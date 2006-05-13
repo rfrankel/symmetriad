@@ -1,0 +1,119 @@
+----------------------------------------------------------------------
+Copyright 2005 Alexey Radul and Rebecca Frankel.
+----------------------------------------------------------------------
+This file is part of The Symmetriad.
+
+The Symmetriad is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+The Symmetriad is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with The Symmetriad; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+----------------------------------------------------------------------
+
+Get cracking on pictures:
+- Figure out a good place to store them and their sources
+- Rescue all of them from playout/ directories in checkouts
+  - No rescueworthy work on averdon's checkout, except as in the code.
+
+GPL the code:
+- Mention NSF funding?
+
+Linting:
+- Move to a Subversion repository?
+
+Release the code:
+- Improve README
+  - Describe init*.gcl in README?
+- Clean code where possible
+- Register with US Registry of Copyrights?
+- Notify webmaster@gnu.org, let them link to project page
+
+(write transform - g0 universe)
+
+Do:
+- Nits:
+  - Get group-tables to print nicely (hash-parsing)
+  - Ditto twodtablehash objets
+  - Check C4 roots?
+  - Separate function to compute geometry (Rebecca, now)
+    - This is the function that really needs the lengths, not
+      the group presentation constructor
+    - Link that function in instead of building things inline
+- Fix performance 
+  - Geometry fill-in takes somewhat long.
+  - The color system is somewhat slow.
+  - The symmetric object face construction may be improvable.
+
+Bugs:
+- Apparent flaws in Geomview:
+  - Pretty serious memory leak if you leave something (big?) spinning
+  - Cannot specify 4D transforms in INST objects
+  - Does not seem to be a file type for 4D transforms to record them on disk
+  - No 4D spheres
+- Fix the symbolics (and numerics!) for the 7+ angle divisors?
+  - sym-cox-{cos/sin}
+
+Tools:
+- Code coverage
+
+Features:
+- Handle the rotation subgroup of the reflection group.
+  - This permits the snub objects.
+- Consistent treatment of nonconvex objects?
+- Demos
+  - Kepler-Poinsot Polyhedra?
+  - Stellations?
+    - Computational?
+    - Extend the boundary of contemporary mathematics?
+      - According to Tom Gettys, http://home.teleport.com/~tpgettys/stellate.shtml,
+        the stellations of the Archimedean solids are not all known.
+        - Probably because they're just hard to imagine.
+  - Compounds?
+    - Study the question, with Coxeter's book
+  - What's up with 0-5-0   0-7-0?  Non-irreducible Coxter systems...
+  - Duals in general?
+    - Duals of Archemedean solids?
+    - Duals may lose some regularity properties...
+
+Future study:
+- Screensavers
+- Backgrounds
+- More graphics types
+  - TeX pictures, OpenGL, Open Inventor, file output (net pbm?), VRML
+    GeomView (n-d format), ps (labels), Povray (ray tracing), 
+    Radiance (global illumination), Flash, Alias Wavefront
+- Better graphics
+  - Thicken the edges so that distance and occlusion become more useful
+    - Beveling for faces?
+  - Useless line elimination
+  - Face coloring
+  - Shading, translucency
+- Reflections of more than just a point about the group?
+  - Line segments?
+  - Circle arcs?
+  - Other stuff that reacts reasonably to reflections?  Lizards?
+  - It may be possible to do this by creating multiple symmetric-objects that
+    represent reflections of control points
+- Morphing from one shape to another
+- Cross sections?
+  - Vertex figures?
+- Unfoldings?
+
+Why:
+- is one apply-table with substitute-multiple and the other with sqrt-rules?
+  - sqrt-rules only deals with the case where the square roots can be cleanly
+    eliminated
+- is sym-cox-cos with the `, notation, and sym-cox-sin without?
+  - this seems to break things (the quote levels are off):
+    ;Generic operator inapplicable apply (#[assignment 224] (...))
+  - Never been used, not thought out carefully
+- What is this involutory generators stuff?  Can I delete it?
+  - Yes

@@ -1,0 +1,437 @@
+----------------------------------------------------------------------
+Copyright 2005 Alexey Radul and Rebecca Frankel.
+----------------------------------------------------------------------
+This file is part of The Symmetriad.
+
+The Symmetriad is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+The Symmetriad is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with The Symmetriad; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+----------------------------------------------------------------------
+
+Documentation for the Functions to compute Coxeter Geometries.
+
+The file coxgraphics.scm contains most of the functions to 
+compute with the geometries associated to coxeter groups.
+The idea behind the geometry represented here is that 
+each element is associated with a chamber defined by 
+mirrors. For each element, we  keep track of the position 
+of each of the mirrors associated with each generator. 
+When I say "the mirror assocated with a generator", I 
+mean the mirror which the chamber will be reflected 
+through when the element is multiplied by generator. 
+
+So I have a mapping
+  elements --> chambers defined by mirrors
+  generators --> walls of the  chamber
+  multiplying an element by a generator -->
+       reflecting a chamber through a wall 
+
+This mapping is standard -- for the definative source, 
+you could look up the book by J. Tits, but you really 
+don't want to, because it is too abstract. For a more 
+readable introduction, see Kane, Casselman or Fulton & Harris.
+(I've given you these references already). 
+
+A set of mirrors can be embedded in space in more than one 
+way. For this reason, I have have tried to keep separate 
+the "group" data structure and the "geometry" data structure.
+The group is completely abstract and doesn't specify a 
+particular embedding, while the geometry structure has specific
+information about one particular embedding. Therefore, there
+could be more than one geometry structure corresponding to one 
+group structure, which specify different embeddings. 
+
+Even though the geometry data structure is meant to 
+hold specific embedding data (and eventually deliver 
+us numbers we can plot on the screen!) I have still 
+tried to keep the information contained in it symbolic 
+for as long as possible. I have to admit that my 
+multiple layers of symbolic answers exhibited in this 
+file are partly for debugging purposes (it is much 
+easier to tell whether the answer "s0 + s1" is correct 
+than to divine whether "(1.87562, .499999)" is what 
+I wanted to find), but also it might turn out to come 
+in handy to have symbolic versions of all the answers 
+to use as labels. 
+
+As a result, most of the code in this file is devoted 
+to the machinery of symbolic manipulation, and the 
+machinations I had to go through to turn a symbolic 
+answer into a number. Some of it depends on the 
+symbolic processing system that Gerry has set up 
+(an considerably unfortunate dependence, I must admit), 
+but I wanted something to work fast. 
+
+So, turning to the nuts and bolts --- 
+The center of the file is a data structure with records:
+
+(name...
+  contains the name of the geometry (some arbitrary string)
+  The #f read-only #t says that it has default value #f, 
+  and it is read-only (that means if you want to set the 
+  name of the geometry, you must do it in  the 
+  constructor function, and after that it cannot be changed.)
+
+(gen-list...
+  contains symbols we are using for the generators
+  I always use "s0, s1, s2 ..." etc (for "symbol 0", etc)
+  but one could use anything. The point is that I want 
+  to keep the calculation symbolic for as long as possible, 
+  so I calculate with these symbols alone as long as I can. 
+
+(num-cosets ...   ;number of cosets in group
+   this just tells me the number of elements in the group.
+   Ignore the "cosets" thing -- in this case, we are dealing 
+   with cosets of the subgroup that contains the single element 
+   the identity (the trivial subgroup) , which means our cosets
+   are elements. 
+   The  reason I am talking about "cosets" is that I started out 
+   writing an implementation of the Todd Coxeter algorithm 
+   (reference: Artin's "Algebra") and this algorithm is expressed 
+   as operating on cosets.
+
+(mult-table #f read-only #t) ;; two-d-table
+   This data structure is copied directly over from the "group" 
+   data structure. In the first example shown in this file (A2)
+   it would look like this:
+
+  (*two-d-table*
+  (s1 (e . #[TMS-NODE 17 (named -s1*c5) (has datum c5)])
+      (c5 . #[TMS-NODE 18 (named s1*c5) (has datum e)])
+      (c4 . #[TMS-NODE 19 (named -s1*c4) (has datum c3)])
+      (c3 . #[TMS-NODE 20 (named s1*c3) (has datum c4)])
+      (c2 . #[TMS-NODE 21 (named -s1*c2) (has datum c1)])
+      (c1 . #[TMS-NODE 22 (named s1*c1) (has datum c2)]))
+  (s0 (c5 . #[TMS-NODE 23 (named -s0*c5) (has datum c4)])
+      (c4 . #[TMS-NODE 24 (named s0*c4) (has datum c5)])
+      (c3 . #[TMS-NODE 25 (named -s0*c3) (has datum c2)])
+      (c2 . #[TMS-NODE 26 (named s0*c2) (has datum c3)])
+      (c1 . #[TMS-NODE 27 (named -s0*c1) (has datum e)])
+      (e . #[TMS-NODE 28 (named s0*e) (has datum c1)]))))
+
+  It is a simple double association table which shows 
+  the multiplication table of the group. 
+  (I use double association tables a lot, and I defined 
+   my own data structure to hold them -- a slight modification 
+   of Chris's code. Look at the file twodtablesimple.scm
+   for the defintion. Its pretty obvious -- there is a 
+   create, get, set and put function, as well as functions 
+   to pull out a column and a row, and pretty-printer. 
+   The pretty printed version of this table looks like this:
+
+    |  s0   s1   
+    |------------
+ e  |  c1    c5    
+ c1 |  e     c2    
+ c2 |  c3    c1    
+ c3 |  c2    c4    
+ c4 |  c5    c3    
+ c5 |  c4    e     
+
+    This is just a multiplication table that says that 
+    e*s0 = c1, e*s1 = c5, etc. 
+    The only complication is the "TMS nodes" shown above.
+    For the purposes of computing geometry, you can ignore
+    them -- all you need to know is that the "node-datum" 
+    function pulls out the value of the node. They are 
+    just a wrapper which holds the answer to the calculation.
+    (they also hold some information about how the answer 
+    was deduced, which is used for the "intelligence" stuff). 
+
+(roots-proc ....   ;; two-d-table
+
+     This is also copied from the group data structure. 
+     In order to understand what is going on here, 
+     I want to make a digression and explain my 
+     strategy for symbolic manipulations. 
+
+Explanation of the symbolic manipulation machinery. 
+
+There are really two different ways to do a symbolic 
+manipulation. One of them is simpler, but more fragile. 
+The second is more general and powerful, but more 
+mysterious (and of course Gerry prefers it). I mostly 
+use the simpler method in this file, but there are 
+some vestiges of my experimentation with the more 
+powerful method. 
+
+Here is the idea behind the simpler method:
+
+We have some expression made up of symbols:
+ say, 'so + 'sqrt2 s1. 
+Suppose we wanted to multiply this by itself:
+ 
+  ('so + 'sqrt2 s1 )* ('so + 'sqrt2 s1 )
+
+we could do it by pure symbolic manipulation -- 
+but we would need some rules (like 'sqrt2 * 'sqrt2 = 2)
+So we define a "rule system" like this:
+
+(define sqrt-rules
+  (rule-system
+   ( (expt sqrt2 (? b even?))
+     none
+     (expt 2 (/ (: b) 2)))
+   ( (expt sqrt2 (? b odd?))
+     none
+     (* sqrt2 (expt 2 (/ (- (: b) 1) 2))))
+   ( (expt sqrt3 (? b even?))
+     none
+     (expt 3 (/ (: b) 2)))
+   ( (expt sqrt3 (? b odd?))
+     none
+     (* sqrt3 (expt 3 (/ (- (: b) 1) 2))))))
+
+This depends on about ten pages of Gerry's code 
+embedded in the scheme system that defines the 
+meaning and processing of rule systems. 
+To apply our rule system we might say:
+  (sqrt-rules
+    (simplify  (* (+ 'so (* 'sqrt2 s1))
+	          (+ 'so (* 'sqrt2 s1))))) 
+
+Then our symbolic expression will be simplified 
+using the rules from the rule system. We get:
+
+ (+ (* (expt s1 2) (expt 2 (/ 2 2))) (* 2 s1 so sqrt2) (expt so 2))
+
+or if we wrap another simplify around it, we get the nice 
+answer we want to see:
+
+(+ (* 2 s1 so sqrt2) (* 2 (expt s1 2)) (expt so 2))
+
+If we then wanted to get a numerical answer out, we could 
+use "substitute-multiple". This takes an expression and 
+a "dictonary" -- an association list of values. 
+So suppose we defined the dictionary
+
+(define small-dict
+  (list (cons 'so 1/2)
+	(cons 's1 1)
+	(cons 'sqrt2 (sqrt 2))))
+
+Then we could substitue into the previous answer:
+
+(substitute-multiple previous-answer small-dict)
+
+(here we have defined previous-answer to be the above expression)
+and we would get 
+ (+ (* 2 1 1/2 1.4142135623730951) (* 2 (expt 1 2)) (expt 1/2 2))
+
+wrapping that in a simplify we would get an actual number:
+
+3.664213562373095
+
+This method has a few advantages:
+  
+   * the inputs are pretty simple 
+   * it only depends on about ten pages of fairly portable code
+   * its easy to see what is going on at each stage.
+
+But it has some disadvantages. 
+
+   * we have to wrap our calculations in *lots* of simplifies!
+     you might easily see
+           (simplify
+              (substitute-multiple
+                (simplify 
+                  (sqrt-rules 
+                     (simplify ...
+     which is a bit absurd. 
+     Simplification is a notoriously tricky thing, too. 
+     Sometimes it just fails to produce anything remotely 
+     simple. The problem is that the notion of "simple" 
+     is not well defined. Also, simplifying can eat up a lot 
+     of processing. Some of my examples take a noticable 
+     amount of time to compute, and they aren't even big examples.
+
+   * we have to carry these arbitrary symbols around --
+     we might get in trouble. For example, I meant 
+     to type s0 and s1 above, but I screwed up and 
+     typed so and s1 instead. Suppose I did that in 
+     one place and then forgot I had done it that way. 
+     Bugs, bugs, bugs! The program becomes fragile 
+     and unmaintanable because it depends on a bunch 
+     of symbol conventions. For example, because I 
+     am doing it that way, I have these symbols 
+     'sqrt2, 'sqrt3, 'tau, etc that I have to 
+     remember to tell you about. 
+     (sqrt2 and sqrt3 are the respective square roots, 
+      and 'tau is the golden ratio, 1+(sqrt 5)/2)
+     Also, there are my generator conventions 's0, 's1, etc
+
+There is another way!
+
+The key idea that makes it possible to avoid these 
+difficulties is to use procedures instead of symbolic 
+expressions. So instead of writing 
+
+'so + 'sqrt2 s1  -- i.e. in scheme (+ 'so (* 'sqrt2 's1))
+
+I might intead write 
+
+(lambda (s0 s1) (+ s0 (* 'sqrt2 s1)))
+
+Now I have a "symbolic expression", but I don't have 
+to remember the symbols -- I just have the first 
+argument, and the second argument. (Internally to 
+the function they are labeled s0 and s1, but no one 
+outside the function needs to know that.) 
+
+Now multiplying is much easier. 
+If my function is called "example-function"
+I can say 
+
+(* example-function example-function)
+
+this will give me another function. 
+If I want to see its value I can apply it to anything:
+
+(pe ((* example-function example-function) 's0 's1))
+
+I get:
+(+ (* (expt s1 2) (expt sqrt2 2)) (* 2 s0 s1 sqrt2) (expt s0 2))
+
+This is almost exactly what we got before, except it obviously didn't
+know how to properly handle (expt sqrt2 2). How do we manage this?
+We want to evaluate our function in an environment where 'sqrt2 is 
+bound to an appropriate value. That's where we might need 
+an incantation like this:
+
+(define (example-environment-maker)
+  (let ((e (extend-ic-environment generic-environment)))
+    (let ((d (lambda (name value)
+	       (local-assignment e name value))))
+      (d 'sqrt2 '(sqrt 2)))
+    e))
+
+(define example-env (example-environment-maker))
+
+I have to admit that I played around with this but I 
+don't remember exactly how it works. The bottom line is 
+that this is obviously a more powerful method, but I 
+didn't want to do it this way because I didn't want 
+to depend on Gerry's code this much! This depends 
+on the whole generic arithmetic system (much more than 
+ten pages of code!) and more besides I don't fully understand. 
+I'm not sure all this environment stuff is fully portable even 
+to other incarnations of Scheme. That's bad; we don't want 
+to get stuck in Gerry's Scheme ghetto. 
+
+On the other hand, it is an intruiging idea. So I wanted 
+to keep my options open so I COULD use these methods 
+if I wanted to play with them. I kept in mind the basic idea 
+that it is preferable to have functions than to have symbolic
+expressions. That is why my first table of roots 
+
+(roots-proc ....
+
+contains functions instead of expressions: 
+(this is copied directly from the group data structure, 
+and is created by that structure.)
+
+ (*two-d-table*
+  (c5 (s1_root . #[compound-procedure 30])
+      (s0_root . #[compound-procedure 31]))
+  (c4 (s1_root . #[compound-procedure 32])
+      (s0_root . #[compound-procedure 33]))
+  (c3 (s1_root . #[compound-procedure 34])
+      (s0_root . #[compound-procedure 35]))
+  (c2 (s1_root . #[compound-procedure 36])
+      (s0_root . #[compound-procedure 37]))
+  (c1 (s1_root . #[compound-procedure 38])
+      (s0_root . #[compound-procedure 39]))
+  (e (s1_root . #[compound-procedure 40])
+     (s0_root . #[compound-procedure 41]))))
+
+These are the functions, which when applied to the generators, 
+produce the expressions for the "roots", the vectors perpendicular
+to the mirrors. So #[compound-procedure 30], when applied to 
+('s0 's1) produces (* -1 s1). The procedure form is more 
+powerful, for the reasons stated above, but it is harder to 
+read and debug, so I create the companion table 
+
+(roots-symb ... 
+
+  which in this case contains
+
+(roots-symb
+ (*two-d-table* (c5 (s1_root * -1 s1) (s0_root + s0 s1))
+                (c4 (s1_root . s0) (s0_root + (* -1 s0) (* -1 s1)))
+                (c3 (s1_root * -1 s0) (s0_root * -1 s1))
+                (c2 (s1_root + (* -1 s0) (* -1 s1)) (s0_root . s1))
+                (c1 (s1_root + s0 s1) (s0_root * -1 s0))
+                (e (s1_root . s1) (s0_root . s0))))
+
+I've worked pretty hard at debugging the procedures that generate 
+this data, so you could deal with them as a black box if you want. 
+The abstraction barrier between the group and the geometry 
+is basically the two tables explained above -- the 
+multiplication table and the symbolic root table. I think 
+that is everything you need to generate geometry. (Though 
+I have to admit that I haven't figured out all the algorithms 
+to use next yet). 
+
+(gen-coords #f) ;; alist with root generators keyed to values
+
+ At this point everything in the table is purely symbolic. 
+It does not contain any information about the specific 
+embedding in space. The gen-coords is the field one uses 
+to specify the actual geometry data. This will be an association 
+list 
+
+(list (s0 . geometry-of-s0) (s1 . geometry-of-s1))
+
+some example geometry functions which produce appropriate 
+geometries are included in coxpresent.scm. Notice that you 
+can't input just anything here -- the geometries must be 
+vectors with acceptable length and angles between them. 
+See the file coxpresent.scm for more information. 
+Right now I have been using functions 
+ (simple-roots-A2),  (simple-roots-B2), etc 
+to generate my geometry.
+
+Note: I have been inputing semi-exact answers using 
+symbols for 'sqrt, as explained above. 
+So the gen-coords created by (simple-roots-A2) look like:
+(s0 . (up 1 0)) (s1 . (up -1/2 (* 1/2 sqrt3))))
+I wanted to look at the coordinates expressed using 
+square roots before plugging in the numbers.
+
+(roots-exact #f) ;; same as roots-symb but with exact numbers
+
+So this is the table which holds all the coordinates 
+expressed using square roots. I get it by applying 
+my roots procedure to the values in gen-coords 
+rather than 's0 and 's1 as I did for roots-symb.
+After doing all the work to set this up, the computation 
+becomes very easy. 
+
+(roots-inexact #f)
+
+This is exactly the same as the previous table but
+the 'sqrt symbols have had numbers plugged in, so the 
+answers come out as real numbers rather than expressions. 
+These values now have rounding error, but they can 
+be used for plotting points on the screen. 
+
+Everything after the function fill-in-root-table 
+in this file is wrong. I was under the mistaken 
+impression that one could find the center 
+of the chambers by adding up all the roots. 
+It doesn't work. I want to clean out this code 
+and replace it with something better; I am only 
+leaving it there because it is at least a working 
+example of how to use the simplification system 
+and the graphics code. 
+
