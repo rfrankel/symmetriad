@@ -18,13 +18,9 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;; Structure to hold information 
-;; about coxeter graphics. 
-
 (declare (usual-integrations))
-(load "group/mirrorgroup")
-(load "graphics/setupandproject") ; For the projections in the examples
-(load "graphics/geom-family")
+
+;;; Structure to hold information about coxeter graphics. 
 
 (define-structure (cox-geometry
 		   (print-procedure 

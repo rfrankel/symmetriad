@@ -18,12 +18,9 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;; This file defines an abstraction for colors.  Right now
-;; colors are just lists, but I may want to change that.
-
 (declare (usual-integrations))
 
-(load "graphics/data-assoc.scm")
+;;; This file defines an abstraction for colors.
 
 (define-structure (color
 		   (constructor %create-color

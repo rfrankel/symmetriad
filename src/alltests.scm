@@ -20,7 +20,7 @@
 
 (declare (usual-integrations))
 (load "compile")
-(load "graphics/drawing")
+(load "load")
 
 (let ()
   (load "utils/multi-set-test")

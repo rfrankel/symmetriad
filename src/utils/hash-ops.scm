@@ -18,6 +18,9 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
+;; TODO Is this correct?  Why wasn't it here before?
+(declare (usual-integrations))
+
 ;; This file defines utilities actively using, working on or producing hash tables
 
 (define ((lin-rem-dup key-hash key=?) lst)

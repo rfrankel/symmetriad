@@ -18,16 +18,16 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;;; Now creating geometries 
-;; These functions create roots
-;; We have chosen roots which will generate a polygon 
-;; with a front face along the z axis and a 
-;; front edge parallel to the x axis.
+;(declare (usual-integrations)) TODO: why not? generic arithmetic?
+; TODO this file may care about load order.
 
-;(declare (usual-integrations))
-(load "group/cox-matrix-defs")
+;;;;; Now creating geometries 
+;;; These functions create roots
+;;; We have chosen roots which will generate a polygon 
+;;; with a front face along the z axis and a 
+;;; front edge parallel to the x axis.
 
-; These roots agree with (make-cox-len-A 2)
+;; These roots agree with (make-cox-len-A 2)
 (define (simple-roots-A2)
   (let* ((cox-mat (make-cox-matrix-A 2))
 	 (p (matrix-ref (cm:matrix cox-mat) 0 1))
@@ -50,7 +50,7 @@
    (vector 0 0 1 0)
    (vector 0 (/ -1/2 'sqrt2) -1/2 (/ 'sqrt5 (* 2 'sqrt2)))))
 
-; These roots agree with (make-cox-len-B 2)
+;; These roots agree with (make-cox-len-B 2)
 (define (simple-roots-B2)
   (let* ((cox-mat (make-cox-matrix-B/C 2))
 	 (p (matrix-ref (cm:matrix cox-mat) 0 1))
@@ -60,7 +60,7 @@
     (map * root-dirs (make-cox-len-B 2))))
 
 
-; These roots agree with (make-cox-len-C 2)
+;; These roots agree with (make-cox-len-C 2)
 (define (simple-roots-C2)
   (let* ((cox-mat (make-cox-matrix-B/C 2))
 	 (p (matrix-ref (cm:matrix cox-mat) 0 1))

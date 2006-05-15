@@ -43,8 +43,8 @@ USA.
 
 |#
 
-;;;; Local Two Dimensional Property Tables
-;; These are restricted to be keyed by symbols
+;;;;; Local Two Dimensional Property Tables
+;;; These are restricted to be keyed by symbols
 
 (load-option 'format)
 (declare (usual-integrations))

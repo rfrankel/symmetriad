@@ -1,0 +1,107 @@
+Symmetraid Coding Style Guide
+
+05/14/2006
+
+<The usual discussion on why having a style at all is better than not
+having a style, even if the specific style may be inferior to some
+possible alternate style for some reason or other.>
+
+This document is presently descriptive rather than normative.
+Sections marked "Normative" are normative -- new code should
+obey them, and old code should be corrected to obey them when
+convenient.
+
+Modules
+
+The Symmetriad currently does not have or use a module system.
+
+Naming Conventions
+
+The Symmetriad currently has little in the way of naming conventions,
+and they are not fully respected throughout the code.  A convention
+present in a decent chunk of the code is that structured data is
+specified via define-structure, the direct accessors are prefixed with
+an abbreviation of the structure name and a slash (/), and functions
+that operate on that structure are prefixed with the same abbreviation
+and a colon (:).
+
+At the moment, "type conversion" functions, that take an object of
+type foo and make of it one of type bar, are named foo->bar.  I am not
+yet certain I like this convention.
+
+Tests
+
+Open the toplevel file alltests.scm and run M-x eval-current-buffer.
+If it doesn't throw an error, the test suite passed, otherwise it
+failed.  There is currently no structure for per-directory tests.
+Some pieces of code have associated foo-test.scm files.  These have
+the same semantics as alltests.scm, and are loaded from it as part of
+the full test suite.  To run an individual test, evaluate that
+individual form.
+
+Comment Syntax (normative)
+
+The copyright notice should be commented with four semicolons (but isn't).
+File heading comments should have three semicolons.
+Function-level comments should have two semicolons.
+Line comments should have one semicolon.
+
+Formatting
+
+The Symmetriad follows the standard Lisp-family code formatting
+guidelines.  Indentation is two spaces per form (no tabs).  Closing
+parentheses pile up at the end of the last form.  Sometimes, when 
+a form has many direct subforms, the closing parenthesis for that 
+form will get its own line, for easy editing and rearrangement of
+the subforms.  e.g.
+
+(let ((simple stuff)
+      (set here)) ; This closing parens is normal
+  body)
+
+(let ((foo bar)
+      (baz quux)
+      ...
+      (last form)
+      ) ; This emphasizes that the forms in the let can be
+        ; subject to reordering or deletion in the future
+  body)
+
+File Structure
+
+To the extent possible, functions to do with a single data type
+(e.g. symmetric-object) or major operation (e.g. drawing) should be
+grouped into one file.  This will be refined with the addition of
+modules.
+
+Load Rules (normative)
+
+Every directory has a load.scm file responsible for loading all the
+*nontest* files in that directory and subdirectories (usually via
+their load.scm files).
+
+The load system for tests is under design and construction.
+
+A few places in the source are known to depend on the load order.
+Where known, this is commented in the load files.  This problem will
+be fixed when possible.
+
+The files in the toplevel play/ directory are not part of the
+Symmetriad but are client code, and thus are not loaded by the load
+system.
+
+Build System (normative)
+
+Every directory has a compile.scm file responsible for compiling all
+the files in that directory and subdirectories (usually via their
+compile.scm files).  At the moment, the compiled files are placed
+alongside their sources, but this will be fixed.  Running make clean
+deletes compiled files.
+
+Order of Events in a File (normative)
+
+1) Copyright notice (Four semicolons)
+2) load-options, if any
+3) (declare (usual-integrations)) (or a comment why not)
+4) File comment, if any (Three semicolons)
+5) Content

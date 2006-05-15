@@ -18,17 +18,13 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;; This file defines the tools needed to create colorings of symmetric
-;; objects.  An edge (face) coloring of a symmetric object is represented
-;; as a procedure that takes an edge (face) thereof
-;; and returns a color (i.e. a list of rgba values) for it.
-;; The procedure is expected to already know what symmetric object it is coloring
-
 (declare (usual-integrations))
 
-(load "graphics/object-creation")
-(load "group/subgroup")
-(load "graphics/color")
+;;; This file defines the tools needed to create colorings of symmetric
+;;; objects.  An edge (face) coloring of a symmetric object is represented
+;;; as a procedure that takes an edge (face) thereof
+;;; and returns a color (i.e. a list of rgba values) for it.
+;;; The procedure is expected to already know what symmetric object it is coloring
 
 (define highlight-touching data:associate-touching)
 

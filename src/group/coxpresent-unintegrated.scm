@@ -20,12 +20,13 @@
 
 ;;; This file contains the stuff from coxpresent that breaks 
 ;;; under (declare (usual-integrations))
+;;; TODO what can I integrate?
 
-; cox-symbol is a 2D lookup table (keyed by the symbols for the roots)
-; that gives the cosines of the angles between the roots.
-; Returns a procedure that represents the root that results from reflecting 
-; mirror_(gen/proc) across the mirror given by reflect_(gen/proc)
-; Breaks horribly if the given roots are from different chambers.
+;; cox-symbol is a 2D lookup table (keyed by the symbols for the roots)
+;; that gives the cosines of the angles between the roots.
+;; Returns a procedure that represents the root that results from reflecting 
+;; mirror_(gen/proc) across the mirror given by reflect_(gen/proc)
+;; Breaks horribly if the given roots are from different chambers.
 (define ((reflect-lambda cox-symbol length-alist) 
 	 mirror_gen reflect_gen mirror_proc reflect_proc)
   (let ((mirror_len (cdr (assq mirror_gen length-alist)))

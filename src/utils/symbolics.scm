@@ -18,7 +18,10 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;; Utilities for dealing with symbolic computation
+;; TODO Is this correct?  Why wasn't it here before?
+(declare (usual-integrations))
+
+;;; Utilities for dealing with symbolic computation
 
 ;; A utility for substituting values in: 
 (define (substitute-multiple expression dictionary)

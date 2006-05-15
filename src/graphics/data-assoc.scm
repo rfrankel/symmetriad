@@ -18,17 +18,14 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;; This file defines the tools needed to associate arbitrary data to
-;; sets of vertices of symmetric objects (usually edges or faces).  An
-;; association of data to a symmetric object is represented as a
-;; procedure that takes a set of vertices thereof and returns a data
-;; object for it.  The procedure is expected to already know what
-;; symmetric object it is associating data with.
-
 (declare (usual-integrations))
 
-(load "graphics/object-creation")
-(load "group/subgroup")
+;;; This file defines the tools needed to associate arbitrary data to
+;;; sets of vertices of symmetric objects (usually edges or faces).  An
+;;; association of data to a symmetric object is represented as a
+;;; procedure that takes a set of vertices thereof and returns a data
+;;; object for it.  The procedure is expected to already know what
+;;; symmetric object it is associating data with.
 
 (define *data:pass* (string->uninterned-symbol "Passive data object"))
 

@@ -18,10 +18,10 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;; This is a file that defines a three-d camera structure
-;; and creates an associate rotation matrix.
-
 (declare (usual-integrations))
+
+;;; This is a file that defines a three-d camera structure
+;;; and creates an associate rotation matrix.
 
 (define-structure (camera 
 		   (print-procedure 

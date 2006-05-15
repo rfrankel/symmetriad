@@ -20,8 +20,6 @@
 
 (declare (usual-integrations))
 
-(load "utils/multi-set")
-
 (let ()
   (define set1 (make-multi-set))
   (define set2 (make-multi-set))

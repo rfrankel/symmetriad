@@ -18,15 +18,15 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;; This file defines a subgroup of a group.
-;; Subgroups are represented by a list of 
-;; words made of generators, and know the 
-;; multiplication table of their group.
-;; These words are the generators of the subgroup.
-;; From this, they can compute their own cosets
-;; starting from an arbitrary element.
-
 (declare (usual-integrations))
+
+;;; This file defines a subgroup of a group.
+;;; Subgroups are represented by a list of 
+;;; words made of generators, and know the 
+;;; multiplication table of their group.
+;;; These words are the generators of the subgroup.
+;;; From this, they can compute their own cosets
+;;; starting from an arbitrary element.
 
 (define-structure (subgroup
 		   (print-procedure

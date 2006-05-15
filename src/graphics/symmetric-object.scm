@@ -18,15 +18,11 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;; This file defines a structure for representing the symmetric
-;; objects that occur when one reflects a point through a coxeter 
-;; geometry.
-
 (declare (usual-integrations))
 
-(load "graphics/coxgraphics")
-(load "utils/multi-set")
-(load "utils/point-clusterer")
+;;; This file defines a structure for representing the symmetric
+;;; objects that occur when one reflects a point through a coxeter 
+;;; geometry.
 
 (define-structure (symmetric-object
 		   (constructor %create-symmetric-object

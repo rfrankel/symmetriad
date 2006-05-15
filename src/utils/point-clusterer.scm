@@ -18,6 +18,9 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
+;; TODO Is this correct?  Why wasn't it here before?
+(declare (usual-integrations))
+
 ;; This file defines a data structure for detecting clusters among 
 ;; points in n-space, assuming the following property: 
 ;; There exist constants c1 and c2 such that c2 >> c1 and for any points x, y, either 

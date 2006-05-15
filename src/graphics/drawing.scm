@@ -18,15 +18,13 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;; A file that has procedures for actually drawing stuff
-
 (declare (usual-integrations))
-(load "graphics/colors")
-(load "asserts")
 
-; Default projection is orthographic
-; This function interacts with scheme graphics
-; Does not handle 4D objects
+;;; Procedures for actually drawing stuff
+
+;; Default projection is orthographic
+;; This function interacts with scheme graphics
+;; Does not handle 4D objects
 (define (symo:draw sym-obj win #!optional projection)
   (let* ((dim (symo:dimension sym-obj))
 	 (project-proc 

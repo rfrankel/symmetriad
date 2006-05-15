@@ -18,17 +18,14 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;;;; Coxeter Groups presentations
-;; A newer, cleaner version of this file
-;; (the older version is coxpresentation.scm)
-;;; 28 Feb 2002
-
 (declare (usual-integrations))
-(load "group/mypresentation")
-(load "group/coxpresent-unintegrated")
-(load "utils/global-flags")
 
-;;; Cox matrix data type
+;;;;; Coxeter Groups presentations
+;;; A newer, cleaner version of this file
+;;; (the older version is coxpresentation.scm)
+;;;; 28 Feb 2002
+
+;; Cox matrix data type
 (define coxeter-matrix-type-tag '*coxeter-matrix*)
 
 (define (coxeter-matrix? cm)

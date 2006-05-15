@@ -18,7 +18,7 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-(load "graphics/drawing")
+(load "load")
 
 ;; Example One: Group of type "A" dimension 2
 ;; type A groups are simplices (triangle, tetrahedron, etc)

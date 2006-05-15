@@ -18,12 +18,12 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
+(declare (usual-integrations))
+
 ;; This file defines a multi-set abstraction.
 ;; If a set contains zero of some element, by definition, it does not contain
 ;; that element.  Therefore, no multi-set will ever register an element as being
 ;; contained in quantity zero.
-
-(declare (usual-integrations))
 
 (define-structure (multi-set
 		   (conc-name mset/)

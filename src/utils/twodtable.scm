@@ -18,13 +18,11 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-; This is a piece of abstraction layer for easily swapping
-; implementations of two-d-tables.
-
+(load-option 'format)
 (declare (usual-integrations))
 
-;(load "utils/twodtablesimple")
-(load "utils/twodtablehash")
+;;; This is a piece of abstraction layer for easily swapping
+;;; implementations of two-d-tables.
 
 
 ;; These printing procedures live outside the swappable abstraction.

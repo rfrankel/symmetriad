@@ -18,19 +18,15 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;; This file contains procedures for creating 
-;; symmetric objects from user data.
-
 (declare (usual-integrations))
 
-(load "graphics/symmetric-object")
-(load "utils/global-flags")
+;;; This file contains procedures for creating symmetric objects from user data.
 
-; Returns a list of the directions of the omega vectors of the identity 
-; chamber of the given cox-geometry.  They are given in an order that 
-; corresponds to the order in which the roots are stored in the cox-geometry 
-; root table.
-; They are just directions, their lengths are unspecified!
+;; Returns a list of the directions of the omega vectors of the identity 
+;; chamber of the given cox-geometry.  They are given in an order that 
+;; corresponds to the order in which the roots are stored in the cox-geometry 
+;; root table.
+;; They are just directions, their lengths are unspecified!
 (define (omega-dirs cox-geo)
   (let* ((e-root-list (cxg:chamber-root-list cox-geo 'e))
 	 (root-matrix (matrix-by-row-list (map up-structure->list e-root-list)))
@@ -40,10 +36,10 @@
 			  (enumerate-interval 0 (- (m:num-rows root-mat-inv) 1)))))
 	 (enumerate-interval 0 (- (m:num-cols root-mat-inv) 1)))))
   
-; Relengths a set of omega directions so that the one given as the base is 
-; length 1, and acts like the (only) vertex of a solid.  The rest are lengthed 
-; such that they lie on the surface of that solid.  I hope.
-; Again, purely numeric.
+;; Relengths a set of omega directions so that the one given as the base is 
+;; length 1, and acts like the (only) vertex of a solid.  The rest are lengthed 
+;; such that they lie on the surface of that solid.  I hope.
+;; Again, purely numeric.
 (define (omega-vectors directions base-index)
   (let ((normalized 
 	 (map (lambda (vector) 
@@ -78,7 +74,7 @@
   (let ((magic ((magic-point cox-geo) root-in-spec)))
     (vector/scalar magic (sqrt (dot-product magic magic)))))
   
-; Returns a procedure suitable for tabulate-point
+;; Returns a procedure suitable for tabulate-point
 (define ((cartesian-point cox-geo) pt-vec)
   (let* ((e-root-list (cxg:chamber-root-list cox-geo 'e))
 	 (root-matrix (matrix-by-col-list (map up-structure->list e-root-list)))

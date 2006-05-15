@@ -19,11 +19,11 @@
 ;;; ----------------------------------------------------------------------
 
 ;;; This file just contains random playing around with 
-;;; the procedures defined in drawing.scm (and earlier files).
+;;; the procedures defined in drawing.scm (and other files).
 ;;; Play with specific Coxeter groups is relegated to the play-* 
 ;;; files.
 
-(load "graphics/drawing")
+(load "load")
 
 ;; An experiment with a random Coxeter diagram
 

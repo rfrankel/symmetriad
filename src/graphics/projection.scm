@@ -18,12 +18,12 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;; This is a file that defines a structure to store 
-;; the attributes of a projection
-;; and creates an associated projection matrix.
-;; This follows the construction in Foley and Van Dam
-
 (declare (usual-integrations))
+
+;;; This is a file that defines a structure to store 
+;;; the attributes of a projection
+;;; and creates an associated projection matrix.
+;;; This follows the construction in Foley and Van Dam
 
 ;; The default specifies a 3d orthonormal projection
 (define-structure (projection

@@ -18,14 +18,12 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;; This file provides definitions of objects that capture geometry family specs.
-;; Each member of such a structure is a procedure that, when handed a dimension, 
-;; returns an appropriate piece of the spec for a coxeter system, in the right 
-;; dimension
-
 (declare (usual-integrations))
-(load "graphics/sample-geometries")
 
+;;; This file provides definitions of objects that capture geometry family specs.
+;;; Each member of such a structure is a procedure that, when handed a dimension, 
+;;; returns an appropriate piece of the spec for a coxeter system, in the right 
+;;; dimension
 
 (define-structure (geom-family
 		   (constructor %create-geom-family (matrix len roots))

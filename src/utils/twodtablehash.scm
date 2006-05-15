@@ -18,13 +18,12 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;;;; Local Two Dimensional Property Tables
-;; These are restricted to be keyed by symbols
-;; This variant is implemented as a hash table on 
-;; the first coordinate and an association list on the second
-
-(load-option 'format)
 (declare (usual-integrations))
+
+;;;;; Local Two Dimensional Property Tables
+;;; These are restricted to be keyed by symbols
+;;; This variant is implemented as a hash table on 
+;;; the first coordinate and an association list on the second
 
 (define two-d-table-type-tag '*two-d-table-hash*)
 

@@ -20,7 +20,7 @@
 
 ;;; This file contains demos of the VRML functionality.
 
-(load "graphics/drawing.scm")
+(load "load")
 
 (define H3-system (geom-family->cox-geometry H-family 3))
 

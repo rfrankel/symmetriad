@@ -18,16 +18,12 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;;;;  Group Multiplication Table found using Todd Coxeter Algorithm 
-;; Adapted for mirror reflection groups
-;;; October 2003 -- rfrankel
-
-(declare (usual-integrations))
-(load "constraint/load")
-(load "group/mypresentation")
-(load "group/group-table")
-(load "utils/global-flags")
 (load-option 'format)
+(declare (usual-integrations))
+
+;;;;;  Group Multiplication Table found using Todd Coxeter Algorithm 
+;;; Adapted for mirror reflection groups
+;;;; October 2003 -- rfrankel
 
 (define group-network-type-tag '*mirror-group*)
 

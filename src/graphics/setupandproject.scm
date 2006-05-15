@@ -18,18 +18,14 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;; This will take a list of vectors 
-;; augment them to create homogenous vectors
-;; and then project them. 
-
-(declare (usual-integrations *))
-(load "group/coxpresent")
-(load "graphics/projection")
 (load-option 'format)
+(declare (usual-integrations *))
 
-;; this makes a list of vectors 
-;; into a list of homogenous column vectors
+;;; This will take a list of vectors 
+;;; augment them to create homogenous vectors
+;;; and then project them. 
 
+;; Makes a list of vectors into a list of homogenous column vectors
 (define (augment-to-homogenous list-of-vects)
   (map 
    (lambda (vect)

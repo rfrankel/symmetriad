@@ -20,9 +20,6 @@
 
 (declare (usual-integrations))
 
-(load "utils/twodtable")
-(load "group/subgroup")
-
 (define-structure (group-table
 		   (print-procedure
 		    (standard-unparser-method

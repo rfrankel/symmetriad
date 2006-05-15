@@ -18,11 +18,10 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;; This file contains functions that create coxeter matrices and coxeter lengths
-;; to go with them, for the possible coxeter groups
-
 (declare (usual-integrations))
-(load "group/coxpresent")
+
+;;; This file contains functions that create coxeter matrices and coxeter lengths
+;;; to go with them, for the possible coxeter groups
 
 (define (make-cox-matrix-A n)
   (make-coxeter-matrix 

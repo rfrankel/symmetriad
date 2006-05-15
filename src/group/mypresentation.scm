@@ -18,15 +18,14 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
+(load-option 'format)
+(declare (usual-integrations))
+
 ;;;;   Group Presentation
 ;;; 13 March 2001 -- rfrankel
 
 ;; This is the presentation of a group in terms
 ;; of generators and relations
-
-(load "group/myrelation")
-(load-option 'format)
-(declare (usual-integrations))
 
 (define group-presentation-type-tag '*group-presentation*)
 

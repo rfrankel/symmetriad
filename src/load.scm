@@ -18,41 +18,17 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-(load "load")
+(for-each (lambda (dir)
+	    (with-working-directory-pathname
+		dir
+	      (lambda ()
+		(load "load"))))
+	  '("utils"
+	    "constraint"
+	    "group"
+	    "graphics"))
 
-;; Example Four: Group of type "B" dimension 3
-
-(define B3-play (geom-family->cox-geometry B-family 3))		      
-
-; The cube
-(symo:draw (cartesian-point->symmetric-object B3-play (up 1 1 1)) 
-	   (frame -2 2 -2 2) cab)
-
-; The cuboctahedron
-(symo:draw (cartesian-point->symmetric-object B3-play (up 1 1 0)) 
-	   (frame -2 2 -2 2) cab)
-
-; The octahedron
-(symo:draw (cartesian-point->symmetric-object B3-play (up 1 0 0)) 
-	   (frame -2 2 -2 2) cab)
-
-; Another vaguely regular thing
-; Small Rhombicuboctahedron?
-(symo:draw (cartesian-point->symmetric-object B3-play (up (* .5 (+ 1 (sqrt 2))) .5 .5)) 
-	   (frame -2 2 -2 2) cab)
-
-(symo:draw (cartesian-point->symmetric-object B3-play (up -1.5 .5 .5) #t) 
-	   (frame -2 2 -2 2) cab)
-
-(symo:file-print-vrml 
- (cartesian-point->symmetric-object 
-  B3-play
-  (up (* .5 (+ 1 (sqrt 2))) .5 .5))
- "playout/fooz.wrl")
-	    
-(symo:draw (symmetric-object B-family '(6 0 1))
-	   (frame -2 2 -2 2) cab)
-
-(symo:draw (symmetric-object H-family '(6 0 1))
-	   (frame -2 2 -2 2) cab)
-
+(for-each (lambda (file)
+	    (load file))
+	  '(;"alltests" ; TODO What about tests?
+	    "asserts"))

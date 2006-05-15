@@ -22,10 +22,6 @@
 
 (declare (usual-integrations))
 
-(load "utils/list-ops")
-(load "utils/hash-ops")
-(load "utils/symbolics")
-
 (define (enumerate-interval low high)
   (if (> low high)
       '()

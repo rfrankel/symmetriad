@@ -18,11 +18,11 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-;; This file contains pictures of cool things in 3D.
-; Attend ye to the ratios.  They are very interesting, and desreve to 
-; be (symbolically!) computed instead of being given by hand.
+;;; This file contains pictures of cool things in 3D.
+;;; Attend ye to the ratios.  They are very interesting, and desreve to 
+;;; be (symbolically!) computed instead of being given by hand.
 
-(load "graphics/drawing.scm")
+(load "load")
 
 ;; Tetrahedral (A3) symmetry:
 
