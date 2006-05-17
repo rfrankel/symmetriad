@@ -22,10 +22,10 @@
 	    (load file))
 	  '("camera"
 	    "color"
-	    "data-assoc" ; TODO colors breaks unless this is loaded first.
+	    "data-assoc" ; colors breaks unless this is loaded first.
 	    "colors"
-	    "sample-geometries" ; TODO geom-family breaks unless this is loaded first.
-	    "geom-family" ; TODO coxgraphics breaks unless this is loaded first.
+	    "sample-geometries" ; geom-family breaks unless this is loaded first.
+	    "geom-family" ; coxgraphics breaks unless this is loaded first.
 	    "coxgraphics"
 	    "drawing"
 	    "object-creation"

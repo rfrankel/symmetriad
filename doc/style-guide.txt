@@ -1,21 +1,32 @@
 Symmetraid Coding Style Guide
 
-05/14/2006
+05/16/2006
 
 <The usual discussion on why having a style at all is better than not
 having a style, even if the specific style may be inferior to some
 possible alternate style for some reason or other.>
 
-This document is presently descriptive rather than normative.
-Sections marked "Normative" are normative -- new code should
-obey them, and old code should be corrected to obey them when
-convenient.
+This document is a mix of descriptive and normative segments.
+Sections marked "(normative)" are normative -- they represent a
+reasoned choice about the subject they discuss.  Consequently, new
+code should obey them, and old code should be corrected to obey them
+when convenient.  Suggestions for improving the style item described
+in such a section are always welcome, especially when explicitly
+requested, but no further thought need necessarily be given to the
+subject.
+
+Sections not so marked are descriptive -- they contain information
+about what is currently done without suggesting that it is good, and
+are an implicit request to standardize the subject in a good way (so
+that the section can be marked as normative).
 
 Modules
 
 The Symmetriad currently does not have or use a module system.
 
 Naming Conventions
+
+- Function Names
 
 The Symmetriad currently has little in the way of naming conventions,
 and they are not fully respected throughout the code.  A convention
@@ -29,15 +40,43 @@ At the moment, "type conversion" functions, that take an object of
 type foo and make of it one of type bar, are named foo->bar.  I am not
 yet certain I like this convention.
 
-Tests
+- File Names
 
-Open the toplevel file alltests.scm and run M-x eval-current-buffer.
-If it doesn't throw an error, the test suite passed, otherwise it
-failed.  There is currently no structure for per-directory tests.
-Some pieces of code have associated foo-test.scm files.  These have
-the same semantics as alltests.scm, and are loaded from it as part of
-the full test suite.  To run an individual test, evaluate that
-individual form.
+If a file defines a data type and its operations, the file should be
+named after the data type.  For example, the file containing
+(define-structure (symmetric-object ... )) should be named
+symmetric-object.scm.
+
+TODO: What about other types of files?  They don't occur much in Java...
+
+Tests (normative)
+
+Tests are good.  We like tests.
+
+The general contract for test files is that, if loaded (or evaluated
+with eval-current-buffer), they will execute their tests.  If
+execution completes normally, the tests pass, otherwise not.  Test
+files should not change the state of the system, and should not depend
+on their order of execution.  It is also good practice to isolate
+individual tests within a test file, so that they can be executed
+alone while programming.  (let () <test-code> ) is your friend.
+
+There are two kinds of test files in the Symmetriad.  First, there are
+files named something-test.scm.  These files contain tests for
+something.  In the absence of emergency, 'something' should be the
+(extensionless) name of another file, functionality defined wherein
+the test file tests.  Such test files should not load other files, but
+assume that they will be loaded with the full system already in place.
+
+The second kind of file currently has only one exemplar, the file
+<root>/src/alltests.scm.  It is this file's responsibility to run the
+entire test suite if loaded or run with eval-current-buffer.  It is
+also this file's responsibility to load all source files (via (load
+"load")) before running the tests, to provide them with an
+environment.
+
+A sensible hierarchical structure should be defined and implemented
+(and detailed in this document) if it becomes necessary.
 
 Comment Syntax (normative)
 
@@ -80,15 +119,22 @@ Every directory has a load.scm file responsible for loading all the
 *nontest* files in that directory and subdirectories (usually via
 their load.scm files).
 
-The load system for tests is under design and construction.
-
 A few places in the source are known to depend on the load order.
-Where known, this is commented in the load files.  This problem will
-be fixed when possible.
+Where known, this is and should be accomodated and commented in the
+load files.
 
-The files in the toplevel play/ directory are not part of the
+Every nontest source file (i.e. matches *.scm but does not match
+*-test.scm) and subdirectory in a directory should be mentioned in its
+load.scm file.  If it should not be loaded, do not omit it, but
+comment it out, with an explaination as to why.
+
+The files in the directory <root>/src/play are not part of the
 Symmetriad but are client code, and thus are not loaded by the load
 system.
+
+The current state of affairs with the load system is good enough to
+use without alteration, but ideas for a better load mechanism are
+welcome.
 
 Build System (normative)
 
@@ -96,7 +142,7 @@ Every directory has a compile.scm file responsible for compiling all
 the files in that directory and subdirectories (usually via their
 compile.scm files).  At the moment, the compiled files are placed
 alongside their sources, but this will be fixed.  Running make clean
-deletes compiled files.
+in the top level deletes compiled files.
 
 Order of Events in a File (normative)
 
@@ -105,3 +151,17 @@ Order of Events in a File (normative)
 3) (declare (usual-integrations)) (or a comment why not)
 4) File comment, if any (Three semicolons)
 5) Content
+
+Don't forget to list every new file in load.scm and compile.scm
+
+Contents of a Directory (normative)
+
+compile.scm:
+Compiles all source files in this directory and subdirectories
+(assuming it will called with the working directory set to the
+directory it's in).
+
+load.scm:
+Loads all nontest source files in this directory and subdirectories
+(assuming it will called with the working directory set to the
+directory it's in).

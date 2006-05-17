@@ -27,5 +27,4 @@
 	    "mirrorgroup"
 	    "mypresentation"
 	    "myrelation"
-;	    "subgroup-test"  ; TODO what about loading test files?
 	    "subgroup"))

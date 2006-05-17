@@ -20,8 +20,6 @@
 
 (declare (usual-integrations))
 
-(load "group/subgroup") ;; TODO what about tests' loads?
-
 (let ()
   (define A2-test (geom-family->cox-geometry A-family 2))
   

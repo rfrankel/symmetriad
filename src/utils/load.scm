@@ -25,10 +25,9 @@
 	    "hash-ops"
 	    "list-ops"
 	    "multi-set"
-;	    "multi-set-test"  ; TODO what about the tests?
 	    "point-clusterer"
 	    "symbolics"
 	    "twodtable"
 	    "twodtablehash"
-;	    "twodtablesimple"  ; TODO unused implementation, namespace conflicts
+;	    "twodtablesimple"  ; unused implementation, namespace conflicts
 	    ))
