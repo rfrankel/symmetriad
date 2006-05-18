@@ -1,0 +1,184 @@
+<html>
+<head>
+<title>Symmetriad Coding Style Guide</title>
+<link href="stylestyle.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+<body>
+<h1>Symmetriad Coding Style Guide</h1>
+
+05/18/2006
+
+<p>Insert the usual discussion on why having a style at all is better
+than not having a style, even if the specific style may be inferior to
+some possible alternate style for some reason or other.</p>
+
+<p>This document is a mix of descriptive and normative segments.
+Sections marked "(normative)" are normative -- they represent a
+reasoned choice about the subject they discuss.  Consequently, new
+code should obey them, and old code should be corrected to obey them
+when convenient.  Suggestions for improving the style item described
+in such a section are always welcome, especially when explicitly
+requested, but no further thought need necessarily be given to the
+subject.</p>
+
+<p>Sections not so marked are descriptive -- they contain information
+about what is currently done without suggesting that it is good, and
+are an implicit request to standardize the subject in a good way (so
+that the section can be marked as normative).</p>
+
+<h2>Modules</h2>
+
+<p>The Symmetriad currently does not have or use a module system.</p>
+
+<h2>Naming Conventions</h2>
+
+<h3>Function Names</h3>
+
+<p>The Symmetriad currently has little in the way of naming conventions,
+and they are not fully respected throughout the code.  A convention
+present in a decent chunk of the code is that structured data is
+specified via define-structure, the direct accessors are prefixed with
+an abbreviation of the structure name and a slash (/), and functions
+that operate on that structure are prefixed with the same abbreviation
+and a colon (:).</p>
+
+<p>At the moment, "type conversion" functions, that take an object of
+type <code>foo</code> and make of it one of type <code>bar</code>, are
+named <code>foo->bar</code>.  I am not yet certain I like this
+convention.</p>
+
+<h3>File Names</h3>
+
+<p>If a file defines a data type and its operations, the file should
+be named after the data type.  For example, the file containing
+<code>(define-structure (symmetric-object ... ))</code> should be
+named symmetric-object.scm.</p>
+
+<p>TODO: What about other types of files?  They don't occur much in Java...</p>
+
+<h3>Tests (normative)</h3>
+
+<p>Tests are good.  We like tests.</p>
+
+<p>The general contract for test files is that, if loaded (or
+evaluated with eval-current-buffer), they will execute their tests.
+If execution completes normally, the tests pass, otherwise not.  Test
+files should not change the state of the system, and should not depend
+on their order of execution.  It is also good practice to isolate
+individual tests within a test file, so that they can be executed
+alone while programming.  <code>(let () &lt;test-code&gt; )</code> is
+your friend.</p>
+
+<p>There are two kinds of test files in the Symmetriad.  First, there are
+files named something-test.scm.  These files contain tests for
+something.  In the absence of emergency, 'something' should be the
+(extensionless) name of another file, functionality defined wherein
+the test file tests.  Such test files should not load other files, but
+assume that they will be loaded with the full system already in place.</p>
+
+<p>The second kind of file currently has only one exemplar, the file
+<code>&lt;root&gt;/src/alltests.scm.</code> It is this file's
+responsibility to run the entire test suite if loaded or run with
+eval-current-buffer.  It is also this file's responsibility to load
+all source files (via <code>(load "load")</code>) before running the
+tests, to provide them with an environment.</p>
+
+<p>A sensible hierarchical structure should be defined and implemented
+(and detailed in this document) if it becomes necessary.</p>
+
+<h3>Comment Syntax (normative)</h3>
+
+<ul><li>The copyright notice should be commented with four semicolons (but isn't).</li>
+<li>File heading comments should have three semicolons.</li>
+<li>Function-level comments should have two semicolons.</li>
+<li>Line comments should have one semicolon.</li></ul>
+
+<h3>Formatting</h3>
+
+<p>The Symmetriad follows the standard Lisp-family code formatting
+guidelines.  Indentation is two spaces per form (no tabs).  Closing
+parentheses pile up at the end of the last form.  Sometimes, when 
+a form has many direct subforms, the closing parenthesis for that 
+form will get its own line, for easy editing and rearrangement of
+the subforms.  e.g.</p>
+
+<pre>
+(let ((simple stuff)
+      (set here)) ; This closing parens is normal
+  body)
+
+(let ((foo bar)
+      (baz quux)
+      ...
+      (last form)
+      ) ; This emphasizes that the forms in the let can be
+        ; subject to reordering or deletion in the future
+  body)
+</pre>
+
+<h3>File Structure</h3>
+
+<p>To the extent possible, functions to do with a single data type
+(e.g. symmetric-object) or major operation (e.g. drawing) should be
+grouped into one file.  This will be refined with the addition of
+modules.</p>
+
+<h3>Load Rules (normative)</h3>
+
+<p>Every directory has a <code>load.scm</code> file responsible for
+loading all the *nontest* files in that directory and subdirectories
+(usually via their <code>load.scm</code> files).</p>
+
+<p>A few places in the source are known to depend on the load order.
+Where known, this is and should be accomodated and commented in the
+load files.</p>
+
+<p>Every nontest source file (i.e. matches <code>*.scm</code> but does
+not match <code>*-test.scm</code>) and subdirectory in a directory
+should be mentioned in its <code>load.scm</code> file.  If it should
+not be loaded, do not omit it, but comment it out, with an
+explaination as to why.</p>
+
+<p>The files in the directory <code>&lt;root&gt;/src/play</code> are
+not part of the Symmetriad but are client code, and thus are not
+loaded by the load system.</p>
+
+<p>The current state of affairs with the load system is good enough to
+use without alteration, but ideas for a better load mechanism are
+welcome.</p>
+
+<h3>Build System (normative)</h3>
+
+<p>Every directory has a <code>compile.scm</code> file responsible for
+compiling all the files in that directory and subdirectories (usually
+via their <code>compile.scm</code> files).  At the moment, the
+compiled files are placed alongside their sources, but this will be
+fixed.  Running make clean in the top level deletes compiled
+files.</p>
+
+<h3>Order of Events in a File (normative)</h3>
+
+<ol>
+<li>Copyright notice (Four semicolons)</li>
+<li>load-options, if any</li>
+<li><code>(declare (usual-integrations))</code> (or a comment why not)</li>
+<li>File comment, if any (Three semicolons)</li>
+<li>Content</li></ol>
+
+<p>Don't forget to list every new file in <code>load.scm</code> and
+<code>compile.scm</code></p>
+
+<h3>Contents of a Directory (normative)</h3>
+
+<p><code>compile.scm</code>:
+Compiles all source files in this directory and subdirectories
+(assuming it will called with the working directory set to the
+directory it's in).</p>
+
+<p><code>load.scm</code>:
+Loads all nontest source files in this directory and subdirectories
+(assuming it will called with the working directory set to the
+directory it's in).</p>
+
+</body>
+</html>
