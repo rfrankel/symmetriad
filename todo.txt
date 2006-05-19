@@ -24,6 +24,7 @@ Refactorings:
   - group-relation
   - group-presentation
   - coxeter-matrix -- export to own file? merge with cox-matrix-defs?
+    what about root-systems?
 - in-code commented examples to unittests
   - group-relation
   - group-presentation

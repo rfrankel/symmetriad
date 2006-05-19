@@ -18,7 +18,7 @@
 ### Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ### ----------------------------------------------------------------------
 
-DIRLIST = constraint/ graphics/ group/ utils/ ./
+DIRLIST = constraint/ geometry/ graphics/ group/ utils/ ./
 
 COMFILES = $(wildcard $(patsubst %,%*.com,$(DIRLIST)))
 BINFILES = $(wildcard $(patsubst %,%*.bin,$(DIRLIST)))
