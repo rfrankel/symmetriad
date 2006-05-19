@@ -22,13 +22,8 @@
 	    (load file))
 	  '("camera"
 	    "color"
-	    "data-assoc" ; colors breaks unless this is loaded first.
+	    "data-association"  ; colors breaks unless this is loaded first
 	    "colors"
-	    "sample-geometries" ; geom-family breaks unless this is loaded first.
-	    "geom-family" ; coxgraphics breaks unless this is loaded first.
-	    "coxgraphics"
 	    "drawing"
-	    "object-creation"
 	    "projection"
-	    "setupandproject"
-	    "symmetric-object"))
+	    "setupandproject"))

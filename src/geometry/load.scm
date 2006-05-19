@@ -19,11 +19,9 @@
 ;;; ----------------------------------------------------------------------
 
 (for-each (lambda (file)
-	    (cf-conditionally file))
-	  '("camera"
-	    "color"
-	    "colors"
-	    "data-association"
-	    "drawing"
-	    "projection"
-	    "setupandproject"))
+	    (load file))
+	  '("root-systems" ; geom-family breaks unless this is loaded first.
+	    "geom-family" ; cox-geometry breaks unless this is loaded first.
+	    "cox-geometry"
+	    "symmetric-object-creation"
+	    "symmetric-object"))

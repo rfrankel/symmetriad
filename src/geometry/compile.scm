@@ -20,10 +20,8 @@
 
 (for-each (lambda (file)
 	    (cf-conditionally file))
-	  '("camera"
-	    "color"
-	    "colors"
-	    "data-association"
-	    "drawing"
-	    "projection"
-	    "setupandproject"))
+	  '("cox-geometry"
+	    "geom-family"
+	    "root-systems"
+	    "symmetric-object-creation"
+	    "symmetric-object"))

@@ -25,7 +25,8 @@
 		(load "load"))))
 	  '("utils"
 	    "constraint"
-	    "group"
+	    "group"  ; geometry/root-systems breaks unless group/cox-matrix-defs is loaded first
+	    "geometry"
 	    "graphics"
 	    ;"play"  ; Client code, not part of the system.
 	    ))

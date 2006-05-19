@@ -25,6 +25,7 @@
 		(load "compile"))))
 	  '("utils"
 	    "constraint"
+	    "geometry"
 	    "group"
 	    "graphics"))
 
