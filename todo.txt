@@ -18,6 +18,18 @@ along with The Symmetriad; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ----------------------------------------------------------------------
 
+Refactorings:
+- Figure out printed (and readable!) representations for record types
+- define-structure
+  - group-relation
+  - group-presentation
+  - coxeter-matrix -- export to own file? merge with cox-matrix-defs?
+- in-code commented examples to unittests
+  - group-relation
+  - group-presentation
+  - cox-matrix-defs
+- read compiler warnings
+
 Get cracking on pictures:
 - Figure out a good place to store them and their sources
 - Rescue all of them from playout/ directories in checkouts
@@ -25,9 +37,6 @@ Get cracking on pictures:
 
 GPL the code:
 - Mention NSF funding?
-
-Linting:
-- Move to a Subversion repository?
 
 Release the code:
 - Improve README

@@ -30,5 +30,4 @@
 
 (for-each (lambda (file)
 	    (cf-conditionally file))
-	  '("alltests"
-	    "asserts"))
+	  '("alltests"))

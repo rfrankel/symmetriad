@@ -36,14 +36,12 @@
 (define (gr:type-predicate v) group-relation?)
 
 ;; Relation-list should be a list of at least two symbols (maybe more)
-;; (Change from previous version: used to be integers).
-
 (define (make-group-relation relation-list)
   (assert (> (length relation-list) 1) "MAKE-RELATION: list too short" relation-list)
   (for-each (lambda (alleged-symbol)
-	     (assert (symbol? alleged-symbol)
-		     "MAKE-RELATION: not an symbol" alleged-symbol))
-	   relation-list)
+	      (assert (symbol? alleged-symbol)
+		      "MAKE-RELATION: not a symbol" alleged-symbol))
+	    relation-list)
   (list group-relation-type-tag relation-list))
 
 (define (group-relation relation-list)
@@ -58,6 +56,7 @@
 (define (gr:relation-element relation position)
   (list-ref (gr:relation-list relation) position))
 
+;; TODO Elucidate this comment.  Unit test?  From example?
 ;;multiply-proc should take an element of the type of start-el or a null
 ;;and an integer from the relation and return either
 ;;another element of the type of start-el

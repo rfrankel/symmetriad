@@ -20,7 +20,8 @@
 
 (for-each (lambda (file)
 	    (load file))
-	  '("general"
+	  '("asserts.scm"
+	    "general"
 	    "global-flags"
 	    "hash-ops"
 	    "list-ops"

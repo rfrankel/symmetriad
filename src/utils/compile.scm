@@ -36,7 +36,8 @@
 
 (for-each (lambda (file)
 	    (cf-conditionally file))
-	  '("general"
+	  '("asserts"
+	    "general"
 	    "global-flags"
 	    "hash-ops"
 	    "list-ops"

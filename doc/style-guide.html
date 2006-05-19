@@ -34,13 +34,15 @@ that the section can be marked as normative).</p>
 
 <h3>Function Names</h3>
 
-<p>The Symmetriad currently has little in the way of naming conventions,
-and they are not fully respected throughout the code.  A convention
-present in a decent chunk of the code is that structured data is
-specified via define-structure, the direct accessors are prefixed with
-an abbreviation of the structure name and a slash (/), and functions
-that operate on that structure are prefixed with the same abbreviation
-and a colon (:).</p>
+<p>The Symmetriad currently has little in the way of naming
+conventions, and they are not fully respected throughout the code.  A
+convention present in a decent chunk of the code is that structured
+data is specified via define-structure, the direct accessors are
+prefixed with an abbreviation of the structure name and a slash (/),
+and functions that operate on that structure are prefixed with the
+same abbreviation and a colon (:).  Functions that operate on the
+structure but are not meant for external use are prefixed with the
+structure abbreviation and <code>-int:</code> (int for internal).</p>
 
 <p>At the moment, "type conversion" functions, that take an object of
 type <code>foo</code> and make of it one of type <code>bar</code>, are
@@ -49,10 +51,15 @@ convention.</p>
 
 <h3>File Names</h3>
 
-<p>If a file defines a data type and its operations, the file should
-be named after the data type.  For example, the file containing
+<p>Files should be named after their major contents.  If a file
+defines a data type and its operations, the file should be named after
+the data type.  For example, the file containing
 <code>(define-structure (symmetric-object ... ))</code> should be
-named symmetric-object.scm.</p>
+named <code>symmetric-object.scm</code>.  If a file defines one major
+function (or generic procedure), that file should be named after that
+function.  For example, the file defining the procedure
+<code>cox-presentation</code> should be named
+<code>cox-presentation.scm</code>.</p>
 
 <p>TODO: What about other types of files?  They don't occur much in Java...</p>
 

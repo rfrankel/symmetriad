@@ -21,11 +21,11 @@
 (for-each (lambda (file)
 	    (cf-conditionally file))
 	  '("cox-matrix-defs"
-	    "coxpresent"
-	    "coxpresent-unintegrated"
+	    "cox-presentation"
+	    "cox-presentation-unintegrated"
 	    "group-table"
-	    "mirrorgroup"
-	    "mypresentation"
-	    "myrelation"
+	    "group-network"
+	    "group-presentation"
+	    "group-relation"
 	    "subgroup-test"
 	    "subgroup"))

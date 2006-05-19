@@ -29,8 +29,3 @@
 	    "graphics"
 	    ;"play"  ; Client code, not part of the system.
 	    ))
-
-(for-each (lambda (file)
-	    (load file))
-	  '(;"alltests" ; TODO What about tests?
-	    "asserts"))

@@ -21,10 +21,10 @@
 (for-each (lambda (file)
 	    (load file))
 	  '("cox-matrix-defs"
-	    "coxpresent"
-	    "coxpresent-unintegrated"
+	    "cox-presentation"
+	    "cox-presentation-unintegrated"
 	    "group-table"
-	    "mirrorgroup"
-	    "mypresentation"
-	    "myrelation"
+	    "group-network"
+	    "group-presentation"
+	    "group-relation"
 	    "subgroup"))
