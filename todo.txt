@@ -27,7 +27,6 @@ Refactorings:
   - coxeter-matrix
 - in-code commented examples to unittests
   - group-relation - more comprehension (and group networks??) required
-- read compiler warnings
 
 Get cracking on pictures:
 - Figure out a good place to store them and their sources

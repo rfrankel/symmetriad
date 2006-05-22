@@ -166,7 +166,7 @@
 	      (symo/face-list sym-obj))
     answer))
 
-; Contains duplicates
+;; Contains duplicates
 (define (symo:edge-list sym-obj)
   (map (lambda (cell) 
 	 (list (car cell) (cdr cell)))
@@ -181,15 +181,14 @@
 	      (list (cadr edge) (car edge))))
 	(symo:edge-list sym-obj))))
 
-; The point proc is a procedure capturing an 
-; expression for a point as a *linear* function of
-; the two (for two dimensions) roots of the appropriate 
-; chamber.
+;; The point proc is a procedure capturing an 
+;; expression for a point as a *linear* function of
+;; the two (for two dimensions) roots of the appropriate 
+;; chamber.
 (define (tabulate-point cox-g point-proc)
-  (let ((roots-inexact (cxg/roots-inexact cox-g)))
-    (map 
-     (lambda (chamber)
-       (list chamber
-	     (apply point-proc 
-		    (cxg:chamber-root-list cox-g chamber))))
-     (cxg/chamber-list cox-g))))
+  (map 
+   (lambda (chamber)
+     (list chamber
+	   (apply point-proc 
+		  (cxg:chamber-root-list cox-g chamber))))
+   (cxg/chamber-list cox-g)))

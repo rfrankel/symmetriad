@@ -247,6 +247,7 @@
 	   (prev-coset (if (gn:use-tms? gn)
 			   (node-datum inv-node)
 			   inv-node))
+	   ; TODO this appears unused.  What's it for?
 	   (forw-node (gt:get-gen-coset grp-table gen prev-coset)))
       ;(pp (list "Unlinking node" victim ", generator" gen)) 
       ;(pp inv-node)

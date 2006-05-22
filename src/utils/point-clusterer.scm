@@ -91,7 +91,6 @@
   (define (prepend-all item list-of-lists)
     (map (lambda (lst) (cons item lst)) list-of-lists))
   (let ((max-near-dist (pocl/max-near-dist clusterer))
-	(min-far-dist (pocl/min-far-dist clusterer))
 	(cube-edge-size (pocl/cube-edge-size clusterer)))
     (let loop ((cube-spec-left (pocl-int:cube-spec clusterer point-list))
 	       (point-list-left point-list))

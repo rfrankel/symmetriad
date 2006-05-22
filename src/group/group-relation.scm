@@ -132,8 +132,7 @@
 	(found-left-false #f)
 	(found-right-non-false #f)
 	(last-right-false-pos #f)
-	(first-left-false-pos #f)
-	(result '()))
+	(first-left-false-pos #f))
     (for-each 
      (lambda (el-from-left el-from-right position)
        (if (and (not el-from-left) (not found-left-false)) 
