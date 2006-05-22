@@ -27,6 +27,9 @@
 ;;; with a front face along the z axis and a 
 ;;; front edge parallel to the x axis.
 
+(define (make-cox-len-A n)
+  (make-list n 1))
+
 ;; These roots agree with (make-cox-len-A 2)
 (define (simple-roots-A2)
   (let* ((cox-mat (make-cox-matrix-A 2))
@@ -49,26 +52,6 @@
    (vector -1/2 (/ 1 'sqrt2) -1/2 0)
    (vector 0 0 1 0)
    (vector 0 (/ -1/2 'sqrt2) -1/2 (/ 'sqrt5 (* 2 'sqrt2)))))
-
-;; These roots agree with (make-cox-len-B 2)
-(define (simple-roots-B2)
-  (let* ((cox-mat (make-cox-matrix-B/C 2))
-	 (p (matrix-ref (cm:matrix cox-mat) 0 1))
-	 (root-dirs (list (vector 1 0)
-			  (vector (sym-cox-cos p)
-				  (sym-cox-sin p)))))
-    (map * root-dirs (make-cox-len-B 2))))
-
-
-;; These roots agree with (make-cox-len-C 2)
-(define (simple-roots-C2)
-  (let* ((cox-mat (make-cox-matrix-B/C 2))
-	 (p (matrix-ref (cm:matrix cox-mat) 0 1))
-	 (root-dirs (list (vector (sym-cox-cos p)
-				  (sym-cox-sin p))
-			  (vector 1 0))))
-    (map * root-dirs (make-cox-len-C 2))))
-
 
 ;; Another way of creating geometries; the version that 
 ;; Richard Kane in "Reflection Groups and Invariant Theory"
@@ -159,25 +142,8 @@
   (list (vector 1 0)
 	(vector (sym-cox-cos m) (sym-cox-sin m))))
 
-#|
-(canonical-roots-A 3)
-;Value 22: (#(1 -1 0 0) #(0 1 -1 0) #(0 0 1 -1))
-
-(canonical-roots-B 3)
-;Value 23: (#(1 -1 0) #(0 1 -1) #(0 0 1))
-
-(canonical-roots-C 3)
-;Value 24: (#(1 -1 0) #(0 1 -1) #(0 0 2))
-
-(canonical-roots-D 3)
-;Value 25: (#(1 -1 0) #(0 1 -1) #(0 1 1))
-
-(canonical-roots-I2 5)
-;Value 20: (#(1 0) #(tau (* (/ 1 2) (sqrt (/ (- 5 (sqrt 5)) 2)))))
-
-(canonical-roots-I2 6)
-;Value 21: (#(1 0) #((*number* (expression (* -1/2 sqrt3))) 1/2))
-|#
+(define (make-cox-len-I2)
+  (make-list 2 1))
 
 
 ; Here's yet a third way to create a geometry: The Hack.

@@ -20,15 +20,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 Refactorings:
 - Figure out printed (and readable!) representations for record types
+- Equality of record objects?  Via equal?
 - define-structure
   - group-relation
   - group-presentation
-  - coxeter-matrix -- export to own file? merge with cox-matrix-defs?
-    what about root-systems?
+  - coxeter-matrix
 - in-code commented examples to unittests
-  - group-relation
-  - group-presentation
-  - cox-matrix-defs
+  - group-relation - more comprehension (and group networks??) required
 - read compiler warnings
 
 Get cracking on pictures:

@@ -45,6 +45,7 @@
 	    "multi-set-test"
 	    "point-clusterer"
 	    "symbolics"
+	    "symbolics-test"
 	    "twodtable"
 	    "twodtablehash"
 	    "twodtablesimple"

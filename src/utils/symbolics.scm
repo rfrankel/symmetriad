@@ -36,11 +36,6 @@
 		  e)))))
   (walk expression))
 
-#|
-(substitute-multiple '(a b d) (list (cons 'a 'A) (cons 'b 'B)))
-;Value: (A B d)
-|#
-
 ;; Custom environments for evaluating 
 ;; our symbolic expressions:
 ;; Doesn't actually work at the moment, but is elegant and fixable in theory.

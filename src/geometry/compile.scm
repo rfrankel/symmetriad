@@ -23,5 +23,6 @@
 	  '("cox-geometry"
 	    "geom-family"
 	    "root-systems"
+	    "root-systems-test"
 	    "symmetric-object-creation"
 	    "symmetric-object"))

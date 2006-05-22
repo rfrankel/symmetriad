@@ -18,15 +18,9 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-(for-each (lambda (file)
-	    (cf-conditionally file))
-	  '("cox-presentation"
-	    "cox-presentation-unintegrated"
-	    "coxeter-matrix"
-	    "coxeter-matrix-test"
-	    "group-table"
-	    "group-network"
-	    "group-presentation"
-	    "group-relation"
-	    "subgroup-test"
-	    "subgroup"))
+(declare (usual-integrations))
+
+(assert-equal
+ (substitute-multiple '(a b d) (list (cons 'a 'A) (cons 'b 'B)))
+ '(A B d))
+

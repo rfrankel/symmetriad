@@ -18,15 +18,28 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-(for-each (lambda (file)
-	    (cf-conditionally file))
-	  '("cox-presentation"
-	    "cox-presentation-unintegrated"
-	    "coxeter-matrix"
-	    "coxeter-matrix-test"
-	    "group-table"
-	    "group-network"
-	    "group-presentation"
-	    "group-relation"
-	    "subgroup-test"
-	    "subgroup"))
+(declare (usual-integrations))
+
+(assert-equal 
+ (canonical-roots-A 3)
+ (list #(1 -1 0 0) #(0 1 -1 0) #(0 0 1 -1)))
+
+(assert-equal
+ (canonical-roots-B 3)
+ (list #(1 -1 0) #(0 1 -1) #(0 0 1)))
+
+(assert-equal
+ (canonical-roots-C 3)
+ (list #(1 -1 0) #(0 1 -1) #(0 0 2)))
+
+(assert-equal
+ (canonical-roots-D 3)
+ (list #(1 -1 0) #(0 1 -1) #(0 1 1)))
+
+(assert-equal
+ (canonical-roots-I2 5)
+ (list #(1 0) #((*number* (expression (* -1/4 (+ 1 sqrt5)))) sinpi/5)))
+
+(assert-equal
+ (canonical-roots-I2 6)
+ (list #(1 0) #((*number* (expression (* -1/2 sqrt3))) 1/2)))

@@ -20,21 +20,10 @@
 
 (declare (usual-integrations))
 
-;; This file defines utilities working on lists (without hashing)
+;;; This file defines utilities working on lists (without hashing)
 
 (define (filter pred lst)
   (keep-matching-items lst pred))
-
-;; Unordered pairs of distinct elements
-(define (for-each-pair proc lst)
-  (define (outer-loop biglist)
-    (if (< (length biglist) 2)
-	'done
-	(begin (for-each (lambda (elt)
-			   (proc (car biglist) elt))
-			 (cdr biglist))
-	       (outer-loop (cdr biglist)))))
-  (outer-loop lst))
 
 (define (last-cons-cell lst)
   (if (null? (cdr lst))
@@ -58,9 +47,8 @@
 (define (conseq-pairs-list lst)
   (map cons lst (append (cdr lst) (list (car lst)))))
 
-; Returns an association list mapping each key to 
-; the corresponding value.  If the value list is too 
-; short, extends it cyclically.
+;; Returns an association list mapping each key to the corresponding
+;; value.  If the value list is too short, extends it cyclically.
 (define (cyclic-associate key-list value-list)
   (define (loop keys-left cur-values-left)
     (if (null? keys-left)
@@ -70,26 +58,3 @@
 	    (cons (cons (car keys-left) (car cur-values-left))
 		  (loop (cdr keys-left) (cdr cur-values-left))))))
   (loop key-list value-list))
-
-;; a utility for finding midpoints
-;; Given a list, say '(a b c) 
-;; finds all sublists with one element gone
-;; i.e. '((b c) (a c) (ab))
-(define (sublists-one-gone thelist) 
-  (map
-   (lambda (elt) 
-     (list-transform-positive    
-      thelist
-      (lambda (test-elt)
-	(if (eq? elt test-elt)
-	    #f #t))))
-   thelist))
-
-#|
-(sublists-one-gone '(a b c))
-;Value: ((b c) (a c) (a b))
-
-(sublists-one-gone '(a b c d))
-;Value: ((b c d) (a c d) (a b d) (a b c))
-|#
-

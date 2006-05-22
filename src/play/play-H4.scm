@@ -24,7 +24,7 @@
 
 (define coxsub (group-presentation '(s0) '(s0 s0)))
 (define cox-pres
-  (cox-presentation (make-cox-matrix-H 4) (make-cox-len-H 4)))
+  (cox-presentation (make-cox-matrix-H 4) H4-lengths))
 (define cox-group-net (group-network cox-pres coxsub "Autogen"))
 
 ; Works!  Takes its sweet time, but works!

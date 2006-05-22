@@ -20,9 +20,9 @@
 
 (for-each (lambda (file)
 	    (load file))
-	  '("cox-matrix-defs"
-	    "cox-presentation"
+	  '("cox-presentation"
 	    "cox-presentation-unintegrated"
+	    "coxeter-matrix"
 	    "group-table"
 	    "group-network"
 	    "group-presentation"

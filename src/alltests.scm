@@ -24,7 +24,10 @@
 
 (let ()
   (load "utils/multi-set-test")
+  (load "utils/symbolics-test")
+  (load "group/coxeter-matrix-test")
   (load "group/subgroup-test")
+  (load "geometry/root-systems-test")
   
   (define A3-system (geom-family->cox-geometry A-family 3 #f))
   
