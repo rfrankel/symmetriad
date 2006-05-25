@@ -21,12 +21,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Refactorings:
 - Figure out printed (and readable!) representations for record types
 - Equality of record objects?  Via equal?
-- define-structure
+- Use define-structure macro (tagged lists or records?  Literals, equality...)
   - group-relation
   - group-presentation
   - coxeter-matrix
 - in-code commented examples to unittests
   - group-relation - more comprehension (and group networks??) required
+- twodtable abstraction
+  - implementation currently chosen by not loading a file, which feels poor
+  - define-structure and/or some generic procedures could prove helpful
 
 Get cracking on pictures:
 - Figure out a good place to store them and their sources
