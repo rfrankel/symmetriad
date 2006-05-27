@@ -37,17 +37,30 @@ that the section can be marked as normative).</p>
 <p>The Symmetriad currently has little in the way of naming
 conventions, and they are not fully respected throughout the code.  A
 convention present in a decent chunk of the code is that structured
-data is specified via define-structure, the direct accessors are
-prefixed with an abbreviation of the structure name and a slash (/),
-and functions that operate on that structure are prefixed with the
-same abbreviation and a colon (:).  Functions that operate on the
-structure but are not meant for external use are prefixed with the
+data is specified via <code>define-structure</code>, the direct
+accessors are prefixed with an abbreviation of the structure name and
+a slash (/), and functions that operate on that structure are prefixed
+with the same abbreviation and a colon (:).  Functions that operate on
+the structure but are not meant for external use are prefixed with the
 structure abbreviation and <code>-int:</code> (int for internal).</p>
 
-<p>At the moment, "type conversion" functions, that take an object of
-type <code>foo</code> and make of it one of type <code>bar</code>, are
+<p>"Type conversion" functions, that take an object of type
+<code>foo</code> and make of it one of type <code>bar</code>, are
 named <code>foo->bar</code>.  I am not yet certain I like this
 convention.</p>
+
+<p>Creation functions that make a new object of type <code>foo</code>
+out of comparatively primitive components are named
+<code>make-foo</code>.  </p>
+
+<p>Functions that are not closely tied to a data type, or old
+functions that were named before these conventions had any strength,
+have no prefix.</p>
+
+<p>As is, to my knowledge, the standard in languages that permit it,
+boolean predicates have names ending with a question mark (?), and
+functions that mutate any of their arguments have names ending in an
+exclaimation mark (!).  This paragraph is normative.</p>
 
 <h3>File Names</h3>
 
@@ -95,7 +108,7 @@ tests, to provide them with an environment.</p>
 
 <h3>Comment Syntax (normative)</h3>
 
-<ul><li>The copyright notice should be commented with four semicolons (but isn't).</li>
+<ul><li>The copyright notice should be commented with three semicolons.</li>
 <li>File heading comments should have three semicolons.</li>
 <li>Function-level comments should have two semicolons.</li>
 <li>Line comments should have one semicolon.</li></ul>
@@ -103,11 +116,11 @@ tests, to provide them with an environment.</p>
 <h3>Formatting</h3>
 
 <p>The Symmetriad follows the standard Lisp-family code formatting
-guidelines.  Indentation is two spaces per form (no tabs).  Closing
-parentheses pile up at the end of the last form.  Sometimes, when 
-a form has many direct subforms, the closing parenthesis for that 
-form will get its own line, for easy editing and rearrangement of
-the subforms.  e.g.</p>
+guidelines.  Indentation for the bodies of forms that have them is two
+spaces (no tabs).  Closing parentheses pile up at the end of the last
+form.  Sometimes, when a form has many direct subforms, the closing
+parenthesis for that form will get its own line, for easy editing and
+rearrangement of the subforms.  e.g.</p>
 
 <pre>
 (let ((simple stuff)
@@ -159,21 +172,22 @@ welcome.</p>
 <p>Every directory has a <code>compile.scm</code> file responsible for
 compiling all the files in that directory and subdirectories (usually
 via their <code>compile.scm</code> files).  At the moment, the
-compiled files are placed alongside their sources, but this will be
-fixed.  Running make clean in the top level deletes compiled
-files.</p>
+compiled files are placed alongside their sources, but this may be
+fixed if deemed sufficiently annoying.  Running <code>make
+clean</code> in the top level deletes compiled files.</p>
 
 <h3>Order of Events in a File (normative)</h3>
 
 <ol>
-<li>Copyright notice (Four semicolons)</li>
+<li>Copyright notice (Three semicolons)</li>
 <li>load-options, if any</li>
 <li><code>(declare (usual-integrations))</code> (or a comment why not)</li>
 <li>File comment, if any (Three semicolons)</li>
 <li>Content</li></ol>
 
-<p>Don't forget to list every new file in <code>load.scm</code> and
-<code>compile.scm</code></p>
+<p>Don't forget to list every new file in <code>compile.scm</code>,
+every new non-test file in <code>load.scm</code>, and every new test
+file in <code>alltests.scm</code>.</p>
 
 <h3>Contents of a Directory (normative)</h3>
 
