@@ -20,6 +20,11 @@
 
 (declare (usual-integrations))
 
+(define (assert-true boolean)
+  (if boolean
+      'pass
+      (error "Should have been true, was false.")))
+
 (define (assert-equal thing1 thing2)
   (if (equal? thing1 thing2)
       'pass

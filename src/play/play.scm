@@ -28,11 +28,11 @@
 ;; An experiment with a random Coxeter diagram
 
 (define cox-matrix
-  (list coxeter-matrix-type-tag
-	(matrix-by-row-list (list (list 1 3 4)
-				  (list 3 1 3)
-				  (list 4 3 1)))))
-(pe cox-matrix)
+  (%create-coxeter-matrix
+   (matrix-by-row-list (list (list 1 3 4)
+			     (list 3 1 3)
+			     (list 4 3 1)))))
+(pp cox-matrix)
 (define cox-lengths '(1 1 1))
 
 (define coxsub (group-presentation '(s0) '(s0 s0)))
