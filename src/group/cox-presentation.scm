@@ -90,7 +90,7 @@
 	  (reflect-proc
 	   ((if compute-numeric? numeric-reflect-lambda reflect-lambda)
 	    symbol-table len-alist)))
-      (group-presentation-and-proc 
+      (make-group-presentation
        gen-list 
        cox-relations 
        reflect-proc))))

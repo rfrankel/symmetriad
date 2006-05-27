@@ -35,7 +35,7 @@
 (pp cox-matrix)
 (define cox-lengths '(1 1 1))
 
-(define coxsub (group-presentation '(s0) '(s0 s0)))
+(define coxsub (make-group-presentation '(s0) '((s0 s0))))
 (define cox-pres (cox-presentation cox-matrix cox-lengths))
 (define cox-group-net (group-network cox-pres coxsub "Autogen"))
 

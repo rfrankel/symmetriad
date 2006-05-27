@@ -26,78 +26,49 @@
 
 ;; This is the presentation of a group in terms
 ;; of generators and relations
+(define-structure
+  (group-presentation
+   (constructor %create-group-presentation)
+   (conc-name gp:))
+  (gen-num-table #f read-only #t)
+  (relations-list #f read-only #t)
+  (generator-symbols #f read-only #t)
+  (reflect-proc #f read-only #t))
 
-(define group-presentation-type-tag '*group-presentation*)
+(define (make-group-presentation generators relations-list #!optional reflect-proc)
+  (if (default-object? reflect-proc) (set! reflect-proc (lambda (v) v))) ; dummy proc
+  (let ((gen-inverse-table (make-1d-table)))
 
-(define (group-presentation? gp)
-  (eq? (car gp) group-presentation-type-tag))
-
-(define (gp:type a-group) group-presentation-type-tag)
-
-(define (gp:type-predicate v) group-presentation?)
-
-(define (make-group-presentation generators relations-list)
-   (let ((num-gens (length generators))
-	 (gen-inverse-table (make-1d-table))
-	 (symbolic-reflect-proc (lambda (v) v))) ;;dummy proc
-
-     ;;Initialize gen-inverse-table -- association between generators 
-     ;; and inverses. 
-     (for-each (lambda (gen-symbol)
-		   (1d-table/put! gen-inverse-table 
-				  gen-symbol 
-				  (symbol-append '- gen-symbol))
-		   (1d-table/put! gen-inverse-table 
-				  (symbol-append '- gen-symbol) 
-				  gen-symbol))
-	       generators)
-
-     ;; Check that the relations are properly expressed in terms 
-     ;; of generator symbols
-     (for-each (lambda (relation)
-		 (for-each (lambda (letter)
-			     (assert (1d-table/get gen-inverse-table letter #f)
-				     "MAKE-PRESENTATION: not a generator --"
-				     letter))
-		       relation))
-	       relations-list)
-
-     ;; Make the relation objects
-     (let ((relation-objs (map (lambda (relation-list)
-				 (make-group-relation relation-list))
-				relations-list)))
-       (list group-presentation-type-tag
-	     num-gens
-	     gen-inverse-table
-	     relation-objs
-	     (list)
-	     generators
-	     symbolic-reflect-proc))))
-
-(define (group-presentation generators . relations)
-  (make-group-presentation generators relations))
-
-(define (group-presentation-and-proc gens relations reflect-proc)
-  (gp:set-reflect-proc! 
-   (make-group-presentation gens relations) reflect-proc))
-       
-(define (gp:num-gens gp)
-  (list-ref gp 1))
-
-(define (gp:gen-num-table gp)
-  (list-ref gp 2))
-
-(define (gp:relations-list gp)
-  (list-ref gp 3))
-
-(define (gp:inv-generators gp)
-  (list-ref gp 4))
-
-(define (gp:generator-symbols gp)
-  (list-ref gp 5))
-
-(define (gp:reflect-proc gp)
-  (list-ref gp 6))
+    ;; Initialize gen-inverse-table -- association between generators 
+    ;; and inverses. 
+    (for-each (lambda (gen-symbol)
+		(1d-table/put! gen-inverse-table 
+			       gen-symbol 
+			       (symbol-append '- gen-symbol))
+		(1d-table/put! gen-inverse-table 
+			       (symbol-append '- gen-symbol) 
+			       gen-symbol))
+	      generators)
+    
+    ;; Check that the relations are properly expressed in terms 
+    ;; of generator symbols
+    (for-each (lambda (relation)
+		(for-each (lambda (letter)
+			    (assert (1d-table/get gen-inverse-table letter #f)
+				    "MAKE-PRESENTATION: not a generator --"
+				    letter))
+			  relation))
+	      relations-list)
+    
+    ;; Make the relation objects
+    (let ((relation-objs (map (lambda (relation-list)
+				(make-group-relation relation-list))
+			      relations-list)))
+      (%create-group-presentation
+       gen-inverse-table
+       relation-objs
+       generators
+       reflect-proc))))
 
 (define (gp:find-gen-num gp letter)
   (1d-table/get (gp:gen-num-table gp) letter #f))
@@ -105,7 +76,3 @@
 (define (gp:inv-gen gp gen-symbol)
   (let ((invtable (gp:gen-num-table gp)))
     (1d-table/get invtable gen-symbol #f)))
-
-(define (gp:set-reflect-proc! gp mult-proc)
-  (set-car! (cddr (cddddr gp)) mult-proc)
-  gp)

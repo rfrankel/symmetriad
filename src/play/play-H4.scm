@@ -22,7 +22,7 @@
 
 ;;; Example 11: H4
 
-(define coxsub (group-presentation '(s0) '(s0 s0)))
+(define coxsub (make-group-presentation '(s0) '((s0 s0))))
 (define cox-pres
   (cox-presentation (make-cox-matrix-H 4) H4-lengths))
 (define cox-group-net (group-network cox-pres coxsub "Autogen"))

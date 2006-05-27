@@ -150,7 +150,7 @@
 ; The arguments better agree!!
 (define (build-cox-geometry matrix lengths roots)
   (assert-roots-match matrix lengths roots)
-  (let* ((coxsub (group-presentation '(s0) '(s0 s0)))
+  (let* ((coxsub (make-group-presentation '(s0) '((s0 s0))))
 	 (cox-pres (cox-presentation matrix lengths))
 	 (cox-group-net (group-network cox-pres coxsub "Autogen")))
     (gn:hlt cox-group-net)
