@@ -37,6 +37,13 @@ Administrative stuff:
   - So, how does one make actual *programs* in Scheme?  Stdout, exit codes, etc?
 - Write module system?
 - Ensure unified, "best practice" code style?  (Using modules?)
+  - cox-geometry
+  - naming/modularization in geom-family, root-systems?
+  - some privatization may be in order for symmetric-object
+  - clean up symmetric-object-creation
+  - didn't check setupandproject, projection, camera
+  - clean up cox-presentation
+  - group-network
 - Emacs boilerplate generation commands?
 - Mission statement
 
