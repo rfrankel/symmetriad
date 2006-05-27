@@ -31,6 +31,15 @@ Refactorings:
   - implementation currently chosen by not loading a file, which feels poor
   - define-structure and/or some generic procedures could prove helpful
 
+Administrative stuff:
+- Working directory independence
+- Create an effective make test
+  - So, how does one make actual *programs* in Scheme?  Stdout, exit codes, etc?
+- Write module system?
+- Ensure unified, "best practice" code style?  (Using modules?)
+- Emacs boilerplate generation commands?
+- Mission statement
+
 Get cracking on pictures:
 - Figure out a good place to store them and their sources
 - Rescue all of them from playout/ directories in checkouts
@@ -53,7 +62,7 @@ Do:
   - Get group-tables to print nicely (hash-parsing)
   - Ditto twodtablehash objets
   - Check C4 roots?
-  - Separate function to compute geometry (Rebecca, now)
+  - Separate function to compute geometry
     - This is the function that really needs the lengths, not
       the group presentation constructor
     - Link that function in instead of building things inline

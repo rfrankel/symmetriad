@@ -21,11 +21,22 @@
 ### ----------------------------------------------------------------------
 
 use strict;
+use English '-no_match_vars';
+
+## It's not clear how well this script actually works.
 
 my $scheme_dir = "/usr/local/scmutils";
 my $scheme = "$scheme_dir/mit-scheme/bin/scheme -library $scheme_dir/mit-scheme/lib";
 my @bands = `find /usr/local/scmutils/ -name "edwin-mechanics.com"`; # Oh, the hacks we pull...
-my $result = `echo '(cd "$ARGV[0]") (load "compile.scm") (load "graphics/drawing") $ARGV[1]' | $scheme -heap 6000 -constant 2000 -band $bands[0]`;
-if(defined $ARGV[2]) {
+my $band = $bands[0];
+chomp($band);
+my $command = "echo '$ARGV[0]' | $scheme -heap 6000 -constant 2000 -band $band -eval '(load \"compile.scm\")' '(load \"load\")'";
+print $command . "\n";
+my $result = `$command`;
+if(defined $ARGV[1]) {
     print $result . "\n";
+}
+if($CHILD_ERROR != 0) {
+    print $result . "\n";
+    exit($CHILD_ERROR);
 }
