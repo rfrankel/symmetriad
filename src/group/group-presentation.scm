@@ -36,34 +36,27 @@
   (reflect-proc #f read-only #t))
 
 (define (make-group-presentation generators relations-list #!optional reflect-proc)
+  (define (initialize-inverse-table! gen-inverse-table)
+    (for-each 
+     (lambda (gen-symbol)
+       (1d-table/put! gen-inverse-table gen-symbol (symbol-append '- gen-symbol))
+       (1d-table/put! gen-inverse-table (symbol-append '- gen-symbol) gen-symbol))
+     generators))
+  (define (check-relations relations-list gen-inverse-table)
+    (for-each
+     (lambda (relation)
+       (for-each
+	(lambda (letter)
+	  (assert (1d-table/get gen-inverse-table letter #f)
+		  "MAKE-PRESENTATION: not a generator --"
+		  letter))
+	relation))
+     relations-list))
   (if (default-object? reflect-proc) (set! reflect-proc (lambda (v) v))) ; dummy proc
   (let ((gen-inverse-table (make-1d-table)))
-
-    ;; Initialize gen-inverse-table -- association between generators 
-    ;; and inverses. 
-    (for-each (lambda (gen-symbol)
-		(1d-table/put! gen-inverse-table 
-			       gen-symbol 
-			       (symbol-append '- gen-symbol))
-		(1d-table/put! gen-inverse-table 
-			       (symbol-append '- gen-symbol) 
-			       gen-symbol))
-	      generators)
-    
-    ;; Check that the relations are properly expressed in terms 
-    ;; of generator symbols
-    (for-each (lambda (relation)
-		(for-each (lambda (letter)
-			    (assert (1d-table/get gen-inverse-table letter #f)
-				    "MAKE-PRESENTATION: not a generator --"
-				    letter))
-			  relation))
-	      relations-list)
-    
-    ;; Make the relation objects
-    (let ((relation-objs (map (lambda (relation-list)
-				(make-group-relation relation-list))
-			      relations-list)))
+    (initialize-inverse-table! gen-inverse-table)
+    (check-relations relations-list gen-inverse-table)
+    (let ((relation-objs (map make-group-relation relations-list)))
       (%create-group-presentation
        gen-inverse-table
        relation-objs
