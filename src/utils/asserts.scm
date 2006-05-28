@@ -112,7 +112,7 @@
 
 (define (assert-valid-group-net gn)
   (let ((cosets (gn:coset-list gn))
-	(mult-table (gn:mult-table gn))
+	(mult-table (gn:multiplication-table gn))
 	(relations (gp:relations-list (gn:presentation gn))))
     (for-each (lambda (coset)
 		(assert-relations-satisfied mult-table coset relations))

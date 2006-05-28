@@ -19,22 +19,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ----------------------------------------------------------------------
 
 Refactorings:
-- Figure out printed (and readable!) representations for record types
-- Equality of record objects?  Via equal?
-- Use define-structure macro (tagged lists or records?  equality...)
-  - group-network?
-  - twodtable??
 - in-code commented examples to unittests
   - group-relation - more comprehension (and group networks??) required
 - twodtable abstraction
   - implementation currently chosen by not loading a file, which feels poor
   - define-structure and/or some generic procedures could prove helpful
-
-Administrative stuff:
-- Working directory independence
-- Create an effective make test
-  - So, how does one make actual *programs* in Scheme?  Stdout, exit codes, etc?
-- Write module system?
 - Ensure unified, "best practice" code style?  (Using modules?)
   - cox-geometry
   - naming/modularization in geom-family, root-systems?
@@ -42,7 +31,13 @@ Administrative stuff:
   - clean up symmetric-object-creation
   - didn't check setupandproject, projection, camera
   - clean up cox-presentation
-  - group-network
+  - group-network - only creation, direct access, and gn:hlt appear to be interesting to the outside world
+
+Administrative stuff:
+- Working directory independence
+- Create an effective make test
+  - So, how does one make actual *programs* in Scheme?  Stdout, exit codes, etc?
+- Write module system?
 - Emacs boilerplate generation commands?
 - Mission statement
 

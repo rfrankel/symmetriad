@@ -25,32 +25,18 @@
 ;;; Adapted for mirror reflection groups
 ;;;; October 2003 -- rfrankel
 
-(define group-network-type-tag '*mirror-group*)
-
-(define (group-network? gn)
-  (eq? (car gn) group-network-type-tag))
-
-(define (gn:type tc) group-network-type-tag)
-
-(define (gn:type-predicate v) group-network?)
-
-(define (make-group-network group-presentation
-			  subgroup-presentation
-                          multiplication-table
-			  group-constraint-system
-			  geometry-table
-			  num-cosets
-			  dead-cosets
-			  use-tms?)
-    (list group-network-type-tag
-	group-presentation
-        subgroup-presentation
-        multiplication-table 
-	group-constraint-system
-        geometry-table
-	num-cosets
-	dead-cosets
-	use-tms?))
+(define-structure
+  (group-network
+   (constructor %create-group-network)
+   (conc-name gn:))
+  (presentation #f read-only #t)
+  (subgroup-presentation #f read-only #t)  ; TODO unused
+  (multiplication-table #f read-only #t)
+  (constraint-network #f read-only #t)
+  (geometry-table #f read-only #t)
+  (num-cosets 0)
+  (dead-cosets #f)
+  (use-tms? #f read-only #t))
 
 ;; utility for initializing the geometry
 (define ((selector_n n) el_list)
@@ -60,7 +46,7 @@
 (define (group-network group-present subgroup-present name)
   (define use-tms? *use-tms?*)
   (let* ((group-net (if use-tms? (create-constraint-network name) #f))
-	 (mult-table (make-empty-group-table))
+	 (gn:multiplication-table (make-empty-group-table))
 	 (geometry-table (make-empty-two-d-table))
 	 (gen-symbols (gp:generator-symbols group-present)))
 
@@ -78,10 +64,10 @@
 	   (two-d-put! geometry-table 'e sroot sel-proc))))
      gen-symbols)
       
-    (make-group-network
+    (%create-group-network
      group-present
      subgroup-present
-     mult-table
+     gn:multiplication-table
      group-net
      geometry-table
      0
@@ -89,53 +75,22 @@
      use-tms?
      )))
 
-(define (gn:presentation group-network)
-  (list-ref group-network 1))
-
-(define (gn:subgroup group-network)
-  (list-ref group-network 2))
-
-(define (gn:mult-table group-network)
-  (list-ref group-network 3))
-
-(define (gn:constraint-network group-network)
-  (list-ref group-network 4))
-
-(define (gn:geometry group-network)
-  (list-ref group-network 5))
-
 (define (gn:set-geometry gn element tag geom)
-  (let ((geometry-table (gn:geometry gn)))
+  (let ((geometry-table (gn:geometry-table gn)))
     (two-d-put! geometry-table element tag geom)))
 
 (define (gn:get-geometry gn element tag)
-  (let ((geometry-table (gn:geometry gn)))
+  (let ((geometry-table (gn:geometry-table gn)))
     (two-d-get geometry-table element tag)))
 
-(define (gn:num-cosets group-network)
-  (list-ref group-network 6))
-
-(define (gn:set-num-cosets! group-network new-cos-num)
-  (set-cdr! (cdr (cddddr group-network)) 
-	    (list new-cos-num 
-		  (gn:dead-cosets group-network)
-		  (gn:use-tms? group-network)
-		  )))
-
-(define (gn:dead-cosets group-network)
-  (list-ref group-network 7))
+(define gn:set-num-cosets! set-gn:num-cosets!)
 
 (define (gn:add-dead-coset! group-network coset)
-  (set-cdr! (cddr (cddddr group-network)) 
-	    (list (cons coset (gn:dead-cosets group-network))
-		  (gn:use-tms? group-network)
-		  )))
+  (set-gn:dead-cosets! group-network
+		       (cons coset (gn:dead-cosets group-network))))
 
 (define (gn:dead-coset? group-network coset)
   (not (not (memq coset (gn:dead-cosets group-network)))))
-
-(define (gn:use-tms? group-network)
-  (list-ref group-network 8))
 
 (define (coset-num->coset coset-num)
   (if (eq? coset-num 0) 
@@ -147,6 +102,7 @@
 (define (coset-list num-cosets)
   (map coset-num->coset (enumerate-interval 0 num-cosets)))
 
+;; TODO this is pretty slow
 (define (gn:coset-list group-net)
   (filter (lambda (coset-symb)
 	    (not (gn:dead-coset? group-net coset-symb)))
@@ -224,7 +180,7 @@
 	
 
 (define (record-product! gn gen factor product symb)
-  (let* ((grp-table (gn:mult-table gn))
+  (let* ((grp-table (gn:multiplication-table gn))
 	 )
     (if (gn:dead-coset? gn factor)
 	(error "Given a dead factor" factor))
@@ -259,7 +215,7 @@
     ;(pp (list "Merging node" loser "into node" winner))
     (if (eq? loser winner)
 	'()
-	(let* ((grp-table (gn:mult-table gn))
+	(let* ((grp-table (gn:multiplication-table gn))
 	       (loser-attachments (gt:get-coset-alist grp-table loser))
 	       (winner-attachments (gt:get-coset-alist grp-table winner))
 	       (recursion-list '()))
@@ -301,7 +257,7 @@
 
 (define (print-group gn)
   (gt:print-by-coset
-   (gn:mult-table gn)
+   (gn:multiplication-table gn)
    (gen-and-inv-list (gn:presentation gn))
    (gn:coset-list gn)
    (lambda (node-or-nil) 
@@ -317,7 +273,7 @@
 ;; Note: multiplication and inverse multiplication are 
 ;; the same in a mirror group.
 (define (gn:trace-relation gn left-symbol right-symbol relation)
-  (let ((grp-mult (gn:mult-table gn)))
+  (let ((grp-mult (gn:multiplication-table gn)))
     (let ((trace-result (gr:sjca? relation left-symbol right-symbol
 			    (lambda (coset generator)
 			     (lookup-mult grp-mult coset generator))
@@ -371,7 +327,7 @@
 ;; Builds the root procedures along with the group multiplication table.
 (define (gn:hlt gn)
   (let ((gp (gn:presentation gn))
-	(grp-mult (gn:mult-table gn)))
+	(grp-mult (gn:multiplication-table gn)))
     (let ((relations (gp:relations-list gp))
 	  (gen-list (gp:generator-symbols gp))
 	  )
@@ -423,7 +379,7 @@
 ;(define (gn:print gn)
 ;  (let ((at (gn:constraint-network gn))
 ;	(gp (gn:presentation gn))
-;	(sp (gn:subgroup gn))
+;	(sp (gn:subgroup-presentation gn))
 ;	(cq (gn:coincidence-queue gn))
 ;	(dfq (gn:definition-queue gn))
 ;	(dq (gn:deduction-queue gn)))

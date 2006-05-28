@@ -60,7 +60,7 @@
 
 (define (build-face-list cox-g)
   (pp "- Building face list.")
-  (let ((grp-mult-table (gn:mult-table (cxg/group-net cox-g)))
+  (let ((grp-mult-table (gn:multiplication-table (cxg/group-net cox-g)))
 	(done-cache (make-eq-hash-table))
 	(chambers (cxg/chamber-list cox-g)))
     (for-each (lambda (chamber)

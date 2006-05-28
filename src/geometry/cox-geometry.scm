@@ -55,11 +55,11 @@
    gen-symbols))
 
 (define (create-cox-geometry name grp-net)
-  (let ((mult-table (gn:mult-table grp-net))
+  (let ((mult-table (gn:multiplication-table grp-net))
 	(gen-list (gp:generator-symbols
 		   (gn:presentation grp-net)))
 	(chamber-list (gn:coset-list grp-net))
-	(geom (gn:geometry grp-net))
+	(geom (gn:geometry-table grp-net))
 	(sname (string->symbol name)))
     (%create-cox-geometry sname gen-list chamber-list mult-table geom grp-net)))
 
