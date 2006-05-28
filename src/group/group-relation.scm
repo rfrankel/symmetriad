@@ -25,15 +25,11 @@
 
 ;; This is the presentation of a group in terms
 ;; of generators and relations
-
-(define group-relation-type-tag '*group-relation*)
-
-(define (group-relation? gr)
-  (eq? (car gr) group-relation-type-tag))
-
-(define (gr:type a-relation) group-relation-type-tag)
-
-(define (gr:type-predicate v) group-relation?)
+(define-structure
+  (group-relation
+   (constructor %create-group-relation)
+   (conc-name gr:))
+  (relation-list #f read-only #t))
 
 ;; Relation-list should be a list of at least two symbols (maybe more)
 (define (make-group-relation relation-list)
@@ -42,13 +38,7 @@
 	      (assert (symbol? alleged-symbol)
 		      "MAKE-RELATION: not a symbol" alleged-symbol))
 	    relation-list)
-  (list group-relation-type-tag relation-list))
-
-(define (group-relation relation-list)
-  (make-group-relation relation-list))
-
-(define (gr:relation-list relation)
-  (list-ref relation 1))
+  (%create-group-relation relation-list))
 
 (define (gr:length relation)
   (length (gr:relation-list relation)))
@@ -77,14 +67,14 @@
 
 ;; Example: in a little network where 
 ;; 'e times 'x = 'one and 'one times 'x = 'two. 
-;; (gr:trace-from-left (make-group-relation (list 'x 'x)) 'e group-mult)
+;; (gr-int:trace-from-left (make-group-relation (list 'x 'x)) 'e group-mult)
 ;Value 90: (e one two)
 ;(define xcubed (make-group-relation (list 'x 'x 'x)))
 ;Value: xcubed
-;;(gr:trace-from-left xcubed 'e group-mult)
+;;(gr-int:trace-from-left xcubed 'e group-mult)
 ;Value 91: (e one two ())
 
-(define (gr:trace-from-left relation start-el multiply-proc)
+(define (gr-int:trace-from-left relation start-el multiply-proc)
   (let ((relation-list (gr:relation-list relation)))
     (define (trace-from-left element-to-multiply partial-relation)
       (let ((answer (multiply-proc element-to-multiply (car partial-relation))))
@@ -99,10 +89,10 @@
 ;; (define (group-mult-inverse el gen)
 ;;	 ((trace-multiplication-inverse-name el gen) group))
 ;; Example:
-;(gr:trace-from-right xcubed 'e group-mult-inverse)
+;(gr-int:trace-from-right xcubed 'e group-mult-inverse)
 ;Value 94: (() () () e)
 
-(define (gr:trace-from-right relation start-el multiply-proc)
+(define (gr-int:trace-from-right relation start-el multiply-proc)
   (let ((relation-list (reverse (gr:relation-list relation))))
     (define (trace-from-left element-to-multiply partial-relation)
       (let ((answer (multiply-proc element-to-multiply (car partial-relation))))
@@ -119,14 +109,14 @@
 ;; in the from-right list.  
 
 ;; Example: 
-;(gr:trace-both-ways xcubed 'e 'e group-mult group-mult-inverse)
+;(gr-int:trace-both-ways xcubed 'e 'e group-mult group-mult-inverse)
 ;Value 103: (2 3 (() () () e) (e one two ()))
 
-(define (gr:trace-both-ways relation start-el-left start-el-right 
+(define (gr-int:trace-both-ways relation start-el-left start-el-right 
 			    mult-proc-l mult-proc-r)
-  (let ((result-from-right (gr:trace-from-right 
+  (let ((result-from-right (gr-int:trace-from-right 
 			    relation start-el-right mult-proc-r))
-	(result-from-left (gr:trace-from-left 
+	(result-from-left (gr-int:trace-from-left 
 			   relation start-el-left mult-proc-l))
 	(relation-length (gr:length relation))
 	(found-left-false #f)
@@ -169,9 +159,9 @@
 ;;Value 113: (add-coset one x)
 
 (define (gr:sjca? relation start-el-left start-el-right mult-proc-l mult-proc-r)
-  (let ((trace-result (gr:trace-both-ways relation 
-					  start-el-left start-el-right
-					  mult-proc-l mult-proc-r)))
+  (let ((trace-result (gr-int:trace-both-ways relation 
+					      start-el-left start-el-right
+					      mult-proc-l mult-proc-r)))
     ;(pp trace-result)
     (let ((last-r-false (list-ref trace-result 0))
 	  (first-l-false (list-ref trace-result 1))
@@ -196,10 +186,10 @@
 ;(define my-rel (make-group-relation (list 0 2 1 3)))
 ;Value: my-rel
 
-;(gr:trace-from-right my-rel 4 (lambda (el rel-el) (+ el rel-el)))
+;(gr-int:trace-from-right my-rel 4 (lambda (el rel-el) (+ el rel-el)))
 ;Value 20: (10 10 8 7 4)
 
-;(gr:trace-from-left my-rel 4 (lambda (el rel-el) (+ el rel-el)))
+;(gr-int:trace-from-left my-rel 4 (lambda (el rel-el) (+ el rel-el)))
 ;Value 17: (4 4 6 7 10)
 
 ;; Given a relation, a multiplication procedure, and a 

@@ -22,7 +22,6 @@ Refactorings:
 - Figure out printed (and readable!) representations for record types
 - Equality of record objects?  Via equal?
 - Use define-structure macro (tagged lists or records?  equality...)
-  - group-relation
   - group-network?
   - twodtable??
 - in-code commented examples to unittests
