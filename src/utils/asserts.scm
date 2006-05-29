@@ -70,18 +70,16 @@
 			(vector/scalar (list-ref roots index) 
 				       (list-ref lengths index))
 			symbol-dict))))    
-  (let ((n (length roots))
-	(matrix (cm:matrix cox-matrix)))
+  (let ((n (length roots)))
     (assert (= n (length lengths)))
-    (assert (= n (m:num-rows matrix)))
-    (assert (= n (m:num-cols matrix)))
+    (assert (= n (cm:dimension cox-matrix)))
     (for-each 
      (lambda (ind1)
        (for-each
 	(lambda (ind2)
 	  (let ((cosine (simplify 
 			 (substitute-multiple
-			  (sym-cox-cos (matrix-ref matrix ind1 ind2))
+			  (sym-cox-cos (cm:matrix-ref cox-matrix ind1 ind2))
 			  symbol-dict)))
 		(root1 (normalized-root ind1))
 		(root2 (normalized-root ind2)))

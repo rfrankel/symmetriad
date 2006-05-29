@@ -33,7 +33,7 @@
 ;; These roots agree with (make-cox-len-A 2)
 (define (simple-roots-A2)
   (let* ((cox-mat (make-cox-matrix-A 2))
-	 (p (matrix-ref (cm:matrix cox-mat) 0 1))
+	 (p (cm:matrix-ref cox-mat 0 1))
 	 (root-dirs (list (vector 1 0)
 			  (vector (sym-cox-cos p)
 				  (sym-cox-sin p)))))

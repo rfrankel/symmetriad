@@ -36,6 +36,11 @@
 (define (make-coxeter-matrix n proc)
   (%create-coxeter-matrix (m:generate n n proc)))
 
+(define (cm:dimension cox-matrix)
+  (m:num-rows (cm:matrix cox-matrix)))
+
+(define (cm:matrix-ref cox-matrix row col)
+  (matrix-ref (cm:matrix cox-matrix) row col))
 
 
 (define (make-cox-matrix-A n)
