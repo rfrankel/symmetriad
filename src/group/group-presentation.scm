@@ -39,8 +39,8 @@
   (define (initialize-inverse-table! gen-inverse-table)
     (for-each 
      (lambda (gen-symbol)
-       (1d-table/put! gen-inverse-table gen-symbol (symbol-append '- gen-symbol))
-       (1d-table/put! gen-inverse-table (symbol-append '- gen-symbol) gen-symbol))
+       (1d-table/put! gen-inverse-table gen-symbol (inverse-symbol gen-symbol))
+       (1d-table/put! gen-inverse-table (inverse-symbol gen-symbol) gen-symbol))
      generators))
   (define (check-relations relations-list gen-inverse-table)
     (for-each

@@ -137,10 +137,8 @@
     (if (gn:use-tms? gn)
         ;; Build the new structures in the constraint system
         ;; add the new (bidirectional) constraint
-	(let ((new-mult-symbol
-	       (symbol-append gen (string->symbol "*") coset))
-	      (new-inv-mult-symbol
-	       (symbol-append inv-gen (string->symbol "*") new-coset-symbol)))
+	(let ((new-mult-symbol (product-symbol gen coset))
+	      (new-inv-mult-symbol (product-symbol inv-gen new-coset-symbol)))
 	  (record-product! gn gen coset new-coset-symbol new-mult-symbol)
 	  (record-product! gn gen new-coset-symbol coset new-inv-mult-symbol))
 	(begin
@@ -154,11 +152,8 @@
 	 (inv-gen (gp:inv-gen gp gen))
 	 )
     (if (gn:use-tms? gn)
-	(let ((new-mult-symbol
-	       (symbol-append gen (string->symbol "*") cos-start))
-	      (new-inv-mult-symbol
-	       (symbol-append inv-gen (string->symbol "*") cos-start))
-	      )
+	(let ((new-mult-symbol (product-symbol gen cos-start))
+	      (new-inv-mult-symbol (product-symbol inv-gen cos-start)))
 	  (record-product! gn gen cos-start cos-end new-mult-symbol)
 	  (record-product! gn gen cos-end cos-start new-inv-mult-symbol))
 	(begin (record-product! gn gen cos-start cos-end #f)

@@ -35,3 +35,9 @@
       (string->symbol (string-append
 		       "c"
 		       (number->string coset-num)))))
+
+(define (product-symbol factor1 factor2)
+  (symbol-append factor1 (string->symbol "*") factor2))
+
+(define (inverse-symbol generator)
+  (symbol-append '- generator))
