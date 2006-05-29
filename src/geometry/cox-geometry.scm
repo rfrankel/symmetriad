@@ -47,13 +47,6 @@
   ) 
 
 
-;; a utility to list the root symbols.
-(define (root-symbols gen-symbols)
-  (map 
-   (lambda (gen)
-     (symbol-append  gen '_root))
-   gen-symbols))
-
 (define (create-cox-geometry name grp-net)
   (let ((mult-table (gn:multiplication-table grp-net))
 	(gen-list (gp:generator-symbols

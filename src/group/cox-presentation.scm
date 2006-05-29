@@ -23,9 +23,6 @@
 ;;;;; Coxeter Groups presentations
 ;;;; 28 Feb 2002
 
-(define (number->generator-symbol num)
-  (symbol-append 's (string->symbol (number->string num))))
-
 ;; Takes a matrix that gives the numbers m in (s_i s_j)^m_{ij} = 1 and
 ;; returns a lookup table of the cosines of the angles between s_i and
 ;; s_j.

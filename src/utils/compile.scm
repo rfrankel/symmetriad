@@ -46,6 +46,7 @@
 	    "point-clusterer"
 	    "symbolics"
 	    "symbolics-test"
+	    "symbol-manipulation"
 	    "twodtable"
 	    "twodtablehash"
 	    "twodtablesimple"

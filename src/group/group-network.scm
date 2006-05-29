@@ -59,7 +59,7 @@
      (lambda (gen)
        (let ((index (- (length gen-symbols)
 		       (length (memq gen gen-symbols)))))
-	 (let ((sroot (symbol-append gen '_root))
+	 (let ((sroot (generator-symbol->root-symbol gen))
 	       (sel-proc (selector_n index)))
 	   (two-d-put! geometry-table 'e sroot sel-proc))))
      gen-symbols)
@@ -92,18 +92,10 @@
 (define (gn:dead-coset? group-network coset)
   (not (not (memq coset (gn:dead-cosets group-network)))))
 
-(define (coset-num->coset coset-num)
-  (if (eq? coset-num 0) 
-      'e 
-      (string->symbol (string-append
-		       "c"
-		       (number->string coset-num)))))
-	  
-(define (coset-list num-cosets)
-  (map coset-num->coset (enumerate-interval 0 num-cosets)))
-
 ;; TODO this is pretty slow
 (define (gn:coset-list group-net)
+  (define (coset-list num-cosets)
+    (map coset-num->coset-symbol (enumerate-interval 0 num-cosets)))
   (filter (lambda (coset-symb)
 	    (not (gn:dead-coset? group-net coset-symb)))
 	  (coset-list (gn:num-cosets group-net))))
@@ -112,19 +104,13 @@
 ;  (let ((at (gn:constraint-network gn)))
 ;    (at:print-table at generator-list)))
 
-(define (root-symbols gen-symbols)
-  (map 
-   (lambda (gen)
-     (symbol-append  gen '_root))
-   gen-symbols))
 
-       
 (define (handle-add gn coset gen)
   (let* ((gp (gn:presentation gn))
          (inv-gen (gp:inv-gen gp gen))
 	 (num-cosets (gn:num-cosets gn))
 	 (new-coset-num (+ 1 num-cosets))
-	 (new-coset-symbol (coset-num->coset new-coset-num))
+	 (new-coset-symbol (coset-num->coset-symbol new-coset-num))
 	 )
 
     (define (add-new-geometry)
@@ -133,8 +119,8 @@
 	(for-each 
 	 (lambda (mirror-sym mirror-gen)
 	   (let ((mirror-proc (gn:get-geometry gn coset mirror-sym))
-		 (gen-proc (gn:get-geometry gn coset      
-					    (symbol-append  gen '_root))))
+		 (gen-proc (gn:get-geometry
+			    gn coset (generator-symbol->root-symbol gen))))
 	     (if mirror-proc
 		 ; Here reflect-proc reflects mirror-(gen/proc) across
 		 ; gen/gen-proc.
@@ -340,16 +326,16 @@
 	;(print-group gn) (newline)
 	)
       (define (skip-dead-coset coset-num)
-	;(display "Skipping dead coset ") (pp (coset-num->coset coset-num))
+	;(display "Skipping dead coset ") (pp (coset-num->coset-symbol coset-num))
 	(hlt-helper (+ coset-num 1)))
       (define (skip-coset coset-num)
-	;(display "Skipping coset ") (pp (coset-num->coset coset-num))
+	;(display "Skipping coset ") (pp (coset-num->coset-symbol coset-num))
 	(hlt-helper (+ coset-num 1)))
       (define (internal-trace-relation coset relation)
 	;(display "Tracing ") (pp relation)
 	(gn:trace-across gn coset coset relation))
       (define (process-coset coset-num)
-	(let ((coset (coset-num->coset coset-num)))
+	(let ((coset (coset-num->coset-symbol coset-num)))
 	  (if (= 0 (remainder coset-num 200))
 	      (begin (display "Processing coset ") (pp coset))
 	      )
@@ -361,7 +347,7 @@
 	      (report-done coset)
 	      (hlt-helper (+ coset-num 1)))))
       (define (hlt-helper coset-num)
-	(let ((coset (coset-num->coset coset-num)))
+	(let ((coset (coset-num->coset-symbol coset-num)))
 	  (cond ((gn:dead-coset? gn coset)
 		 (skip-dead-coset coset-num))
 		; Hack, becuase coset skipping causes bad coincidences in A4 and D4
