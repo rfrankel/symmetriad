@@ -46,7 +46,7 @@
 (define (group-network group-present subgroup-present name)
   (define use-tms? *use-tms?*)
   (let* ((group-net (if use-tms? (create-constraint-network name) #f))
-	 (gn:multiplication-table (make-empty-group-table))
+	 (multiplication-table (make-empty-group-table))
 	 (geometry-table (make-empty-two-d-table))
 	 (gen-symbols (gp:generator-symbols group-present)))
 
@@ -67,7 +67,7 @@
     (%create-group-network
      group-present
      subgroup-present
-     gn:multiplication-table
+     multiplication-table
      group-net
      geometry-table
      0
