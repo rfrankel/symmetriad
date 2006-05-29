@@ -89,11 +89,11 @@
 	(enumerate-interval 0 (- n 1))))
      (enumerate-interval 0 (- n 1)))))
 
-(define (assert-relation-satisfied group-table coset relation)
+(define (assert-relation-satisfied group-net coset relation)
   (define (relation-walk cur-coset relation-left)
     (if (= 1 (length relation-left))
-	(lookup-mult group-table cur-coset (car relation-left))
-	(let ((result (lookup-mult group-table cur-coset (car relation-left))))
+	(gn:product group-net cur-coset (car relation-left))
+	(let ((result (gn:product group-net cur-coset (car relation-left))))
 	  (assert (not (eq? result coset))
 		  "Relation redundant."
 		  (list coset relation))
@@ -103,17 +103,16 @@
 	    "Relation unsatisfied."
 	    (list  coset relation end))))
 
-(define (assert-relations-satisfied group-table coset relations)
+(define (assert-relations-satisfied group-net coset relations)
   (for-each (lambda (relation)
-	      (assert-relation-satisfied group-table coset relation))
+	      (assert-relation-satisfied group-net coset relation))
 	    relations))
 
 (define (assert-valid-group-net gn)
   (let ((cosets (gn:coset-list gn))
-	(mult-table (gn:multiplication-table gn))
 	(relations (gp:relations-list (gn:presentation gn))))
     (for-each (lambda (coset)
-		(assert-relations-satisfied mult-table coset relations))
+		(assert-relations-satisfied gn coset relations))
 	      cosets)))
 
 (define (assert-correct-stats sym-obj #!optional num-verts num-faces)

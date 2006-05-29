@@ -45,11 +45,9 @@
 ; generator and return their supergroup product
 
 (define (coxg-subgroup cox-g word-list)
-  (%create-subgroup (lambda (elt gen)
-		      (lookup-mult (cxg/mult-table cox-g) elt gen))
-		    (map (lambda (word)
-			   (if (list? word) word (list word)))
-			 word-list)))
+  (%create-subgroup
+   (lambda (elt gen) (gn:product (cxg/group-net cox-g) elt gen))
+   (map (lambda (word) (if (list? word) word (list word))) word-list)))
 
 ; gen-spec is a list of 1's and 0's.  The 0's indicate which 
 ; generators go into the subgroup.

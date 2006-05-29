@@ -146,7 +146,7 @@
   (let* ((coxsub (make-group-presentation '(s0) '((s0 s0))))
 	 (cox-pres (cox-presentation matrix lengths))
 	 (cox-group-net (group-network cox-pres coxsub "Autogen")))
-    (gn:hlt cox-group-net)
+    (gn:hlt! cox-group-net)
     (assert-valid-group-net cox-group-net)
     (display "Group net appears valid.") (newline)
     (let ((cox-geom (create-cox-geometry "Autogen again" cox-group-net)))

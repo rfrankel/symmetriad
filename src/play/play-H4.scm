@@ -29,7 +29,7 @@
 
 ; Works!  Takes its sweet time, but works!
 ; 1367 dead cosets.
-(gn:hlt cox-group-net)
+(gn:hlt! cox-group-net)
 (assert-valid-group-net cox-group-net)
 (gc-flip)
 

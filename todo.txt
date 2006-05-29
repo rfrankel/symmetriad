@@ -30,8 +30,9 @@ Refactorings:
   - some privatization may be in order for symmetric-object
   - clean up symmetric-object-creation
   - didn't check setupandproject, projection, camera
+- Modularize?
   - cox-presentation?  Only cox-presentation itself is interesting to the outside world
-  - group-network - only creation, direct access, and gn:hlt appear to be interesting to the outside world
+  - group-network? - only creation, simple access, and gn:hlt! are interesting to the outside world
 
 Administrative stuff:
 - Working directory independence

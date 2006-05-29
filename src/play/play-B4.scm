@@ -64,7 +64,7 @@
 
 
 (define a-cube (%create-subgroup (lambda (elt gen)
-				   (lookup-mult (cxg/mult-table B4-play) elt gen))
+				   (gn:product (cxg/group-net B4-play) elt gen))
 				 '((s1) (s2) (s3))))
 
 (subg:get-coset a-cube 'e)
@@ -79,7 +79,7 @@
 		    (map (lambda (elt) (symo:get-vertex tesseract elt)) 
 			 (subg:get-coset a-cube 'c402))))
 
-(lookup-mult (cxg/mult-table B4-play) 'e 's2)
+(gn:product (cxg/group-net B4-play) 'e 's2)
 (subg/word-list a-cube)
 
 (pp (lin-rem-dup-eq (map (lambda (elt)

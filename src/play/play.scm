@@ -41,5 +41,5 @@
 
 ; Dies with strange errors without informing me as to whether 
 ; this group ends up being infinite.
-(gn:hlt cox-group-net)
+(gn:hlt! cox-group-net)
 

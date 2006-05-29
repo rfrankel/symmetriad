@@ -60,7 +60,7 @@
 
 (define (build-face-list cox-g)
   (pp "- Building face list.")
-  (let ((grp-mult-table (gn:multiplication-table (cxg/group-net cox-g)))
+  (let ((group-net (cxg/group-net cox-g))
 	(done-cache (make-eq-hash-table))
 	(chambers (cxg/chamber-list cox-g)))
     (for-each (lambda (chamber)
@@ -72,7 +72,7 @@
 	    #f
 	    (let ((face (gr:follow-relation 
 			 relation
-			 (lambda (elt gen) (lookup-mult grp-mult-table elt gen))
+			 (lambda (elt gen) (gn:product group-net elt gen))
 			 chamber)))
 	      (for-each (lambda (face-chamber)
 			  (hash-table/put! 
