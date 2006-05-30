@@ -25,14 +25,14 @@ Refactorings:
   - implementation currently chosen by not loading a file, which feels poor
   - define-structure and/or some generic procedures could prove helpful
 - Ensure unified, "best practice" code style?  (Using modules?)
-  - cox-geometry
-  - naming/modularization in geom-family, root-systems?
   - some privatization may be in order for symmetric-object
-  - clean up symmetric-object-creation
+  - clean up symmetric-object-creation?
   - didn't check setupandproject, projection, camera
 - Modularize?
   - cox-presentation?  Only cox-presentation itself is interesting to the outside world
   - group-network? - only creation, simple access, and gn:hlt! are interesting to the outside world
+    - privatize appropriate members?
+  - cox-geometry?
 
 Administrative stuff:
 - Working directory independence

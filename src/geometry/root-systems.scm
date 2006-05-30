@@ -19,13 +19,13 @@
 ;;; ----------------------------------------------------------------------
 
 ;(declare (usual-integrations)) TODO: why not? generic arithmetic?
-; TODO this file may care about load order.
 
 ;;;;; Now creating geometries 
-;;; These functions create roots
-;;; We have chosen roots which will generate a polygon 
-;;; with a front face along the z axis and a 
-;;; front edge parallel to the x axis.
+;;; These functions create roots.
+
+;;; TODO Is this still true?
+;;; We have chosen roots which will generate a polygon with a front
+;;; face along the z axis and a front edge parallel to the x axis.
 
 (define (make-cox-len-A n)
   (make-list n 1))
@@ -38,7 +38,6 @@
 			  (vector (sym-cox-cos p)
 				  (sym-cox-sin p)))))
     (map * root-dirs (make-cox-len-A 2))))
-
 
 (define (hacked-roots-A3)
   (list
@@ -53,13 +52,12 @@
    (vector 0 0 1 0)
    (vector 0 (/ -1/2 'sqrt2) -1/2 (/ 'sqrt5 (* 2 'sqrt2)))))
 
-;; Another way of creating geometries; the version that 
-;; Richard Kane in "Reflection Groups and Invariant Theory"
-;; claims is canonical. 
+;; Richard Kane in "Reflection Groups and Invariant Theory" claims the
+;; following mechanism for creating roots is canonical.
 
-;; a utility that makes the basis vector (0 0 .. 1 .. 0 0) in n space.
-;; note that e-sub-1 is (1 0 0 ...) not (0 1 0 ...) i.e.
-;; we do 1-based indexing not 0-based indexing as comp. sci. people do.
+;; Makes the basis vector (0 0 .. 1 .. 0 0) in n space.  Note that
+;; indexing is 1-based, as mathematicians do, not 0-based, as computer
+;; scientists do. (i.e. e-sub-1 is (1 0 0 ...) not (0 1 0 ...))
 (define (e-sub-i i n)
   (let ((answer (make-vector n 0)))
     (vector-set! answer (- i 1) 1)
@@ -72,16 +70,16 @@
     (vector-set! answer i -1)
     answer))
 
-; Here the angles are right, but the dimensionality is one too high,
-; and the lengths are wrong (don't agree with (make-cox-len-A n))
+;; Here the angles are right, but the dimensionality is one too high,
+;; and the lengths are wrong (don't agree with (make-cox-len-A n))
 (define (canonical-roots-A n)
   (map 
    (lambda (i)
      (e-sub-i-minus-e-sub-iplusone i (+ n 1)))
    (enumerate-interval 1 n)))
  
-; The angles and dimensionality are right.
-; The lenghts agree with (canonical-len-B n)
+;; The angles and dimensionality are right.
+;; The lenghts agree with (canonical-len-B n)
 (define (canonical-roots-B n)
   (append 
    (map 
@@ -95,8 +93,8 @@
    (make-list (- n 1) 'sqrt2)
    (list 1)))
 
-; The angles and dimensionality are right.
-; The lenghts agree with (canonical-len-C n)
+;; The angles and dimensionality are right.
+;; The lenghts agree with (canonical-len-C n)
 (define (canonical-roots-C n)
   (append 
    (map 
@@ -110,8 +108,8 @@
    (make-list (- n 1) 'sqrt2)
    (list 2)))
 
-; The angles and dimensionality are right.
-; The lenghts agree with (canonical-len-D n)
+;; The angles and dimensionality are right.
+;; The lenghts agree with (canonical-len-D n)
 (define (canonical-roots-D n)
   (append 
    (map 
@@ -136,8 +134,7 @@
 				 (number->string n) "."))
   (list 'sqrt2 'sqrt2 1 1))
 	
-; The angles are right.  The lengths agree with
-; (make-cox-len-I2)
+;; The angles are right.  The lengths agree with (make-cox-len-I2)
 (define (canonical-roots-I2 m)
   (list (vector 1 0)
 	(vector (sym-cox-cos m) (sym-cox-sin m))))
@@ -146,7 +143,7 @@
   (make-list 2 1))
 
 
-; Here's yet a third way to create a geometry: The Hack.
+;; Here's yet a third way to create a geometry: The Hack.
 (define icosoverts
   (list (up 0 0 1)
 	(up (/ 2 (sqrt 5)) 0 (/ 1 (sqrt 5)))
@@ -154,7 +151,6 @@
 	    (/ (* 2 (sin (* 2/5 :pi))) (sqrt 5))
 	    (/ 1 (sqrt 5)))
 	))
-
 
 (define H3-omegavects
   (list (car icosoverts)

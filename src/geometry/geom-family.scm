@@ -98,4 +98,7 @@
   'done)
 
 (define (gfam:all-families)
+  ; The constant I-family is not exactly a family, in that it is a
+  ; parametrized family of families, and thus is not homogenous with
+  ; the others.
   (list A-family B-family C-family D-family F-family H-family))
