@@ -18,29 +18,28 @@ along with The Symmetriad; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ----------------------------------------------------------------------
 
+Administrative stuff:
+- Working directory independence
+- Create an effective make test
+  - So, how does one make actual *programs* in Scheme?  Stdout, exit codes, etc?
+- Emacs boilerplate generation commands?
+- Mission statement
+
 Refactorings:
 - in-code commented examples to unittests
   - group-relation - more comprehension (and group networks??) required
 - twodtable abstraction
   - implementation currently chosen by not loading a file, which feels poor
   - define-structure and/or some generic procedures could prove helpful
-- Ensure unified, "best practice" code style?  (Using modules?)
-  - some privatization may be in order for symmetric-object
-  - clean up symmetric-object-creation?
-  - didn't check setupandproject, projection, camera
 - Modularize?
+  - Write module system?
   - cox-presentation?  Only cox-presentation itself is interesting to the outside world
   - group-network? - only creation, simple access, and gn:hlt! are interesting to the outside world
     - privatize appropriate members?
   - cox-geometry?
-
-Administrative stuff:
-- Working directory independence
-- Create an effective make test
-  - So, how does one make actual *programs* in Scheme?  Stdout, exit codes, etc?
-- Write module system?
-- Emacs boilerplate generation commands?
-- Mission statement
+  - symmetric-object?
+  - symmetric-object-creation? -- Also check function naming and documentation
+- Test and clean up setupandproject, projection, camera, if desired
 
 Get cracking on pictures:
 - Figure out a good place to store them and their sources
@@ -61,8 +60,6 @@ Release the code:
 
 Do:
 - Nits:
-  - Get group-tables to print nicely (hash-parsing)
-  - Ditto twodtablehash objets
   - Check C4 roots?
   - Separate function to compute geometry
     - This is the function that really needs the lengths, not
@@ -115,7 +112,6 @@ Future study:
   - Thicken the edges so that distance and occlusion become more useful
     - Beveling for faces?
   - Useless line elimination
-  - Face coloring
   - Shading, translucency
 - Reflections of more than just a point about the group?
   - Line segments?
@@ -136,5 +132,3 @@ Why:
   - this seems to break things (the quote levels are off):
     ;Generic operator inapplicable apply (#[assignment 224] (...))
   - Never been used, not thought out carefully
-- What is this involutory generators stuff?  Can I delete it?
-  - Yes
