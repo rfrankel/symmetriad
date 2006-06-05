@@ -43,3 +43,24 @@
 ; this group ends up being infinite.
 (gn:hlt! cox-group-net)
 
+;; Reducible group 0-4-0   0-4-0
+(define cox-matrix-B2B2
+  (%create-coxeter-matrix
+   (matrix-by-row-list '((1 4 2 2)
+			 (4 1 2 2)
+			 (2 2 1 4)
+			 (2 2 4 1)))))
+
+(define cox-roots-B2B2
+  (list #(1 -1 0 0) #(0 1 0 0) #(0 0 1 -1) #(0 0 0 1)))
+
+(define cox-len-B2B2 '(sqrt2 1 sqrt2 1))
+
+(define B2B2-system
+  (build-cox-geometry cox-matrix-B2B2 cox-len-B2B2 cox-roots-B2B2))
+
+;; Fails with ";Given a dead factor c37".  This is due to an
+;; unfortunate choice in coincidence resolution, where the coset that
+;; gets resolved away is chosen arbitrarily.  In this case,
+;; coincidence resolution slays the coset currently being processed,
+;; so the algorithm dies on that coset's next relation.
