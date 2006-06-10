@@ -44,23 +44,22 @@
 (gn:hlt! cox-group-net)
 
 ;; Reducible group 0-4-0   0-4-0
-(define cox-matrix-B2B2
-  (%create-coxeter-matrix
-   (matrix-by-row-list '((1 4 2 2)
-			 (4 1 2 2)
-			 (2 2 1 4)
-			 (2 2 4 1)))))
-
-(define cox-roots-B2B2
-  (list #(1 -1 0 0) #(0 1 0 0) #(0 0 1 -1) #(0 0 0 1)))
-
-(define cox-len-B2B2 '(sqrt2 1 sqrt2 1))
-
-(define B2B2-system
-  (build-cox-geometry cox-matrix-B2B2 cox-len-B2B2 cox-roots-B2B2))
-
-;; Fails with ";Given a dead factor c37".  This is due to an
-;; unfortunate choice in coincidence resolution, where the coset that
-;; gets resolved away is chosen arbitrarily.  In this case,
-;; coincidence resolution slays the coset currently being processed,
-;; so the algorithm dies on that coset's next relation.
+(let* ((cox-matrix-B2B2
+	(%create-coxeter-matrix
+	 (matrix-by-row-list '((1 4 2 2)
+			       (4 1 2 2)
+			       (2 2 1 4)
+			       (2 2 4 1)))))
+       (cox-roots-B2B2
+	(list #(1 -1 0 0) #(0 1 0 0) #(0 0 1 -1) #(0 0 0 1)))
+       (cox-len-B2B2 '(sqrt2 1 sqrt2 1))
+       (B2B2-system
+	(build-cox-geometry cox-matrix-B2B2 cox-len-B2B2 cox-roots-B2B2)))
+  (assert-equal 64 (gn:num-live-cosets (cxg/group-net B2B2-system)))
+  (assert-equal 21 (length (gn:dead-cosets (cxg/group-net B2B2-system))))
+  (let* ((B2B2-full (magic-spec->symmetric-object B2B2-system '(1 1 1 1))))
+    (symo:file-print-gv 
+     B2B2-full "playout/B2B2-full.off" 'off-conformal
+     (highlight-multigroup-cosets
+      B2B2-full
+      `(((s0 s1 s2) . ,*purple*) ((s1 s2 s3) . ,*green*))))))

@@ -33,6 +33,7 @@
 (let ()
   (define A3-system (geom-family->cox-geometry A-family 3 #f))
   (assert-equal 24 (gn:num-live-cosets (cxg/group-net A3-system)))
+  (assert-equal 0 (length (gn:dead-cosets (cxg/group-net A3-system))))
   
   (define tetrahedron 
     (make-symmetric-object A3-system ((cartesian-point A3-system) 
@@ -73,6 +74,7 @@
 (let ()
   (define B3-system (geom-family->cox-geometry B-family 3 #f))
   (assert-equal 48 (gn:num-live-cosets (cxg/group-net B3-system)))
+  (assert-equal 0 (length (gn:dead-cosets (cxg/group-net B3-system))))
   
   (define cube
     (cartesian-point->symmetric-object B3-system (up 1 1 1)))
@@ -120,6 +122,7 @@
 (let ()
   (define H3-system (geom-family->cox-geometry H-family 3 #f))
   (assert-equal 120 (gn:num-live-cosets (cxg/group-net H3-system)))
+  (assert-equal 0 (length (gn:dead-cosets (cxg/group-net H3-system))))
   
   (define dodecahedron
     (cartesian-point->symmetric-object H3-system (caddr (omega-dirs H3-system))))
@@ -177,6 +180,7 @@
 (let ()  
   (define A4-system (geom-family->cox-geometry A-family 4 #f))
   (assert-equal 120 (gn:num-live-cosets (cxg/group-net A4-system)))
+  (assert-equal 2 (length (gn:dead-cosets (cxg/group-net A4-system))))
   
   (define simplex (magic-spec->symmetric-object A4-system '(1 0 0 0)))
   
@@ -187,6 +191,7 @@
 (let ()  
   (define B4-system (geom-family->cox-geometry B-family 4 #f))
   (assert-equal 384 (gn:num-live-cosets (cxg/group-net B4-system)))
+  (assert-equal 18 (length (gn:dead-cosets (cxg/group-net B4-system))))
   
   (define tesseract 
     (cartesian-point->symmetric-object B4-system (up 1 1 1 1)))
@@ -199,6 +204,7 @@
 (let ()  
   (define D4-system (geom-family->cox-geometry D-family 4 #f))
   (assert-equal 192 (gn:num-live-cosets (cxg/group-net D4-system)))
+  (assert-equal 0 (length (gn:dead-cosets (cxg/group-net D4-system))))
   
   (define weird-thing
     (cartesian-point->symmetric-object D4-system (up 1 0 0 0)))
@@ -281,9 +287,30 @@
 	 (fam-prism2 (symo-subgroup object '(s1 s0 s3)))
 	 )
     (assert-equal 1152 (gn:num-live-cosets (cxg/group-net (symo/geometry object))))
+    (assert-equal 48 (length (gn:dead-cosets (cxg/group-net (symo/geometry object)))))
     (symo:file-print-gv-skel
      object "test-output/F4-12111.skel"
      (highlight-all-cosets object fam-cubo1 *dblue* #f)
      ))
   
+  (let* ((cox-matrix-B2B2
+	  (%create-coxeter-matrix
+	   (matrix-by-row-list '((1 4 2 2)
+				 (4 1 2 2)
+				 (2 2 1 4)
+				 (2 2 4 1)))))
+	 (cox-roots-B2B2
+	  (list #(1 -1 0 0) #(0 1 0 0) #(0 0 1 -1) #(0 0 0 1)))
+	 (cox-len-B2B2 '(sqrt2 1 sqrt2 1))
+	 (B2B2-system
+	  (build-cox-geometry cox-matrix-B2B2 cox-len-B2B2 cox-roots-B2B2)))
+    (assert-equal 64 (gn:num-live-cosets (cxg/group-net B2B2-system)))
+    (assert-equal 21 (length (gn:dead-cosets (cxg/group-net B2B2-system))))
+    (let* ((B2B2-full (magic-spec->symmetric-object B2B2-system '(1 1 1 1))))
+      (symo:file-print-gv 
+       B2B2-full "test-output/B2B2-full.off" 'off-conformal
+       (highlight-multigroup-cosets
+	B2B2-full
+	`(((s0 s1 s2) . ,*purple*) ((s1 s2 s3) . ,*green*))))))
+
   'pass)

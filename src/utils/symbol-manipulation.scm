@@ -36,6 +36,11 @@
 		       "c"
 		       (number->string coset-num)))))
 
+(define (coset-symbol->coset-num coset-symbol)
+  (if (eq? coset-symbol 'e)
+      0
+      (string->number (string-tail (symbol->string coset-symbol) 1))))
+
 (define (product-symbol factor1 factor2)
   (symbol-append factor1 (string->symbol "*") factor2))
 

@@ -133,7 +133,7 @@
 ;;==============================================================================
 
 ;; TODO should this return the symbol of the new coset?
-(define (handle-add! gn coset gen)
+(define (add-link-to-new-coset! gn coset gen)
   (let* ((num-cosets (gn:num-cosets gn))
 	 (new-coset-num (+ 1 num-cosets))
 	 (new-coset-symbol (coset-num->coset-symbol num-cosets)))
@@ -192,9 +192,11 @@
 	(gt:put-gen-coset! grp-table gen factor product))
     ))
 
+;; If both cosets have any common recorded products, those are
+;; recursively merged.
 ;; TODO should this return the symbols of the slain cosets?
-(define (handle-coincidence! gn left-bad right-bad)
-  ;(pp (list "Coincidence detected" left-bad right-bad))
+(define (identify-cosets! gn coset1 coset2)
+  ;(pp (list "Coincidence detected" coset1 coset2))
   (define (remove-link! grp-table victim gen)
     (let* ((inv-node (gt:get-gen-coset grp-table gen victim))
 	   (prev-coset (if (gn:use-tms? gn)
@@ -236,10 +238,22 @@
 	   loser-attachments)
 	  (gn:add-dead-coset! gn loser)
 	  recursion-list)))
-  (define (recursive-merge! loser winner)
-    (let ((answer (merge-nodes! loser winner)))
-      (map recursive-merge! (map car answer) (map cdr answer))))
-  (recursive-merge! left-bad right-bad)
+  (define (pick-loser coset1 coset2)
+    (if (> (coset-symbol->coset-num coset1)
+ 	   (coset-symbol->coset-num coset2))
+ 	coset1
+ 	coset2))
+;  (define (pick-loser coset1 coset2) coset1)
+  (define (pick-winner coset1 coset2)
+    (if (eq? coset1 (pick-loser coset1 coset2))
+	coset2
+	coset1))
+  (define (recursive-merge! coset1 coset2)
+    (let ((loser (pick-loser coset1 coset2))
+	  (winner (pick-winner coset1 coset2)))
+      (let ((answer (merge-nodes! loser winner)))
+	(map recursive-merge! (map car answer) (map cdr answer)))))
+  (recursive-merge! coset1 coset2)
   )
 
 ;;==============================================================================
@@ -260,7 +274,7 @@
 	    ((eq? switch 'add-coset)
 	     (let ((coset (list-ref trace-result 1))
 		   (gen (list-ref trace-result 2)))
-	       (handle-add! gn coset gen)
+	       (add-link-to-new-coset! gn coset gen)
 	       'not-done-yet))
 	    ((eq? switch 'join)
 	     (let ((cos-start (list-ref trace-result 1))
@@ -271,7 +285,7 @@
 	    ((eq? switch 'coincidence)
 	     (let ((left-bad (list-ref trace-result 1))
 		   (right-bad (list-ref trace-result 2)))
-	       (handle-coincidence! gn left-bad right-bad)
+	       (identify-cosets! gn left-bad right-bad)
 	       ))))))
 
 (define (gn:trace-across! gn left-cos right-cos relation)
