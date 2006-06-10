@@ -26,6 +26,7 @@
 	    "coxeter-matrix-test"
 	    "group-table"
 	    "group-network"
+	    "group-network-test"
 	    "group-presentation"
 	    "group-relation"
 	    "subgroup-test"

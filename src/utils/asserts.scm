@@ -28,7 +28,7 @@
 (define (assert-equal thing1 thing2)
   (if (equal? thing1 thing2)
       'pass
-      (error "Things differ" (cons thing1 thing2))))
+      (error "Things differ" (list thing1 thing2))))
 
 (define (assert-same-file filename1 filename2)
   (let ((file-contents1 

@@ -52,7 +52,7 @@
 		  letter))
 	relation))
      relations-list))
-  (if (default-object? reflect-proc) (set! reflect-proc (lambda (v) v))) ; dummy proc
+  (if (default-object? reflect-proc) (set! reflect-proc (lambda v v))) ; dummy proc
   (let ((gen-inverse-table (make-1d-table)))
     (initialize-inverse-table! gen-inverse-table)
     (check-relations relations-list gen-inverse-table)

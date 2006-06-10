@@ -34,7 +34,7 @@
   (multiplication-table #f read-only #t)
   (constraint-network #f read-only #t)
   (geometry-table #f read-only #t)
-  (num-cosets 0)
+  (num-cosets 1)
   (dead-cosets #f)
   (use-tms? #f read-only #t))
 
@@ -70,7 +70,7 @@
      multiplication-table
      group-net
      geometry-table
-     0
+     1
      '()
      use-tms?
      )))
@@ -95,7 +95,8 @@
 ;; TODO this is pretty slow
 (define (gn:coset-list group-net)
   (define (coset-list num-cosets)
-    (map coset-num->coset-symbol (enumerate-interval 0 num-cosets)))
+    ; enumerate-interval is inclusive
+    (map coset-num->coset-symbol (enumerate-interval 0 (- num-cosets 1))))
   (filter (lambda (coset-symb)
 	    (not (gn:dead-coset? group-net coset-symb)))
 	  (coset-list (gn:num-cosets group-net))))
@@ -108,6 +109,9 @@
 	    (if (gn:use-tms? gn) (tms-node/datum node) node)
 	    #f))
       #f))
+
+(define (gn:num-live-cosets gn)
+  (- (gn:num-cosets gn) (length (gn:dead-cosets gn))))
 
 (define (gn:print-group gn)
   (gt:print-by-coset
@@ -124,11 +128,15 @@
   (newline) (display (length (gn:dead-cosets gn)))
   (display " dead cosets: ") (pp (gn:dead-cosets gn)))
 
+;;==============================================================================
+;;  Level shift
+;;==============================================================================
 
+;; TODO should this return the symbol of the new coset?
 (define (handle-add! gn coset gen)
   (let* ((num-cosets (gn:num-cosets gn))
 	 (new-coset-num (+ 1 num-cosets))
-	 (new-coset-symbol (coset-num->coset-symbol new-coset-num)))
+	 (new-coset-symbol (coset-num->coset-symbol num-cosets)))
 
     (define (add-new-geometry!)
       (let* ((gp (gn:presentation gn))
@@ -167,7 +175,6 @@
       (begin (record-product! gn gen cos-start cos-end #f)
 	     (record-product! gn gen cos-end cos-start #f))))
 
-
 (define (record-product! gn gen factor product symb)
   (let* ((grp-table (gn:multiplication-table gn))
 	 )
@@ -185,6 +192,7 @@
 	(gt:put-gen-coset! grp-table gen factor product))
     ))
 
+;; TODO should this return the symbols of the slain cosets?
 (define (handle-coincidence! gn left-bad right-bad)
   ;(pp (list "Coincidence detected" left-bad right-bad))
   (define (remove-link! grp-table victim gen)
@@ -233,6 +241,10 @@
       (map recursive-merge! (map car answer) (map cdr answer))))
   (recursive-merge! left-bad right-bad)
   )
+
+;;==============================================================================
+;;  Level shift
+;;==============================================================================
 
 ;; Note: multiplication and inverse multiplication are
 ;; the same in a mirror group.
