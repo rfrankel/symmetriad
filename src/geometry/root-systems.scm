@@ -23,6 +23,21 @@
 ;;;;; Now creating geometries 
 ;;; These functions create roots.
 
+(define (root-cross-product root-list1 root-list2)
+  (define (append-zeroes vect n)
+    (vector-append vect (make-vector n 0)))
+  (define (prepend-zeroes vect n)
+    (vector-append (make-vector n 0) vect))
+  (cond ((null? root-list1) root-list2)
+	((null? root-list2) root-list1)
+	(else
+	 (let ((dim1 (vector-length (car root-list1)))
+	       (dim2 (vector-length (car root-list2))))
+	   (append (map (lambda (vect) (append-zeroes vect dim2)) root-list1)
+		   (map (lambda (vect) (prepend-zeroes vect dim1)) root-list2))))))
+
+(define length-cross-product append)
+
 ;;; TODO Is this still true?
 ;;; We have chosen roots which will generate a polygon with a front
 ;;; face along the z axis and a front edge parallel to the x axis.

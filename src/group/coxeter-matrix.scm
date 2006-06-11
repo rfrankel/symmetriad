@@ -42,6 +42,18 @@
 (define (cm:matrix-ref cox-matrix row col)
   (matrix-ref (cm:matrix cox-matrix) row col))
 
+(define (cm:cross-product cm1 cm2)
+  (let ((dim1 (cm:dimension cm1))
+	(dim2 (cm:dimension cm2)))
+    (make-coxeter-matrix
+     (+ dim1 dim2)
+     (lambda (i j)
+       (cond ((and (< i dim1) (< j dim1))
+	      (cm:matrix-ref cm1 i j))
+	     ((and (>= i dim1) (>= j dim1))
+	      (cm:matrix-ref cm2 (- i dim1) (- j dim1)))
+	     (else 2))))))
+
 
 (define (make-cox-matrix-A n)
   (make-coxeter-matrix 

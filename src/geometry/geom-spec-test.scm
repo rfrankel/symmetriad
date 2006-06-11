@@ -20,20 +20,19 @@
 
 (declare (usual-integrations))
 
-;; A specification for a geometry.  Contains a coxeter-matrix, a set
-;; of roots for it, and a set of lengths for those roots.
-(define-structure (geom-spec
-		   (constructor %create-geom-spec (matrix lengths roots))
-		   (conc-name gspec/))
-  (matrix #f read-only #t)
-  (lengths #f read-only #t)
-  (roots #f read-only #t))
+(let ((B2xB2-spec (gspec:cross-product
+		   (geom-family->geom-spec B-family 2)
+		   (geom-family->geom-spec B-family 2))))
+  (assert-equal
+   (cm:matrix (gspec/matrix B2xB2-spec))
+   (matrix-by-rows (list 1 4 2 2)
+		   (list 4 1 2 2)
+		   (list 2 2 1 4)
+		   (list 2 2 4 1)))
+  (assert-equal
+   (gspec/lengths B2xB2-spec)
+   (list 'sqrt2 1 'sqrt2 1))
+  (assert-equal
+   (gspec/roots B2xB2-spec)
+   '(#(1 -1 0 0) #(0 1 0 0) #(0 0 1 -1) #(0 0 0 1))))
 
-(define (make-geom-spec matrix lengths roots)
-  (assert-roots-match matrix lengths roots)
-  (%create-geom-spec matrix lengths roots))
-
-(define (gspec:cross-product spec1 spec2)
-  (make-geom-spec (cm:cross-product (gspec/matrix spec1) (gspec/matrix spec2))
-		  (length-cross-product (gspec/lengths spec1) (gspec/lengths spec2))
-		  (root-cross-product (gspec/roots spec1) (gspec/roots spec2))))

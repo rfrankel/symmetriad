@@ -110,3 +110,12 @@
  (cm:matrix (make-cox-matrix-I2 6))
  (matrix-by-rows (list 1 6)
 		 (list 6 1)))
+
+(let ((product (cm:cross-product (make-cox-matrix-A 2) (make-cox-matrix-A 2))))
+  (assert-true (coxeter-matrix? product))
+  (assert-equal
+   (cm:matrix product)
+   (matrix-by-rows (list 1 3 2 2)
+		   (list 3 1 2 2)
+		   (list 2 2 1 3)
+		   (list 2 2 3 1))))
