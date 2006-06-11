@@ -23,5 +23,6 @@
 	  '("root-systems" ; geom-family breaks unless this is loaded first.
 	    "geom-family" ; cox-geometry breaks unless this is loaded first.
 	    "cox-geometry"
+	    "geom-spec"
 	    "symmetric-object-creation"
 	    "symmetric-object"))

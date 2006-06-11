@@ -150,13 +150,16 @@
       (cxg-int:fill-in-root-tables! cox-geom)
       cox-geom)))
 
+(define (geom-spec->cox-geometry spec)
+  (build-cox-geometry (gspec/matrix spec)
+		      (gspec/lengths spec)
+		      (gspec/roots spec)))
+
 (define (compute-geom-family->cox-geometry family dimension)
   (assert (geom-family? family)
 	  "Object fails to be a geom-family."
 	  family)
-  (build-cox-geometry ((gfam/matrix family) dimension)
-		      ((gfam/len family) dimension) 
-		      ((gfam/roots family) dimension)))
+  (geom-spec->cox-geometry (geom-family->geom-spec family dimension)))
 
 (define geom-family->cox-geometry
   (cache-wrapper compute-geom-family->cox-geometry gfam/done-cache))

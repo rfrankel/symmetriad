@@ -33,6 +33,11 @@
   (roots #f read-only #t)
   (done-cache (make-eq-hash-table) read-only #t))
 
+(define (geom-family->geom-spec family dimension)
+  (make-geom-spec ((gfam/matrix family) dimension)
+		  ((gfam/len family) dimension) 
+		  ((gfam/roots family) dimension)))
+
 (define A-family
   (%create-geom-family 
    make-cox-matrix-A 
