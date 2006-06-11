@@ -82,8 +82,8 @@
 	      ;(pp cache-val) (newline)
 	      cache-val))))))
 
-;; numeric values of cosines and sines
-;; note also we want the *obtuse* version of the angle
+;; Numeric values of cosines and sines.
+;; Note that we want the *obtuse* version of the angle
 ;; so all the cosines are the negatives
 (define (num-cox-cos angle-divisor)
   (cond ((= angle-divisor 1) 1)
@@ -92,8 +92,8 @@
 	((= angle-divisor 4) (/ -1 (sqrt 2)))
 	((= angle-divisor 5) (* -1 (/ (+ 1 (sqrt 5)) 4)))
 	((= angle-divisor 6) (* -1 (/ (sqrt 3) 2)))
-	(else `(cos (/ (*  pi (- ,angle-divisor 1))
-		       ,angle-divisor)))))
+	(else (cos (/ (*  pi (- angle-divisor 1))
+		      angle-divisor)))))
 
 ;; TODO: Check this comment with Rebecca
 ;; Returns the group presentation of a Coxeter group with the given

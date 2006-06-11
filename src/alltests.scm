@@ -293,6 +293,7 @@
      (highlight-all-cosets object fam-cubo1 *dblue* #f)
      ))
   
+  ;; Reducible group 0-4-0   0-4-0
   (let* ((cox-matrix-B2B2
 	  (%create-coxeter-matrix
 	   (matrix-by-row-list '((1 4 2 2)

@@ -47,19 +47,20 @@
 	    ;(pp cache-val) (newline)
 	    cache-val)))))
 
-;; symbolic values of cosines and sines
-;; note also we want the *obtuse* version of the angle
-;; so all the cosines are the negatives 
+;; Symbolic values of cosines and sines.
+;; Note that we want the *obtuse* version of the angle
+;; so all the cosines are the negatives.
+;; Note also that the symbolics are terrible and not very
+;; useful beyond angle-divisor = 6, so those are numeric.
 (define (sym-cox-cos angle-divisor)
   (cond ((= angle-divisor 1) 1)
 	((= angle-divisor 2) 0)
 	((= angle-divisor 3) (/ -1 2))
 	((= angle-divisor 4) (/ -1 'sqrt2))
-	;((= angle-divisor 5) (* -1 'cospi/5))
 	((= angle-divisor 5) (* -1 (/ (+ 1 'sqrt5) 4)))
 	((= angle-divisor 6) (* -1 (/ 'sqrt3 2)))
-	(else `(cos (/ (*  pi (- ,angle-divisor 1)) 
-		       ,angle-divisor)))))
+	(else (cos (/ (*  pi (- angle-divisor 1)) 
+		      angle-divisor)))))
 
 (define (sym-cox-sin angle-divisor)
   (cond ((= angle-divisor 2) 1)
