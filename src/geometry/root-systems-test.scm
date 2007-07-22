@@ -38,11 +38,11 @@
 
 (assert-equal
  (canonical-roots-I2 5)
- (list #(1 0) #((*number* (expression (* -1/4 (+ 1 sqrt5)))) sinpi/5)))
+ (list #(1 0) #((*number* (expression (* -1 (/ (+ 1 sqrt5) 4)))) sinpi/5)))
 
 (assert-equal
  (canonical-roots-I2 6)
- (list #(1 0) #((*number* (expression (* -1/2 sqrt3))) 1/2)))
+ (list #(1 0) #((*number* (expression (* -1 (/ sqrt3 2)))) 1/2)))
 
 (assert-equal
  (root-cross-product '(#(1)) '(#(2)))
@@ -50,5 +50,5 @@
 
 (assert-equal
  (root-cross-product (canonical-roots-I2 5) (canonical-roots-I2 5))
- (list #(1 0 0 0) #((*number* (expression (* -1/4 (+ 1 sqrt5)))) sinpi/5 0 0)
-       #(0 0 1 0) #(0 0 (*number* (expression (* -1/4 (+ 1 sqrt5)))) sinpi/5)))
+ (list #(1 0 0 0) #((*number* (expression (* -1 (/ (+ 1 sqrt5) 4)))) sinpi/5 0 0)
+       #(0 0 1 0) #(0 0 (*number* (expression (* -1 (/ (+ 1 sqrt5) 4)))) sinpi/5)))
