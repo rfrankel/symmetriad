@@ -19,11 +19,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ----------------------------------------------------------------------
 
 Administrative stuff:
-- Working directory independence
 - Create an effective make test
   - So, how does one make actual *programs* in Scheme?  Stdout, exit codes, etc?
 - Emacs boilerplate generation commands?
 - Mission statement
+- Add an executable (even if it's a shell script)
+ - Working directory independence?
 
 Refactorings:
 - in-code commented examples to unittests
