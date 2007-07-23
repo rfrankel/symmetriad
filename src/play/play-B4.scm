@@ -397,3 +397,26 @@
    'skel
    (color-cycle-all-cosets object '(s1 s2 s3)
 			   (list *red* *green* *blue* *purple* *dred* *yellow* *dblue* *cyan*))))
+
+(let ((object (symmetric-object B-family '(0 1 0 0))))
+  (symo:file-print-gv
+   object
+   "playout/B4-0100.off"
+   'off-conformal
+   (merge-by-first 
+    (list
+     (highlight-all-cosets object '(s3 s1 s2) '(255 102 153 255))
+     (highlight-all-cosets object '(s0 s1 s2) '(0 0 102 255))))
+   ))
+
+(let ((object (symmetric-object B-family '(0 1 0 0))))
+  (symo:file-print-gv
+   object
+   "playout/B4-0100.skel"
+   'skel
+   (merge-by-first 
+    (list
+     (highlight-all-cosets object '(s3 s1 s2) '(255 102 153 255))
+     (highlight-all-cosets object '(s0 s1 s2) '(0 0 102 255))))
+   ))
+

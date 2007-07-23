@@ -178,3 +178,14 @@
    'off-conformal
    (highlight-all-cosets object '(s0 s2 s3) '(51 0 204 255))))
 
+(let ((object (symmetric-object H-family '(0 1 0 0))))
+  (symo:file-print-gv
+   object
+   "playout/H4-0100.off"
+   'off-conformal
+   (merge-by-first 
+    (list
+     (highlight-all-cosets object '(s0 s1 s2) '(0 0 102 255))))
+     (highlight-all-cosets object '(s3 s1 s2) '(255 102 153 255))
+   ))
+
