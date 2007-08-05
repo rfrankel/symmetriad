@@ -222,3 +222,15 @@
 	  (symo:print-gv sym-obj format)
 	  (symo:print-gv sym-obj format color-proc)
 	  ))))
+
+(define (symo:file-print-both sym-obj file-base #!optional color-spec)
+  (symo:file-print-gv
+   sym-obj
+   (string-append file-base ".off")
+   'off-conformal
+   color-spec)
+  (symo:file-print-gv
+   sym-obj
+   (string-append file-base ".skel")
+   'skel
+   color-spec))
