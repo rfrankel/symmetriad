@@ -54,17 +54,23 @@
 			   color
 			   default-color))
 
-(define (highlight-listed-cosets sym-obj subg elt-list color 
-				 #!optional default-color)
-  (if (default-object? default-color) (set! default-color (color:default)))
+(define (listed-cosets sym-obj subg elt-list)
   (if (not (subgroup? subg))
       (if (list? subg)
 	  (set! subg (symo-subgroup sym-obj subg))
-	  (error "Inalid subgroup." subg)))		 
-  (let ((cosets (lin-rem-dup-eq
-		 (map (lambda (elt)
-			(subg:get-coset subg elt))
-		      elt-list))))
+	  (error "Inalid subgroup." subg)))
+  (lin-rem-dup-eq
+   (map (lambda (elt)
+	  (subg:get-coset subg elt))
+	elt-list)))
+
+(define (all-cosets sym-obj subg)
+  (listed-cosets sym-obj subg (cxg/chamber-list (symo/geometry sym-obj))))
+
+(define (highlight-listed-cosets sym-obj subg elt-list color 
+				 #!optional default-color)
+  (if (default-object? default-color) (set! default-color (color:default)))		 
+  (let ((cosets (listed-cosets sym-obj subg elt-list)))
     (display "Highlighting ") (display (length cosets)) 
     (display " cosets") (newline)
     (highlight-partition sym-obj cosets color default-color)))
