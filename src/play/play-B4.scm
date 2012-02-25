@@ -420,3 +420,9 @@
      (highlight-all-cosets object '(s0 s1 s2) '(0 0 102 255))))
    ))
 
+(let ((object (symmetric-object B-family '(1 0 0 1))))
+  (symo:file-print-polyhedra
+   object
+   "playout/B4-1001-1.poly"
+   (map (lambda (c) (cons c '(0.0 0.5 0.5 1.0))) (all-cosets object '(s1 s2 s3)))
+   ))

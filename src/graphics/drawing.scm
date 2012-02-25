@@ -149,14 +149,6 @@
       (if (not (eq? format 'skel))
 	  (display " 0")) ; OFF formats demand but do not use edges
       (newline)))
-  (define (print-vertices sym-obj)
-    (for-each (lambda (vertex-symb)
-		(let ((vertex-coords (symo:get-vertex sym-obj vertex-symb)))
-		  (for-each (lambda (coord) 
-			      (display (exact->inexact coord)) (display " "))
-			    (up-structure->list vertex-coords)))
-		(newline))
-	      (symo/unique-vertices sym-obj)))
   (define (print-drawee drawee color)
     (display (length drawee)) (display " ")
     (for-each (lambda (drawee-elt)
@@ -182,6 +174,15 @@
   (newline (notification-output-port))
 
 )
+
+(define (print-vertices sym-obj)
+  (for-each (lambda (vertex-symb)
+	      (let ((vertex-coords (symo:get-vertex sym-obj vertex-symb)))
+		(for-each (lambda (coord) 
+			    (display (exact->inexact coord)) (display " "))
+			  (up-structure->list vertex-coords)))
+	      (newline))
+	    (symo/unique-vertices sym-obj)))
 
 (define (symo:print-oogl-off sym-obj #!optional color-proc format)
   (if (default-object? color-proc)
@@ -234,3 +235,72 @@
    (string-append file-base ".skel")
    'skel
    color-spec))
+
+;;; Print out the selected polyhedra in a format of my own devising, loosely
+;;; based on Geomview's OFF format.  The polyhedra are selected by an alist of
+;;; vertex-list to color.  Each vertex-list is expected to be one polyhedron.  The
+;;; purpose of the exercise is to provide the polyhedra explicitly to downstream
+;;; processors, along with the faces in each polyhedron.
+;;;
+;;; The output format is as follows:
+;;; First, there is a header, consisting of the word "Polyhedra" on one line,
+;;; and the number of vertices and the number of polyhedra on the next line.
+;;; After this comes the list of vertices, just like in OFF.
+;;; After this come the polyhedra, one by one.
+;;; Each polyhedron is:
+;;; - A line giving the number of vertices in the polyhedron, the number of
+;;;   faces in the polyhedron, and then the vertices in the polyhedron by reference
+;;;   into the vertex list (zero-indexed).
+;;; - Lines giving faces (as many as promised).  Each face is formatted the same
+;;;   way as a polygon in OFF format.
+(define (symo:print-polyhedra sym-obj hedron-specs)
+  (define (print-header)
+    (display "Polyhedra") (newline)
+    (display (length (symo/unique-vertices sym-obj))) (display " ")
+    (display (length hedron-specs)) (newline))
+  (define (print-hedron spec)
+    ;; TODO Abstract commonalities with symo:print-gv-help
+    (define (hack-map chamber-symb)
+      (symo:rep-index sym-obj chamber-symb))
+    (define vertices (car spec))
+    (define color (cdr spec))
+    (define color-spec (highlight-contained sym-obj vertices color (color:default)))
+    (define face-color-list 
+      (filter (lambda (x) x)
+	      (map (lambda (face)
+		     (let ((color (color-spec face)))
+		       (if (color:drawable? color) 
+			   (cons face color) #f)))
+		   (symo/face-list sym-obj))))
+    (define (print-face face color)
+      (display (length face)) (display " ")
+      (for-each (lambda (face-elt)
+		  (display (hack-map face-elt))
+		  (display " "))
+		face)
+      (display (color->string color))
+      (newline))
+    (define (print-faces face-color-list)
+      (for-each 
+       (lambda (face)
+	 (print-face (car face) (cdr face)))
+       face-color-list))
+    ;; TODO Why are there non-eq vertices in the input list that map to the same vertex index?
+    (define vert-indexes (delete-duplicates (map hack-map vertices) =))
+    (display (length vert-indexes)) (display " ")
+    (display (length face-color-list)) (display " ")
+    (for-each (lambda (index)
+		(display index)
+		(display " "))
+	      vert-indexes)
+    (newline)
+    (print-faces face-color-list))
+  (print-header)
+  (print-vertices sym-obj)
+  (for-each print-hedron hedron-specs))
+
+(define (symo:file-print-polyhedra sym-obj filename hedron-specs)
+  (with-output-to-file-ensuring-path
+      filename
+    (lambda ()
+      (symo:print-polyhedra sym-obj hedron-specs))))
