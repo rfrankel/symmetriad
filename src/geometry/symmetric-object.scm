@@ -149,14 +149,13 @@
 
 (define (symo:rep-index sym-obj chamber-symb)
   (hash-table/get (symo/rep-index-map sym-obj)
-		  (hash-table/get (symo/representative-map sym-obj)
-				  chamber-symb #f)
+		  (symo:representative sym-obj chamber-symb)
 		  #f))
 
 (define (symo:get-vertex sym-obj chamber-symb)
   (hash-table/get 
    (symo/point-table sym-obj)
-   (hash-table/get (symo/representative-map sym-obj) chamber-symb #f)
+   (symo:representative sym-obj chamber-symb)
    #f))
 
 (define (symo:face-stats sym-obj)
