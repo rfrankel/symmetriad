@@ -43,12 +43,9 @@
 		   (map (lambda (vert) (symo:rep-index sym-obj vert)) vert-list))))
     (lambda (given-verts)
       ;(pp given-verts)
-      (if (reduce 
-	   (lambda (a b) (or a b))
-	   #f
-	   (map (lambda (vert)
-		  (hash-table/get vert-set (symo:rep-index sym-obj vert) #f))
-		given-verts))
+      (if (any (lambda (vert)
+                 (hash-table/get vert-set (symo:rep-index sym-obj vert) #f))
+               given-verts)
 	  data
 	  default-data))))
 
@@ -61,12 +58,9 @@
 		   (map (lambda (vert) (symo:rep-index sym-obj vert)) vert-list))))
     (lambda (given-verts)
       ;(pp given-verts)
-      (if (reduce 
-	   (lambda (a b) (and a b))
-	   #t
-	   (map (lambda (vert)
-		  (hash-table/get vert-set (symo:rep-index sym-obj vert) #f))
-		given-verts))
+      (if (every (lambda (vert)
+                   (hash-table/get vert-set (symo:rep-index sym-obj vert) #f))
+                 given-verts)
 	  data
 	  default-data))))
 
