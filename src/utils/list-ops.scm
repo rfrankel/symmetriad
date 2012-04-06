@@ -58,3 +58,14 @@
 	    (cons (cons (car keys-left) (car cur-values-left))
 		  (loop (cdr keys-left) (cdr cur-values-left))))))
   (loop key-list value-list))
+
+;; Interprets the list as circular and rotates it until the first
+;; element satisfies the predicate.
+(define (rotate-to-front pred lst)
+  (let loop ((tail lst)
+             (head '()))
+    (cond ((null? tail)
+           (error "Predicate never matched in rotate-to-front" pred lst))
+          ((pred (car tail))
+           (append tail (reverse head)))
+          (else (loop (cdr tail) (cons (car tail) head))))))

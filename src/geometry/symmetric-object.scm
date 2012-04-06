@@ -96,14 +96,9 @@
 		 (hash-table/get representative-map chamber-symb #f))
 	       face))))
     (let ((min-index (apply min (map index-proc resymboled-face))))
-      (define (loop cur-face last-cell)
-	(if (= min-index (index-proc (car cur-face)))
-	    cur-face
-	    (let ((new-last-cell (cons (car cur-face) '()))) 
-	      (set-cdr! last-cell new-last-cell)
-	      (loop (cdr cur-face) new-last-cell))))
-      (let ((copy (list-copy resymboled-face)))
-	(loop copy (last-cons-cell copy))))))
+      (rotate-to-front (lambda (symb)
+                         (= min-index (index-proc symb)))
+                       resymboled-face))))
 
 (define (build-unique-face-list cox-g representative-map)
   (pp "Building list of unique faces.")
