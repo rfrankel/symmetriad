@@ -1,0 +1,5 @@
+Add the cyan cubes (B4-1001, s1 s2 s3) to the B4-1001-2.gcl picture, but remove (or make transparent?) the one the camera is inside of.
+
+Make a movie of H4-1003 (especially more interesting than others).
+
+Consider turning extant pictures into wireframes as well.
