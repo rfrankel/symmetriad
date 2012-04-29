@@ -327,12 +327,11 @@
       (highlight-contained
        sym-obj vertices color (color:default)))
     (define face-color-list 
-      (filter (lambda (x) x)
-	      (map (lambda (face)
-		     (let ((color (color-spec face)))
-		       (if (color:drawable? color) 
-			   (cons face color) #f)))
-		   (symo/face-list sym-obj))))
+      (filter-map (lambda (face)
+                    (let ((color (color-spec face)))
+                      (if (color:drawable? color) 
+                          (cons face color) #f)))
+                  (symo/face-list sym-obj)))
     (define (print-face face color)
       (define face-vertices (map vertex->mv face))
       (define face-sphere-mv
