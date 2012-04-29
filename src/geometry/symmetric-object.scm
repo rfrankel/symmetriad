@@ -24,22 +24,29 @@
 ;;; objects that occur when one reflects a point through a coxeter 
 ;;; geometry.
 
-(define-structure (symmetric-object
-		   (constructor %create-symmetric-object
-				(geometry point-proc point-table face-list
-					  unique-vertices representative-map rep-index-map))
-		   (conc-name symo/))
+(define-structure
+  (symmetric-object
+   (constructor
+    %create-symmetric-object
+    (geometry point-proc point-table face-list
+              unique-vertices representative-map rep-index-map))
+   (conc-name symo/))
   (geometry #f read-only #t)
   (point-proc #f read-only #t)
-  (point-table #f read-only #t) ;; Should be private, hash of symbol to up-structure
+  ;; Should be private, hash of symbol to up-structure
+  (point-table #f read-only #t)
   (face-list '() read-only #t)
-  (unique-vertices '() read-only #t) ; Symbols of vertices that are unique
-  (representative-map #f read-only #t) ; Maps coset to symbol of representative
-  (rep-index-map #f read-only #t) ; Maps unique vertex its index in unique-vertices list
+  ;; Symbols of vertices that are unique
+  (unique-vertices '() read-only #t)
+  ;; Maps coset to symbol of representative
+  (representative-map #f read-only #t)
+  ;; Maps unique vertex its index in unique-vertices list
+  (rep-index-map #f read-only #t)
   (vertex-group #f)
   )
 
-(define (make-symmetric-object cox-g point-proc #!optional mild-testing)
+(define (make-symmetric-object cox-g point-proc
+                               #!optional mild-testing)
   (if (default-object? mild-testing) (set! mild-testing #t))
   (define (hashtablify point-table)
     ((list->eq-hash-table car cadr) point-table))
@@ -51,8 +58,9 @@
 	 (rep-index-map (index-map unique-vertices))
 	 (face-list (build-unique-face-list cox-g rep-map)))
     (pp "Components finished.")
-    (let ((answer (%create-symmetric-object cox-g point-proc point-table face-list
-					    unique-vertices rep-map rep-index-map)))
+    (let ((answer (%create-symmetric-object
+                   cox-g point-proc point-table face-list
+                   unique-vertices rep-map rep-index-map)))
       (assert-verts-on-sphere answer)
       (assert-correct-face-vertex-incidence-stats answer)
       (if (not mild-testing) (assert-same-edge-lengths answer))
@@ -63,22 +71,25 @@
   (let ((group-net (cxg/group-net cox-g))
 	(done-cache (make-eq-hash-table))
 	(chambers (cxg/chamber-list cox-g)))
-    (for-each (lambda (chamber)
-		(hash-table/put! done-cache chamber (make-eq-hash-table)))
-	      chambers)
+    (for-each
+     (lambda (chamber)
+       (hash-table/put! done-cache chamber (make-eq-hash-table)))
+     chambers)
     (define (process-face chamber relation)
       (let ((my-done-cache (hash-table/get done-cache chamber #f)))
 	(if (hash-table/get my-done-cache relation #f)
 	    #f
 	    (let ((face (gr:follow-relation 
 			 relation
-			 (lambda (elt gen) (gn:product group-net elt gen))
+			 (lambda (elt gen)
+                           (gn:product group-net elt gen))
 			 chamber)))
-	      (for-each (lambda (face-chamber)
-			  (hash-table/put! 
-			   (hash-table/get done-cache face-chamber #f)
-			   relation #t))
-			face)
+	      (for-each
+               (lambda (face-chamber)
+                 (hash-table/put! 
+                  (hash-table/get done-cache face-chamber #f)
+                  relation #t))
+               face)
 	      face))))
     (filter (lambda (x) x)
 	    (flatten (map (lambda (chamber)
@@ -91,7 +102,8 @@
 ;; in the list of chambers of the relevant coxeter geometry.
 (define (normalize-face face representative-map index-proc)
   (let ((resymboled-face 
-	 (lin-rem-dup-eq ; TODO Technically should be consecutive duplicates...
+         ;; TODO Technically should be consecutive duplicates...
+	 (lin-rem-dup-eq
 	  (map (lambda (chamber-symb)
 		 (hash-table/get representative-map chamber-symb #f))
 	       face))))
@@ -118,7 +130,8 @@
     (for-each 
      (lambda (face)
        (if (not (or (hash-table/get unique-faces face #f)
-		    (hash-table/get unique-faces (normalizer (reverse face)) #f)))
+		    (hash-table/get unique-faces
+                                    (normalizer (reverse face)) #f)))
 	   (hash-table/put! unique-faces face #t)))
      face-list)
     (filter (lambda (face)
