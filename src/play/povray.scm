@@ -77,10 +77,10 @@
 (let ((object (symmetric-object B-family '(3 0 0 1))))
   (symo->povray
    object
-   "playout/B4-1001-2.pov"
+   "playout/shadows-of-the-tesseract.pov"
    (map (colorize '(0.0 0.5 0.5 1.0))
         (all-cosets object '(s1 s2 s3)))
-   ))
+   "../tools/header-2.pov"))
 
 ;; TODO This one seems to cause division by zero.
 #;
