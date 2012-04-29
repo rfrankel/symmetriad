@@ -40,12 +40,15 @@
 (symo:draw (magic-spec->symmetric-object H3-system '(1 1 1))
 	   (frame -2 2 -2 2) cab)
 
-(symo:file-print-vrml (magic-spec->symmetric-object H3-system '(0 0 1))
-		      "playout/dodecahedron.wrl")
-(symo:file-print-vrml (magic-spec->symmetric-object H3-system '(1 0 0))
-		      "playout/icosohedron.wrl")
-(symo:file-print-vrml (magic-spec->symmetric-object H3-system '(1 1 1))
-		      "playout/great-rhombicosidodecahedron.wrl")
+(symo:file-print-vrml
+ (magic-spec->symmetric-object H3-system '(0 0 1))
+ "playout/dodecahedron.wrl")
+(symo:file-print-vrml
+ (magic-spec->symmetric-object H3-system '(1 0 0))
+ "playout/icosohedron.wrl")
+(symo:file-print-vrml
+ (magic-spec->symmetric-object H3-system '(1 1 1))
+ "playout/great-rhombicosidodecahedron.wrl")
 (symo:file-print-oogl-off 
  (magic-spec->symmetric-object H3-system '(1 0 0))
  "playout/icosohedron.off" 
@@ -61,11 +64,12 @@
   (symo:file-print-gv-skel 
    object
    "playout/H3-play-2.skel" 
-   (merge-by-first (list
-		    (highlight-all-cosets object '(s0) '(1.0 0.0 0.0))
-		    (highlight-all-cosets object '(s1) '(0.0 1.0 0.0))
-		    (highlight-all-cosets object '(s2) '(0.0 0.0 1.0))
-		    ) '(1.0 1.0 1.0 1.0))))
+   (merge-by-first
+    (list
+     (highlight-all-cosets object '(s0) '(1.0 0.0 0.0))
+     (highlight-all-cosets object '(s1) '(0.0 1.0 0.0))
+     (highlight-all-cosets object '(s2) '(0.0 0.0 1.0))
+     ) '(1.0 1.0 1.0 1.0))))
 
 (let ((object (symmetric-object H-family '(1.0 0.3 0.1))))
   (symo:file-print-gv-skel 
@@ -80,25 +84,21 @@
   (symo:file-print-gv-skel 
    object
    "playout/H3-play.skel" 
-   (merge-by-first (list
-		    (highlight-all-cosets object '(s0)
-					  '(1.0 0.0 0.0))
-		    (highlight-all-cosets object '(s1)
-					  '(0.0 1.0 0.0))
-		    (highlight-all-cosets object '(s2)
-					  '(0.0 1.0 1.0))
-		    ) '(1.0 1.0 1.0 1.0))))
+   (merge-by-first
+    (list
+     (highlight-all-cosets object '(s0) '(1.0 0.0 0.0))
+     (highlight-all-cosets object '(s1) '(0.0 1.0 0.0))
+     (highlight-all-cosets object '(s2) '(0.0 1.0 1.0))
+     ) '(1.0 1.0 1.0 1.0))))
 
 (let ((object (symmetric-object H-family '(1 0 0))))
   (symo:file-print-gv-skel 
    object
    "playout/H3-play-4.skel" 
-   (merge-by-first (list
-		    (highlight-all-cosets object '(s0)
-					  '(1.0 0.0 0.0))
-		    (highlight-all-cosets object '(s1)
-					  '(0.0 1.0 0.0))
-		    (highlight-all-cosets object '(s2)
-					  '(0.0 1.0 1.0))
-		    ) '(1.0 1.0 1.0 1.0))))
+   (merge-by-first
+    (list
+     (highlight-all-cosets object '(s0) '(1.0 0.0 0.0))
+     (highlight-all-cosets object '(s1) '(0.0 1.0 0.0))
+     (highlight-all-cosets object '(s2) '(0.0 1.0 1.0))
+     ) '(1.0 1.0 1.0 1.0))))
 
