@@ -22,18 +22,20 @@
 
 ;;; Example 11: H4
 
-(define coxsub (make-group-presentation '(s0) '((s0 s0))))
-(define cox-pres
-  (cox-presentation (make-cox-matrix-H 4) H4-lengths))
-(define cox-group-net (group-network cox-pres coxsub "Autogen"))
+#|
+ (define coxsub (make-group-presentation '(s0) '((s0 s0))))
+ (define cox-pres
+   (cox-presentation (make-cox-matrix-H 4) H4-lengths))
+ (define cox-group-net (group-network cox-pres coxsub "Autogen"))
 
-; Works!  Takes its sweet time, but works!
-; 1367 dead cosets.
-(gn:hlt! cox-group-net)
-(assert-valid-group-net cox-group-net)
-(gc-flip)
+ ; Works!  Takes its sweet time, but works!
+ ; 1367 dead cosets.
+ (gn:hlt! cox-group-net)
+ (assert-valid-group-net cox-group-net)
+ (gc-flip)
 
-(count-interned-symbols)
+ (count-interned-symbols)
+|#
 
 ; With numeric computation, (using usual-integrations), 
 ; and without the tms, the build takes
@@ -44,9 +46,9 @@
 ; It builds!  About 7 seconds on averdon
 ; And only takes about 0.5 megawords...
 (define 600-cell (magic-spec->symmetric-object H4-play '(1 0 0 0)))
-(define 600-cell #f)
-(cxg:clear-cache! H4-play)
-(gfam:clear-cache! F-family)
+; (define 600-cell #f)
+; (cxg:clear-cache! H4-play)
+; (gfam:clear-cache! F-family)
 
 ; Fast for simple functions, but slows down with complexity
 (symo:file-print-gv-skel
@@ -60,8 +62,8 @@
 ; It builds!  About 10 seconds on averdon, dominated by
 ; post-component stuff And only takes about 0.6 megawords...
 (define H4-1001 (magic-spec->symmetric-object H4-play '(1 0 0 1)))
-(define H4-1001 #f)
-(cxg:clear-cache! H4-play)
+; (define H4-1001 #f)
+; (cxg:clear-cache! H4-play)
 
 ; Coloring takes no more than about 10 seconds.
 (symo:file-print-gv-skel
@@ -86,7 +88,7 @@
    object
    "playout/H4-1003.off"
    (highlight-all-cosets object '(s0 s1 s2) '(0.0 0.5 0.0 1.0))
-   'conformal))
+   'off-conformal))
  
 (let ((object (magic-spec->symmetric-object H4-play '(6 0 0 1))))
   (symo:file-print-gv-skel
@@ -101,7 +103,7 @@
    object
    "playout/H4-6001.off"
    (highlight-all-cosets object '(s1 s2 s3) '(0.0 0.0 0.5 1.0))
-   'conformal))
+   'off-conformal))
 
 ; Set Geomview into spherical mode, conformal view *before* loading 
 ; objects made like this 
@@ -110,7 +112,7 @@
    object
    "playout/H4-6011.off"
    (highlight-all-cosets object '(s1 s2 s3) '(0.5 0.0 0.0 1.0))
-   'conformal))
+   'off-conformal))
 
 (let ((object (magic-spec->symmetric-object H4-play '(6 0 1 1))))
   (symo:file-print-gv
@@ -125,8 +127,8 @@
 ; assert-collapse-matches-vertex-group is disabled in
 ; compute-magic-spec->symmetric-object 0.8 megawords
 (define H4-full (magic-spec->symmetric-object H4-play '(1 1 1 1)))
-(define H4-full #f)
-(cxg:clear-cache! H4-play)
+; (define H4-full #f)
+; (cxg:clear-cache! H4-play)
 
 (symo:file-print-gv-skel
  H4-full
