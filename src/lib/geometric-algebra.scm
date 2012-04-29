@@ -171,6 +171,9 @@
   (make-multivector
    (append (multivector-terms mv1) (multivector-terms mv2))))
 
+(define (zero-mv? multivector)
+  (null? (multivector-terms multivector)))
+
 (define geom* (termwise term*))
 
 (define geom^ (termwise term^))
@@ -266,6 +269,9 @@
     (if (not (one-vector? (dual answer)))
         (error "Great sphere wasn't" answer (dual answer)))
     answer))
+
+(define (really-plane? sphere)
+  (zero-mv? (geom^ sphere einf)))
 
 (define (inside-sphere? sphere point)
   (let* ((inner-product-sphere (dual sphere))

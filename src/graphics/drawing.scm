@@ -339,6 +339,8 @@
         (great-sphere (car face-vertices)
                       (cadr face-vertices)
                       (caddr face-vertices)))
+      (if (really-plane? face-sphere-mv)
+          (warn "Looks like a plane" face-sphere-mv))
       (define other-vertex
         (vertex->mv (car (lset-difference eq? vertices face))))
       ;; I expect all other vertices of the polyhedron to give the
