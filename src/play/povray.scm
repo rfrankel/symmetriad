@@ -82,8 +82,6 @@
         (all-cosets object '(s1 s2 s3)))
    "../tools/header-2.pov"))
 
-;; TODO This one seems to cause division by zero.
-#;
 (let ((object (symmetric-object F-family '(1 1 1 9))))
   (symo->povray
    object
@@ -93,4 +91,4 @@
          (all-cosets object '(s0 s1 s2)))
     (map (colorize '(0.5 0.3 0.1 1.0))
          (all-cosets object '(s0 s1 s3))))
-   ))
+   "../tools/header-2.pov"))
