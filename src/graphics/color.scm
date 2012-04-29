@@ -30,10 +30,13 @@
   (color-string #f read-only #t))
 
 (define (color-int:list->string color-list)
-  (string-append (number->string (car color-list)) " "
-		 (number->string (cadr color-list)) " "
-		 (number->string (caddr color-list)) " "
-		 (number->string (cadddr color-list)) " "))
+  (string-append
+   (number->string (car color-list)) " "
+   (number->string (cadr color-list)) " "
+   (number->string (caddr color-list)) " "
+   (if (> (length color-list) 3)
+       (string-append (number->string (cadddr color-list)) " ")
+       "")))
 
 (define (list->color lst)
   (%create-color lst (color-int:list->string lst)))
