@@ -178,6 +178,16 @@
 	      (list (cadr edge) (car edge))))
 	(symo:edge-list sym-obj))))
 
+(define ((symo:canonicalize sym-obj) vertices)
+  (map-canonicalize (symo/representative-map sym-obj) vertices))
+
+(define (symo:canonicalize-multiple sym-obj vertex-lists)
+  (define (order lst) (sort lst symbol<?))
+  ((lin-rem-dup (lambda (key mod)
+                  (equal-hash-mod (order key) mod))
+                (on equal? order))
+   (map (symo:canonicalize sym-obj) vertex-lists)))
+
 ;; The point proc is a procedure capturing an 
 ;; expression for a point as a *linear* function of
 ;; the two (for two dimensions) roots of the appropriate 

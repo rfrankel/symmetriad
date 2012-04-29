@@ -78,3 +78,8 @@
 (define (with-output-to-file-ensuring-path filename proc)
   (ensure-path-exists (directory-pathname filename))
   (with-output-to-file filename proc))
+
+;; From Haskell on :: (b -> b -> c) -> (a -> b) -> a -> a -> c
+(define (on binary unary)
+  (lambda (x y)
+    (binary (unary x) (unary y))))

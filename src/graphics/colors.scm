@@ -21,7 +21,11 @@
 (declare (usual-integrations))
 
 (define (listed-cosets sym-obj subg elt-list)
-  (subg:coset-list (symo-subgroup sym-obj subg) elt-list))
+  ;; Yes, this canonicalization is redundant with the
+  ;; canonicalization done by the data association facility, but
+  ;; doing it here produces clean cosets for other purposes.
+  (symo:canonicalize-multiple sym-obj
+   (subg:coset-list (symo-subgroup sym-obj subg) elt-list)))
 
 (define (all-cosets sym-obj subg)
   (listed-cosets
