@@ -33,22 +33,26 @@
 		((= dim 3)
 		 (lambda (vect) (project-three-d projection vect)))
 		(else
-		 (error "Given projection does not match dimension.")))))
-    (for-each (lambda (edge)
-		(let* ((pt1 (project-proc (symo:get-vertex sym-obj (car edge))))
-		       (pt2 (project-proc (symo:get-vertex sym-obj (cadr edge)))))
-		  ;(pp (list pt1 pt2))
-		  (plot-line win (ref pt1 0) (ref pt1 1)
-			     (ref pt2 0) (ref pt2 1))))
-	      (symo:unique-edge-list sym-obj))))
+		 (error
+                  "Given projection does not match dimension.")))))
+    (define (draw edge)
+      (let* ((pt1 (project-proc
+                   (symo:get-vertex sym-obj (car edge))))
+             (pt2 (project-proc
+                   (symo:get-vertex sym-obj (cadr edge)))))
+        ;;(pp (list pt1 pt2))
+        (plot-line win (ref pt1 0) (ref pt1 1)
+                   (ref pt2 0) (ref pt2 1))))
+    (for-each draw (symo:unique-edge-list sym-obj))))
 
 (define (add-three-d-axes win projection)
-  (for-each (lambda (axis)
-	      (let ((proj-zero (project-three-d projection (up 0 0 0)))
-		    (proj-axis (project-three-d projection axis)))
-		(plot-line win (ref proj-zero 0) (ref proj-zero 1)
-			   (ref proj-axis 0) (ref proj-axis 1))))
-	    (list (up 1 0 0) (up 0 1 0) (up 0 0 1))))
+  (for-each
+   (lambda (axis)
+     (let ((proj-zero (project-three-d projection (up 0 0 0)))
+           (proj-axis (project-three-d projection axis)))
+       (plot-line win (ref proj-zero 0) (ref proj-zero 1)
+                  (ref proj-axis 0) (ref proj-axis 1))))
+   (list (up 1 0 0) (up 0 1 0) (up 0 0 1))))
 
 
 ; At the moment, only works for 3D objects.  Breaks silently if the 
@@ -65,13 +69,14 @@
     (display "  geometry IndexedLineSet {") (newline)
     (display "    coord Coordinate { point [") (newline))
   (define (print-vertices sym-obj)
-    (for-each (lambda (vertex-symb)
-		(display "      ")
-		(let ((vertex-coords (symo:get-vertex sym-obj vertex-symb)))
-		  (for-each (lambda (coord) (display coord) (display ", "))
-			    (up-structure->list vertex-coords)))
-		(newline))
-	      (symo/unique-vertices sym-obj)))
+    (for-each
+     (lambda (vertex-symb)
+       (display "      ")
+       (let ((vertex-coords (symo:get-vertex sym-obj vertex-symb)))
+         (for-each (lambda (coord) (display coord) (display ", "))
+                   (up-structure->list vertex-coords)))
+       (newline))
+     (symo/unique-vertices sym-obj)))
   (define (print-vert-edge-transition)
     (display "    ] }") (newline)
     (display "    coordIndex [") (newline))
@@ -132,8 +137,8 @@
 	   (display "nOFF") (newline)
 	   (display (symo:dimension sym-obj)) (newline))
 	  ((eq? format 'off-conformal)
-	   ; Set Geomview into spherical mode, conformal view *before* 
-	   ; loading objects made like this 
+	   ;; Set Geomview into spherical mode, conformal view
+	   ;; *before* loading objects made like this
 	   (if (not (= (symo:dimension sym-obj) 4))
 	       (error "Do not draw non-4D objects in 4OFF mode."))
 	   (display "4OFF") (newline))
@@ -175,13 +180,14 @@
 )
 
 (define (print-vertices sym-obj)
-  (for-each (lambda (vertex-symb)
-	      (let ((vertex-coords (symo:get-vertex sym-obj vertex-symb)))
-		(for-each (lambda (coord) 
-			    (display (exact->inexact coord)) (display " "))
-			  (up-structure->list vertex-coords)))
-	      (newline))
-	    (symo/unique-vertices sym-obj)))
+  (for-each
+   (lambda (vertex-symb)
+     (let ((vertex-coords (symo:get-vertex sym-obj vertex-symb)))
+       (for-each (lambda (coord) 
+                   (display (exact->inexact coord)) (display " "))
+                 (up-structure->list vertex-coords)))
+     (newline))
+   (symo/unique-vertices sym-obj)))
 
 (define (symo:print-oogl-off sym-obj #!optional color-proc format)
   (if (default-object? color-proc)
@@ -190,7 +196,8 @@
 	  (symo:print-gv sym-obj 'off-virtual color-proc)
 	  (symo:print-gv sym-obj format color-proc))))
 
-(define (symo:file-print-oogl-off sym-obj filename #!optional color-proc format)
+(define (symo:file-print-oogl-off sym-obj filename
+                                  #!optional color-proc format)
   (with-output-to-file-ensuring-path
       filename
     (lambda ()
@@ -206,7 +213,8 @@
       (symo:print-gv sym-obj 'skel)
       (symo:print-gv sym-obj 'skel color-proc)))
 
-(define (symo:file-print-gv-skel sym-obj filename #!optional color-proc)
+(define (symo:file-print-gv-skel sym-obj filename
+                                 #!optional color-proc)
   (with-output-to-file-ensuring-path
       filename
     (lambda ()
@@ -214,7 +222,8 @@
 	  (symo:print-gv-skel sym-obj)
 	  (symo:print-gv-skel sym-obj color-proc)))))
 
-(define (symo:file-print-gv sym-obj filename format #!optional color-proc)
+(define (symo:file-print-gv sym-obj filename format
+                            #!optional color-proc)
   (with-output-to-file-ensuring-path
       filename
     (lambda ()
@@ -223,7 +232,8 @@
 	  (symo:print-gv sym-obj format color-proc)
 	  ))))
 
-(define (symo:file-print-both sym-obj file-base #!optional color-spec)
+(define (symo:file-print-both sym-obj file-base
+                              #!optional color-spec)
   (symo:file-print-gv
    sym-obj
    (string-append file-base ".off")
@@ -235,23 +245,25 @@
    'skel
    color-spec))
 
-;;; Print out the selected polyhedra in a format of my own devising, loosely
-;;; based on Geomview's OFF format.  The polyhedra are selected by an alist of
-;;; vertex-list to color.  Each vertex-list is expected to be one polyhedron.  The
-;;; purpose of the exercise is to provide the polyhedra explicitly to downstream
-;;; processors, along with the faces in each polyhedron.
+;;; Print out the selected polyhedra in a format of my own devising,
+;;; loosely based on Geomview's OFF format.  The polyhedra are
+;;; selected by an alist of vertex-list to color.  Each vertex-list
+;;; is expected to be one polyhedron.  The purpose of the exercise is
+;;; to provide the polyhedra explicitly to downstream processors,
+;;; along with the faces in each polyhedron.
 ;;;
 ;;; The output format is as follows:
-;;; First, there is a header, consisting of the word "Polyhedra" on one line,
-;;; and the number of vertices and the number of polyhedra on the next line.
+;;; First, there is a header, consisting of the word "Polyhedra" on
+;;; one line, and the number of vertices and the number of polyhedra
+;;; on the next line.
 ;;; After this comes the list of vertices, just like in OFF.
 ;;; After this come the polyhedra, one by one.
 ;;; Each polyhedron is:
-;;; - A line giving the number of vertices in the polyhedron, the number of
-;;;   faces in the polyhedron, and then the vertices in the polyhedron by reference
-;;;   into the vertex list (zero-indexed).
-;;; - Lines giving faces (as many as promised).  Each face is formatted the same
-;;;   way as a polygon in OFF format.
+;;; - A line giving the number of vertices in the polyhedron, the
+;;;   number of faces in the polyhedron, and then the vertices in the
+;;;   polyhedron by reference into the vertex list (zero-indexed).
+;;; - Lines giving faces (as many as promised).  Each face is
+;;;   formatted the same way as a polygon in OFF format.
 (define (symo:print-polyhedra sym-obj hedron-specs)
   (define (print-header)
     (display "Polyhedra") (newline)
@@ -263,7 +275,8 @@
       (symo:rep-index sym-obj chamber-symb))
     (define vertices (car spec))
     (define color (cdr spec))
-    (define color-spec (highlight-contained sym-obj vertices color (color:default)))
+    (define color-spec
+      (highlight-contained sym-obj vertices color (color:default)))
     (define face-color-list 
       (filter (lambda (x) x)
 	      (map (lambda (face)
@@ -284,8 +297,10 @@
        (lambda (face)
 	 (print-face (car face) (cdr face)))
        face-color-list))
-    ;; TODO Why are there non-eq vertices in the input list that map to the same vertex index?
-    (define vert-indexes (delete-duplicates (map hack-map vertices) =))
+    ;; TODO Why are there non-eq vertices in the input list that map
+    ;; to the same vertex index?
+    (define vert-indexes
+      (delete-duplicates (map hack-map vertices) =))
     (display (length vert-indexes)) (display " ")
     (display (length face-color-list)) (display " ")
     (for-each (lambda (index)
