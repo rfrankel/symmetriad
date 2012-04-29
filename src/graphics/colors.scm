@@ -107,10 +107,7 @@
 	 sym-obj subg coset-color-alist #!optional default-color)
   (if (default-object? default-color)
       (set! default-color (color:default)))
-  (if (not (subgroup? subg))
-      (if (list? subg)
-	  (set! subg (symo-subgroup sym-obj subg))
-	  (error "Inalid subgroup." subg)))		 
+  (set! subg (symo-subgroup sym-obj subg)) ; canonicalize
   (multihighlight-partition
    sym-obj (map (lambda (coset-color-pair)
 		  (cons (subg:get-coset subg (car coset-color-pair))
@@ -122,10 +119,7 @@
 	 sym-obj subg color-list #!optional default-color)
   (if (default-object? default-color)
       (set! default-color (color:default)))
-  (if (not (subgroup? subg))
-      (if (list? subg)
-	  (set! subg (symo-subgroup sym-obj subg))
-	  (error "Inalid subgroup." subg)))		 
+  (set! subg (symo-subgroup sym-obj subg)) ; canonicalize
   (multicolor-listed-cosets 
    sym-obj subg 
    (cyclic-associate
