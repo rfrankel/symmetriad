@@ -278,12 +278,11 @@
     (define color-spec
       (highlight-contained sym-obj vertices color (color:default)))
     (define face-color-list 
-      (filter (lambda (x) x)
-	      (map (lambda (face)
-		     (let ((color (color-spec face)))
-		       (if (color:drawable? color) 
-			   (cons (map rep-index face) color) #f)))
-		   (symo/face-list sym-obj))))
+      (filter-map (lambda (face)
+                    (let ((color (color-spec face)))
+                      (if (color:drawable? color) 
+                          (cons (map rep-index face) color) #f)))
+                  (symo/face-list sym-obj)))
     ;; TODO Why are there non-eq vertices in the input list that map
     ;; to the same vertex index?
     (define vert-indexes
