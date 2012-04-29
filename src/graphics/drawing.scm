@@ -332,7 +332,7 @@
                       (if (color:drawable? color) 
                           (cons face color) #f)))
                   (symo/face-list sym-obj)))
-    (define (print-face face color)
+    (define (face-as-sphere face)
       (define face-vertices (map vertex->mv face))
       (define face-sphere-mv
         ;; The rest will lie on the same sphere.
@@ -346,23 +346,32 @@
       (define invert?
         (not (inside-sphere? face-sphere-mv other-vertex)))
       (define center-vec (sphere-center face-sphere-mv))
-      (display "sphere {") (newline)
-      (format #t "<~A, ~A, ~A>, ~A"
-              (car center-vec)
-              (cadr center-vec)
-              (caddr center-vec)
-              (sphere-radius face-sphere-mv))
-      (newline)
-      (format #t "pigment { color rgb <~A, ~A, ~A> }\n"
-              (car color) (cadr color) (caddr color))
-      (if invert? (display "inverse\n"))
-      (display "}") (newline) (flush-output))
+      (define radius (sphere-radius face-sphere-mv))
+      (make-sphere center-vec radius invert?))
+    (define (print-face face color)
+      (let ((center (sph-center face))
+            (radius (sph-radius face))
+            (invert? (sph-invert? face)))
+        (display "sphere {") (newline)
+        (format #t "<~A, ~A, ~A>, ~A"
+                (car center)
+                (cadr center)
+                (caddr center)
+                radius)
+        (newline)
+        (format #t "pigment { color rgb <~A, ~A, ~A> }\n"
+                (car color) (cadr color) (caddr color))
+        (if invert? (display "inverse\n"))
+        (display "}")) (newline) (flush-output))
     (define (print-faces face-color-list)
       (display "intersection {\n")
       (for-each 
        (lambda (face)
-	 (print-face (car face) (cdr face)))
+	 (print-face (face-as-sphere (car face)) (cdr face)))
        face-color-list)
       (display "}\n"))
     (print-faces face-color-list))
   (for-each print-hedron hedra))
+
+(define-structure (sphere (conc-name sph-))
+  center radius invert?)
