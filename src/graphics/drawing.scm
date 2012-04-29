@@ -314,8 +314,6 @@
       answer)))
 
 (define (symo->povray-help sym-obj hedra)
-  (define (representative s)
-    (symo:representative sym-obj s))
   (define (vertex->mv vertex-symb)
     (apply r4-vector->mv
            (up-structure->list
@@ -328,8 +326,6 @@
     (define color-spec
       (highlight-contained
        sym-obj vertex-symbols color (color:default)))
-    (define vertex-representatives
-      (lin-rem-dup-eq (map representative vertex-symbols)))
     (define face-color-list 
       (filter (lambda (x) x)
 	      (map (lambda (face)
@@ -338,8 +334,6 @@
 			   (cons face color) #f)))
 		   (symo/face-list sym-obj))))
     (define (print-face face color)
-      (define face-representatives
-        (lin-rem-dup-eq (map representative face)))
       (define face-vertices (map vertex->mv face))
       (define face-sphere-mv
         ;; The rest will lie on the same sphere.
@@ -347,22 +341,11 @@
                       (cadr face-vertices)
                       (caddr face-vertices)))
       (define other-vertex
-        (vertex->mv (car (lset-difference eq?
-                          vertex-representatives
-                          face-representatives))))
+        (vertex->mv (car (lset-difference eq? vertex-symbols face))))
       ;; I expect all other vertices of the polyhedron to give the
       ;; same answer.
       (define invert?
         (not (inside-sphere? face-sphere-mv other-vertex)))
-      #;
-      (pp (map (lambda (other-vert)
-                 (cons (inside-sphere? face-sphere-mv other-vert)
-                       (multivector->list other-vert)))
-               (map vertex->mv
-                    (lset-difference eq?
-                     vertex-representatives
-                     face-representatives)))
-          (notification-output-port))
       (define center-vec (sphere-center face-sphere-mv))
       (display "sphere {") (newline)
       (format #t "<~A, ~A, ~A>, ~A"
