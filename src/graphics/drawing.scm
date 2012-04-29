@@ -330,7 +330,6 @@
   (define (print-hedron spec)
     (pp `(printing hedron ,spec) (notification-output-port))
     ;; TODO Abstract commonalities with symo:print-gv-help
-    (define rep-index (symo:rep-index sym-obj))
     (define vertex-symbols (car spec))
     (define color (cdr spec))
     (define color-spec
