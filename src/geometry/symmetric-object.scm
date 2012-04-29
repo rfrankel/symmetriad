@@ -35,6 +35,8 @@
   (point-proc #f read-only #t)
   ;; Should be private, hash of symbol to up-structure
   (point-table #f read-only #t)
+  ;; List of unique nondegenerate faces (each face is a list of
+  ;; symbols of the representative vertices that appear on the face).
   (face-list '() read-only #t)
   ;; Symbols of vertices that are unique
   (unique-vertices '() read-only #t)
