@@ -56,11 +56,7 @@
 			   default-color))
 
 (define (listed-cosets sym-obj subg elt-list)
-  (set! subg (symo-subgroup sym-obj subg)) ; canonicalize
-  (lin-rem-dup-eq
-   (map (lambda (elt)
-	  (subg:get-coset subg elt))
-	elt-list)))
+  (subg:coset-list (symo-subgroup sym-obj subg) elt-list))
 
 (define (all-cosets sym-obj subg)
   (listed-cosets
