@@ -75,6 +75,7 @@
    ))
 
 ;; TODO This one seems to cause division by zero.
+#;
 (let ((object (symmetric-object F-family '(1 1 1 9))))
   (symo->povray
    object
