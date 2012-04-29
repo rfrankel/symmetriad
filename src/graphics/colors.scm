@@ -20,6 +20,13 @@
 
 (declare (usual-integrations))
 
+(define (listed-cosets sym-obj subg elt-list)
+  (subg:coset-list (symo-subgroup sym-obj subg) elt-list))
+
+(define (all-cosets sym-obj subg)
+  (listed-cosets
+   sym-obj subg (cxg/chamber-list (symo/geometry sym-obj))))
+
 ;;; This file defines the tools needed to create colorings of
 ;;; symmetric objects.  An edge (face) coloring of a symmetric object
 ;;; is represented as a procedure that takes an edge (face) thereof
@@ -54,13 +61,6 @@
 			   (cxg/chamber-list (symo/geometry sym-obj))
 			   color
 			   default-color))
-
-(define (listed-cosets sym-obj subg elt-list)
-  (subg:coset-list (symo-subgroup sym-obj subg) elt-list))
-
-(define (all-cosets sym-obj subg)
-  (listed-cosets
-   sym-obj subg (cxg/chamber-list (symo/geometry sym-obj))))
 
 (define (highlight-listed-cosets sym-obj subg elt-list color 
 				 #!optional default-color)
