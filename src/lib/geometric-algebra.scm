@@ -305,6 +305,23 @@
      (/ (mv->scalar (* inner-product-sphere inner-product-sphere))
         (square (mv->scalar (dot inner-product-sphere einf)))))))
 
+(define (plane-normal plane)
+  (let ((inner-product-plane (dual plane)))
+    (mv->3-vector
+     ((project (* e1 e2 e3)) inner-product-plane))))
+
+(define (plane-scale plane)
+  (define (3-norm vec)
+    (sqrt (apply + (map * vec vec))))
+  (3-norm (plane-normal plane)))
+
+(define (plane-unit-normal plane)
+  (map / (plane-normal plane) (make-list 3 (plane-scale plane))))
+
+(define (plane-displacement plane)
+  (- (/ (mv->scalar (dot (dual plane) e0))
+        (plane-scale plane))))
+
 ;; This implicitly projects the input 4-vector conformally down to R3
 ;; (and represents the result in the conformal algebra).
 (define (r4-vector->mv x y z w)

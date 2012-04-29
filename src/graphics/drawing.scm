@@ -339,18 +339,19 @@
         (great-sphere (car face-vertices)
                       (cadr face-vertices)
                       (caddr face-vertices)))
-      (if (really-plane? face-sphere-mv)
-          (warn "Looks like a plane" face-sphere-mv))
-      (define other-vertex
-        (vertex->mv (car (lset-difference eq? vertices face))))
       ;; I expect all other vertices of the polyhedron to give the
       ;; same answer.
-      (define invert?
-        (not (inside-sphere? face-sphere-mv other-vertex)))
-      (define center-vec (sphere-center face-sphere-mv))
-      (define radius (sphere-radius face-sphere-mv))
-      (make-sphere center-vec radius invert?))
-    (define (print-face face color)
+      (define other-vertex
+        (vertex->mv (car (lset-difference eq? vertices face))))
+      (if (really-plane? face-sphere-mv)
+          (make-plane
+           (plane-unit-normal face-sphere-mv)
+           (plane-displacement face-sphere-mv))
+          (make-sphere
+           (sphere-center face-sphere-mv)
+           (sphere-radius face-sphere-mv)
+           (not (inside-sphere? face-sphere-mv other-vertex)))))
+    (define (print-sphere-face face color)
       (let ((center (sph-center face))
             (radius (sph-radius face))
             (invert? (sph-invert? face)))
@@ -365,6 +366,23 @@
                 (car color) (cadr color) (caddr color))
         (if invert? (display "inverse\n"))
         (display "}")) (newline) (flush-output))
+    (define (print-plane-face face color)
+      (let ((normal (pln-normal face))
+            (displacement (pln-displacement face)))
+        (display "plane {") (newline)
+        (format #t "<~A, ~A, ~A>, ~A"
+                (car normal)
+                (cadr normal)
+                (caddr normal)
+                displacement)
+        (newline)
+        (format #t "pigment { color rgb <~A, ~A, ~A> }\n"
+                (car color) (cadr color) (caddr color))
+        (display "}")) (newline) (flush-output))
+    (define (print-face face color)
+      (if (plane? face)
+          (print-plane-face face color)
+          (print-sphere-face face color)))
     (define (print-faces face-color-list)
       (display "intersection {\n")
       (for-each 
@@ -377,3 +395,6 @@
 
 (define-structure (sphere (conc-name sph-))
   center radius invert?)
+
+(define-structure (plane (conc-name pln-))
+  normal displacement)
