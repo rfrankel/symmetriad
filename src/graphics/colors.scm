@@ -56,10 +56,7 @@
 			   default-color))
 
 (define (listed-cosets sym-obj subg elt-list)
-  (if (not (subgroup? subg))
-      (if (list? subg)
-	  (set! subg (symo-subgroup sym-obj subg))
-	  (error "Inalid subgroup." subg)))
+  (set! subg (symo-subgroup sym-obj subg)) ; canonicalize
   (lin-rem-dup-eq
    (map (lambda (elt)
 	  (subg:get-coset subg elt))
