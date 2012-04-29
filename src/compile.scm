@@ -24,6 +24,7 @@
 	      (lambda ()
 		(load "compile"))))
 	  '("utils"
+            "lib"
 	    "constraint"
 	    "geometry"
 	    "group"

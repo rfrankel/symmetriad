@@ -1,5 +1,5 @@
 ;;; ----------------------------------------------------------------------
-;;; Copyright 2005 Alexey Radul and Rebecca Frankel.
+;;; Copyright 2012 Alexey Radul and Rebecca Frankel.
 ;;; ----------------------------------------------------------------------
 ;;; This file is part of The Symmetriad.
 ;;; 
@@ -18,16 +18,7 @@
 ;;; Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ;;; ----------------------------------------------------------------------
 
-(for-each (lambda (dir)
-	    (with-working-directory-pathname
-		dir
-	      (lambda ()
-		(load "load"))))
-	  '("utils"
-            "lib"
-	    "constraint"
-	    "group"  ; geometry/root-systems breaks unless group/cox-matrix-defs is loaded first
-	    "geometry"
-	    "graphics"
-	    ;"play"  ; Client code, not part of the system.
+(for-each (lambda (file)
+	    (load file))
+	  '("geometric-algebra"
 	    ))
