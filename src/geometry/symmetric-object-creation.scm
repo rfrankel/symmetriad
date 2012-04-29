@@ -20,41 +20,46 @@
 
 (declare (usual-integrations))
 
-;;; This file contains procedures for creating symmetric objects from user data.
+;;; This file contains procedures for creating symmetric objects from
+;;; user data.
 
-;; Returns a list of the directions of the omega vectors of the identity 
-;; chamber of the given cox-geometry.  They are given in an order that 
-;; corresponds to the order in which the roots are stored in the cox-geometry 
-;; root table.
-;; They are just directions, their lengths are unspecified!
+;; Returns a list of the directions of the omega vectors of the
+;; identity chamber of the given cox-geometry.  They are given in an
+;; order that corresponds to the order in which the roots are stored
+;; in the cox-geometry root table.  They are just directions, their
+;; lengths are unspecified!
 (define (omega-dirs cox-geo)
   (let* ((e-root-list (cxg:chamber-root-list cox-geo 'e))
-	 (root-matrix (matrix-by-row-list (map up-structure->list e-root-list)))
+	 (root-matrix (matrix-by-row-list
+                       (map up-structure->list e-root-list)))
 	 (root-mat-inv (invert root-matrix))) ; Will not fail, b/c roots form a basis.
     (map (lambda (col)
-	   (apply up (map (lambda (row) (matrix-ref root-mat-inv row col))
-			  (enumerate-interval 0 (- (m:num-rows root-mat-inv) 1)))))
+	   (apply up (map (lambda (row)
+                            (matrix-ref root-mat-inv row col))
+			  (enumerate-interval
+                           0 (- (m:num-rows root-mat-inv) 1)))))
 	 (enumerate-interval 0 (- (m:num-cols root-mat-inv) 1)))))
   
-;; Relengths a set of omega directions so that the one given as the base is 
-;; length 1, and acts like the (only) vertex of a solid.  The rest are lengthed 
-;; such that they lie on the surface of that solid.  I hope.
-;; Again, purely numeric.
+;; Relengths a set of omega directions so that the one given as the
+;; base is length 1, and acts like the (only) vertex of a solid.  The
+;; rest are lengthed such that they lie on the surface of that solid.
+;; I hope.  Again, purely numeric.
 (define (omega-vectors directions base-index)
   (let ((normalized 
 	 (map (lambda (vector) 
-		(vector/scalar vector (sqrt (dot-product vector vector))))
+		(vector/scalar
+                 vector (sqrt (dot-product vector vector))))
 	      directions)))
     (map (lambda (vector) 
-	   (vector*scalar vector 
-			  (dot-product vector (list-ref normalized
-							base-index))))
+	   (vector*scalar
+            vector 
+            (dot-product vector (list-ref normalized base-index))))
 	 normalized)))
 
-;; Returns the magic direction corresponding to the given spec.
-;; The spec needs to be a list parallel to the roots of the geometry.
-;; Each number in the spec is the dot product that the point needs to have
-;; with the corresponding (normalized) root.
+;; Returns the magic direction corresponding to the given spec.  The
+;; spec needs to be a list parallel to the roots of the geometry.
+;; Each number in the spec is the dot product that the point needs to
+;; have with the corresponding (normalized) root.
 ;; Currently only numeric.
 ;; Returns a direction --- length unspecified.
 (define ((magic-point cox-geo) root-in-spec)
@@ -65,7 +70,8 @@
     (vector/scalar vect (sqrt (dot-product vect vect))))
   (let* ((e-root-list (cxg:chamber-root-list cox-geo 'e))
 	 (norm-root-list (map normalize e-root-list))
-	 (root-matrix (matrix-by-row-list (map up-structure->list norm-root-list)))
+	 (root-matrix (matrix-by-row-list
+                       (map up-structure->list norm-root-list)))
 	 (root-mat-inv (invert root-matrix)) ; Will not fail, b/c roots form a basis.
 	 (targ-vec (list->up-structure root-in-spec)))
     (matrix*vector root-mat-inv targ-vec)))
@@ -77,21 +83,23 @@
 ;; Returns a procedure suitable for tabulate-point
 (define ((cartesian-point cox-geo) pt-vec)
   (let* ((e-root-list (cxg:chamber-root-list cox-geo 'e))
-	 (root-matrix (matrix-by-col-list (map up-structure->list e-root-list)))
+	 (root-matrix (matrix-by-col-list
+                       (map up-structure->list e-root-list)))
 	 (root-mat-inv (invert root-matrix)) ; Will not fail, b/c roots form a basis
 	 (coords-rel-roots (matrix*vector root-mat-inv pt-vec)))
     (lambda (#!rest roots-list)
       ;(pp root-mat-inv) (newline)
       ;(pp coords-rel-roots) (newline)
       (let* ((given-matrix 
-	      (matrix-by-col-list (map up-structure->list roots-list))))
+	      (matrix-by-col-list
+               (map up-structure->list roots-list))))
 	;(pp given-matrix) (newline)
 	(matrix*vector given-matrix coords-rel-roots)))))
 
-(define (cartesian-point->symmetric-object cox-g point #!optional mild-testing)
-  (if (default-object? mild-testing)
-      (make-symmetric-object cox-g ((cartesian-point cox-g) point))
-      (make-symmetric-object cox-g ((cartesian-point cox-g) point) mild-testing)))
+(define (cartesian-point->symmetric-object cox-g point
+                                           #!optional mild-testing)
+  (make-symmetric-object
+   cox-g ((cartesian-point cox-g) point) mild-testing))
 
 (define (compute-magic-spec->symmetric-object cox-g magic-spec)
   (let ((mild-testing #f))
@@ -100,9 +108,10 @@
 		    (set! mild-testing #t)))
 	      magic-spec)
 ;    (pp (list "Testing mildly:" mild-testing))
-    (let ((answer (cartesian-point->symmetric-object 
-		   cox-g 
-		   ((normal-magic-point cox-g) magic-spec) mild-testing))
+    (let ((answer
+           (cartesian-point->symmetric-object 
+            cox-g 
+            ((normal-magic-point cox-g) magic-spec) mild-testing))
 	  (vertex-group (coxg-gen-subgroup cox-g magic-spec)))
       (set-symo/vertex-group! answer vertex-group)
       (if *check-correct-collapse?*
@@ -110,7 +119,8 @@
       answer)))
 
 (define magic-spec->symmetric-object 
-  (cache-wrapper compute-magic-spec->symmetric-object cxg/done-cache))
+  (cache-wrapper
+   compute-magic-spec->symmetric-object cxg/done-cache))
 
 (define (symmetric-object family spec)
   (magic-spec->symmetric-object 
