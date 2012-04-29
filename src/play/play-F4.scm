@@ -79,7 +79,7 @@
        (subg-lead (symo-subgroup object '(s1 s2 s3)))
        (subg-follow (symo-subgroup object '(s1 s2 s0))))
   (pp (symmetric-object? object))
-  (pp (map car (subg:coset-list subg-lead object)))
+  (pp (map car (all-cosets object subg-lead)))
   (symo:file-print-gv-skel
    object "playout/F4-0100.skel"
    (merge-by-first
@@ -102,7 +102,7 @@
 (let* ((object (symmetric-object F-family '(0 1 1 0)))
        (subg-lead (symo-subgroup object '(s1 s2 s3)))
        (subg-follow (symo-subgroup object '(s1 s2 s0))))
-  ;(pp (map car (subg:coset-list subg-lead object)))
+;  (pp (map car (all-cosets object subg-lead)))
   (symo:file-print-gv-skel
    object "playout/F4-0110.skel"
 ;   (color-cycle-all-cosets 

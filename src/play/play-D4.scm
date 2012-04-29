@@ -52,8 +52,7 @@
    ))
 
 (let* ((object (symmetric-object D-family '(1 0 0 0))))
-;  (pp (subg:coset-list (symo-subgroup object '(s0 s1 s2))
-;		       (cxg/chamber-list (symo/geometry object))))
+;  (pp (all-cosets object '(s0 s1 s2)))
   (symo:file-print-gv-skel
    object "playout/D4-1000-skel"
    ;(highlight-listed-cosets object '(s0 s1 s2) '(e) *red* (param-grey 0.6))

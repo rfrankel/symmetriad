@@ -116,8 +116,7 @@
   (multicolor-listed-cosets 
    sym-obj subg 
    (cyclic-associate
-    (map car (subg:coset-list subg (cxg/chamber-list 
-                                    (symo/geometry sym-obj))))
+    (map car (all-cosets sym-obj subg))
     color-list)
    default-color))
 
