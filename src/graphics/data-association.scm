@@ -52,8 +52,8 @@
                  (hash-table/get
                   vert-set (symo:rep-index sym-obj vert) #f))
                given-verts)
-	  data
-	  default-data))))
+          data
+          default-data))))
 
 ;; Associates the given data object with every set of vertices
 ;; contained in the given one.  If supplied, associates the given
@@ -72,8 +72,8 @@
                    (hash-table/get
                     vert-set (symo:rep-index sym-obj vert) #f))
                  given-verts)
-	  data
-	  default-data))))
+          data
+          default-data))))
 
 ;; Associates the given data object with every set of vertices that
 ;; is contained in one of the given ones.  If supplied, associates
@@ -94,15 +94,15 @@
                     (hash-table/get
                      vert-sets (symo:rep-index sym-obj vert) #f))
                   given-verts)))
-	(let ((results
+        (let ((results
                (reduce
                 (lambda (set1 set2)
                   (and set1 set2 (mset:intersection set1 set2)))
                 (car index-msets)  
                 index-msets)))
-	  (if (and results (not (mset:empty? results)))
-	      data
-	      default-data))))))
+          (if (and results (not (mset:empty? results)))
+              data
+              default-data))))))
 
 ;; Associates those vertex sets that are entirely contained in one of
 ;; the given lists of vertices with the corresponding data object.
@@ -119,22 +119,22 @@
                  (map (lambda (vert) (symo:rep-index sym-obj vert))
                       lst))
                (map car vert-list-data-alist))))
-	(data-map (list->vector (map cdr vert-list-data-alist))))
+        (data-map (list->vector (map cdr vert-list-data-alist))))
     (lambda (given-verts)
       (let ((index-msets
              (map (lambda (vert)
                     (hash-table/get
                      vert-sets (symo:rep-index sym-obj vert) #f))
                   given-verts)))
-	(let ((results
+        (let ((results
                (reduce
                 (lambda (set1 set2)
                   (and set1 set2 (mset:intersection set1 set2)))
                 (car index-msets)  
                 index-msets)))
-	  (if (and results (not (mset:empty? results)))
-	      (vector-ref data-map (car (mset:elt-list results)))
-	      default-data))))))
+          (if (and results (not (mset:empty? results)))
+              (vector-ref data-map (car (mset:elt-list results)))
+              default-data))))))
 
 (define (merge-by-first proc-list #!optional default-data)
   (if (default-object? default-data)
@@ -142,10 +142,10 @@
   (lambda (given-verts)
     ;(pp given-verts)
     (if (null? proc-list)
-	default-data
-	(let ((data ((car proc-list) given-verts)))
-	  (if (not (data:passive? data))
-	      data
-	      ((merge-by-first (cdr proc-list) default-data)
+        default-data
+        (let ((data ((car proc-list) given-verts)))
+          (if (not (data:passive? data))
+              data
+              ((merge-by-first (cdr proc-list) default-data)
                given-verts))))))
 
