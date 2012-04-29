@@ -121,12 +121,11 @@
 	symo:unique-edge-list
 	symo/face-list))
   (define drawee-color-list 
-    (filter (lambda (x) x)
-	    (map (lambda (drawee)
-		   (let ((color (color-proc drawee)))
-		     (if (color:drawable? color) 
-			 (cons drawee color) #f)))
-		 (drawee-selector sym-obj))))
+    (filter-map (lambda (drawee)
+                  (let ((color (color-proc drawee)))
+                    (if (color:drawable? color) 
+                        (cons drawee color) #f)))
+                (drawee-selector sym-obj)))
   
   (define (print-header sym-obj format)
     (cond ((eq? format 'off-virtual)
