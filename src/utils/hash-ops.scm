@@ -48,6 +48,10 @@
 	      lst)
     answer))
 
+(define (map-canonicalize table items)
+  (lin-rem-dup-eq
+   (map (lambda (item) (hash-table/get table item #f)) items)))
+
 (define (((list->hash-table key-hash key=?) get-key get-val) lst)
   (let ((answer ((strong-hash-table/constructor key-hash key=? #t))))
     (for-each (lambda (elt)

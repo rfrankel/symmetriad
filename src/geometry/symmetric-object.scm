@@ -103,12 +103,7 @@
 ;; Index proc takes a chamber symbol and returns its index 
 ;; in the list of chambers of the relevant coxeter geometry.
 (define (normalize-face face representative-map index-proc)
-  (let ((resymboled-face 
-         ;; TODO Technically should be consecutive duplicates...
-	 (lin-rem-dup-eq
-	  (map (lambda (chamber-symb)
-		 (hash-table/get representative-map chamber-symb #f))
-	       face))))
+  (let ((resymboled-face (map-canonicalize representative-map face)))
     (let ((min-index (apply min (map index-proc resymboled-face))))
       (rotate-to-front (lambda (symb)
                          (= min-index (index-proc symb)))
