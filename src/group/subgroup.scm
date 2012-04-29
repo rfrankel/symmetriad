@@ -117,10 +117,7 @@
        (subg:get-coset subg elt2)))
        
 (define (subg:coset-list subg elt-list)
-  (if (symmetric-object? elt-list)
-      (subg:coset-list
-       subg (cxg/chamber-list (symo/geometry elt-list)))
-      (lin-rem-dup-eq
-       (map (lambda (elt)
-	      (subg:get-coset subg elt))
-	    elt-list))))
+  (lin-rem-dup-eq
+   (map (lambda (elt)
+          (subg:get-coset subg elt))
+        elt-list)))
