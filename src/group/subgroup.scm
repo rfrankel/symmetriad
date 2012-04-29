@@ -56,8 +56,12 @@
 			(cxg/gen-list cox-g)
 			gen-spec)))
 
-(define (symo-subgroup sym-obj word-list)
-  (coxg-subgroup (symo/geometry sym-obj) word-list))
+(define (symo-subgroup sym-obj obj)
+  (cond ((subgroup? obj) obj)
+        ((list? obj)
+         ;; Treat as a list of words
+         (coxg-subgroup (symo/geometry sym-obj) obj))
+        (error "Inalid subgroup spec." obj)))
 
 ;; May be computing the wrong handedness of coset...
 (define (subg:compute-coset subg start)

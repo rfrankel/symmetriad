@@ -39,14 +39,11 @@
                          #!optional default-color)
   (if (default-object? default-color)
       (set! default-color (color:default)))
-  (if (not (subgroup? subg))
-      (if (list? subg)
-	  (set! subg (symo-subgroup sym-obj subg))
-	  (error "Inalid subgroup." subg)))		 
-  (highlight-contained sym-obj
-		       (subg:get-coset subg elt)
-		       color
-		       default-color))
+  (highlight-contained
+   sym-obj
+   (subg:get-coset (symo-subgroup sym-obj subg) elt)
+   color
+   default-color))
 
 ; Need a better interface to the colors.
 (define (highlight-all-cosets sym-obj subg color
