@@ -23,7 +23,7 @@
 (let ((object (symmetric-object A-family '(1 0 0 1))))
   (symo->povray
    object
-   "~/Misc/Code/4d/A4-1001-1.pov"
+   "playout/A4-1001-1.pov"
    (map cons (all-cosets object '(s1 s2 s3))
         '((0.0 0.5 0.5 1.0) (1.0 0.0 0.0 1.0) (0.0 1.0 0.0 1.0)
           (0.0 0.0 1.0 0.0) (0.5 0.5 0.0 1.0)))
@@ -37,7 +37,7 @@
 (let ((object (symmetric-object A-family '(1 0 0 1))))
   (symo->povray
    object
-   "~/Misc/Code/4d/A4-1001-2.pov"
+   "playout/A4-1001-2.pov"
    (append
     (map (colorize '(0.0 0.5 0.5 1.0))
          (all-cosets object '(s1 s2 s3)))
@@ -47,20 +47,20 @@
 
 (let* ((object (symmetric-object A-family '(1 0 0 1))))
   (symo:file-print-gv
-   object "~/Misc/Code/4d/A4-1001-1.off" 'off-conformal
+   object "playout/A4-1001-1.off" 'off-conformal
    #;
    (merge-by-first
-   (list (highlight-all-cosets
-   object '(s0 s1 s2) '(147 112 219 255))
-   (highlight-all-cosets
-   object '(s3 s1 s2) '(187 12 119 255))
-   ))
+    (list (highlight-all-cosets
+           object '(s0 s1 s2) '(147 112 219 255))
+          (highlight-all-cosets
+           object '(s3 s1 s2) '(187 12 119 255))
+          ))
    (highlight-coset object '(s1 s2 s3) 'e '(0.0 0.5 0.5 1.0))))
 
 (let ((object (symmetric-object A-family '(1 0 0 1))))
   (symo:file-print-polyhedra
    object
-   "~/Misc/Code/4d/A4-1001-1.poly"
+   "playout/A4-1001-1.poly"
    (map cons (all-cosets object '(s1 s2 s3))
         '((0.0 0.5 0.5 1.0) (1.0 0.0 0.0 1.0) (0.0 1.0 0.0 1.0)
           (0.0 0.0 1.0 0.0) (0.5 0.5 0.0 1.0)))
@@ -69,7 +69,7 @@
 (let ((object (symmetric-object B-family '(1 0 0 1))))
   (symo->povray
    object
-   "~/Misc/Code/4d/B4-1001-1.pov"
+   "playout/B4-1001-1.pov"
    (map (colorize '(0.0 0.5 0.5 1.0))
         (all-cosets object '(s1 s2 s0)))
    ))
@@ -78,7 +78,7 @@
 (let ((object (symmetric-object F-family '(1 1 1 9))))
   (symo->povray
    object
-   "~/Misc/Code/4d/F4-1119.pov"
+   "playout/F4-1119.pov"
    (append
     (map (colorize '(0.9 0.7 0.5 1.0))
          (all-cosets object '(s0 s1 s2)))
