@@ -60,7 +60,7 @@
   (let ((v (fixed-objects-item 'obarray))
 	(n 0))
     (for-each-vector-element v (lambda (l)
-				 (set! n (+ n (length l)))))
+				 (set! n (+ n (weak-length l)))))
     n))
 
 (define (ensure-path-exists dir-pathname)
