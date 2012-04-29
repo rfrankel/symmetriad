@@ -153,18 +153,10 @@
       (if (not (eq? format 'skel))
 	  (display " 0")) ; OFF formats demand but do not use edges
       (newline)))
-  (define (print-drawee drawee color)
-    (display (length drawee)) (display " ")
-    (for-each (lambda (drawee-elt)
-		(display (rep-index drawee-elt))
-		(display " "))
-	      drawee)
-    (display (color->string color))
-    (newline))
   (define (print-drawees drawee-color-list)
     (for-each 
      (lambda (drawee)
-       (print-drawee (car drawee) (cdr drawee)))
+       (print-gv-item (map rep-index (car drawee)) (cdr drawee)))
      drawee-color-list))
 
   (print-header sym-obj format)
@@ -188,6 +180,15 @@
                  (up-structure->list vertex-coords)))
      (newline))
    (symo/unique-vertices sym-obj)))
+
+(define (print-gv-item vert-indexes color)
+  (display (length vert-indexes)) (display " ")
+  (for-each (lambda (vert-index)
+              (display vert-index)
+              (display " "))
+            vert-indexes)
+  (display (color->string color))
+  (newline))
 
 (define (symo:print-oogl-off sym-obj #!optional color-proc format)
   (if (default-object? color-proc)
@@ -283,18 +284,10 @@
 		       (if (color:drawable? color) 
 			   (cons face color) #f)))
 		   (symo/face-list sym-obj))))
-    (define (print-face face color)
-      (display (length face)) (display " ")
-      (for-each (lambda (face-elt)
-		  (display (rep-index face-elt))
-		  (display " "))
-		face)
-      (display (color->string color))
-      (newline))
     (define (print-faces face-color-list)
       (for-each 
        (lambda (face)
-	 (print-face (car face) (cdr face)))
+	 (print-gv-item (map rep-index (car face)) (cdr face)))
        face-color-list))
     ;; TODO Why are there non-eq vertices in the input list that map
     ;; to the same vertex index?
