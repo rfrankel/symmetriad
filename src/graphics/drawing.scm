@@ -129,7 +129,7 @@
     (filter-map (lambda (drawee)
                   (let ((color (color-proc drawee)))
                     (if (color:drawable? color) 
-                        (cons drawee color) #f)))
+                        (cons (map rep-index drawee) color) #f)))
                 (drawee-selector sym-obj)))
   
   (define (print-header sym-obj format)
@@ -153,11 +153,6 @@
       (if (not (eq? format 'skel))
 	  (display " 0")) ; OFF formats demand but do not use edges
       (newline)))
-  (define (print-drawees drawee-color-list)
-    (for-each 
-     (lambda (drawee)
-       (print-gv-item (map rep-index (car drawee)) (cdr drawee)))
-     drawee-color-list))
 
   (print-header sym-obj format)
   (display "Printing vertices... " (notification-output-port))
@@ -165,7 +160,7 @@
   (if (eq? format 'skel)
       (display "Printing edges... " (notification-output-port))
       (display "Printing faces... " (notification-output-port)))
-  (print-drawees drawee-color-list)
+  (print-gv-items-alist drawee-color-list)
   (display "Done." (notification-output-port))
   (newline (notification-output-port))
 
@@ -189,6 +184,11 @@
             vert-indexes)
   (display (color->string color))
   (newline))
+
+(define (print-gv-items-alist item-color-list)
+  (for-each 
+   (lambda (item) (print-gv-item (car item) (cdr item)))
+   item-color-list))
 
 (define (symo:print-oogl-off sym-obj #!optional color-proc format)
   (if (default-object? color-proc)
@@ -282,13 +282,8 @@
 	      (map (lambda (face)
 		     (let ((color (color-spec face)))
 		       (if (color:drawable? color) 
-			   (cons face color) #f)))
+			   (cons (map rep-index face) color) #f)))
 		   (symo/face-list sym-obj))))
-    (define (print-faces face-color-list)
-      (for-each 
-       (lambda (face)
-	 (print-gv-item (map rep-index (car face)) (cdr face)))
-       face-color-list))
     ;; TODO Why are there non-eq vertices in the input list that map
     ;; to the same vertex index?
     (define vert-indexes
@@ -300,7 +295,7 @@
 		(display " "))
 	      vert-indexes)
     (newline)
-    (print-faces face-color-list))
+    (print-gv-items-alist face-color-list))
   (print-header)
   (print-vertices sym-obj)
   (for-each print-hedron hedron-specs))
