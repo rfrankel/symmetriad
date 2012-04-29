@@ -321,11 +321,11 @@
   (define (print-hedron spec)
     (pp `(printing hedron ,spec) (notification-output-port))
     ;; TODO Abstract commonalities with symo:print-gv-help
-    (define vertex-symbols (car spec))
+    (define vertices (car spec))
     (define color (cdr spec))
     (define color-spec
       (highlight-contained
-       sym-obj vertex-symbols color (color:default)))
+       sym-obj vertices color (color:default)))
     (define face-color-list 
       (filter (lambda (x) x)
 	      (map (lambda (face)
@@ -341,7 +341,7 @@
                       (cadr face-vertices)
                       (caddr face-vertices)))
       (define other-vertex
-        (vertex->mv (car (lset-difference eq? vertex-symbols face))))
+        (vertex->mv (car (lset-difference eq? vertices face))))
       ;; I expect all other vertices of the polyhedron to give the
       ;; same answer.
       (define invert?
