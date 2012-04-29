@@ -60,26 +60,29 @@
 ;			   (param-grey 0.6))
    ))
 
-(define other-thing (magic-spec->symmetric-object A4-play '(0 1 0 0)))
+(define other-thing
+  (magic-spec->symmetric-object A4-play '(0 1 0 0)))
 (assert-correct-stats other-thing 10 30)
 
 (let* ((object (symmetric-object A-family '(1 1 1 1)))
        )
   (symo:file-print-gv-skel
    object "playout/A3-play.skel"
-   (multicolor-listed-cosets object (symo-subgroup object '(s0 s1 s2))
-			     `((c3 . ,*red*) (c81 . ,*blue*) (c109 . ,*green*) 
-					     (c26 . ,*magenta*) (c91 . ,*yellow*))
-			     (param-grey 0.6))
+   (multicolor-listed-cosets
+    object (symo-subgroup object '(s0 s1 s2))
+    `((c3 . ,*red*) (c81 . ,*blue*) (c109 . ,*green*) 
+      (c26 . ,*magenta*) (c91 . ,*yellow*))
+    (param-grey 0.6))
    ))
 
 (let* ((object (symmetric-object A-family '(1 1 1 1)))
        )
   (symo:file-print-gv-skel
    object "playout/A3-play-2.skel"
-   (color-cycle-all-cosets object '(s3 s1 s2)
-			   (list *red* *blue* *green* *magenta* *yellow*)
-			   (param-grey 0.6))
+   (color-cycle-all-cosets
+    object '(s3 s1 s2)
+    (list *red* *blue* *green* *magenta* *yellow*)
+    (param-grey 0.6))
    ))
 
 (let* ((object (symmetric-object A-family '(1 1 1 1)))
@@ -90,7 +93,8 @@
   (symo:file-print-gv
    object "playout/A4-1001.off" 'off-conformal
    (merge-by-first
-    (list (highlight-all-cosets object '(s0 s1 s2) '(147 112 219 255))
-	  (highlight-all-cosets object '(s3 s1 s2) '(187 12 119 255))
-	  ))))
-	  
+    (list (highlight-all-cosets
+           object '(s0 s1 s2) '(147 112 219 255))
+	  (highlight-all-cosets
+           object '(s3 s1 s2) '(187 12 119 255))
+          ))))

@@ -38,11 +38,14 @@
 
 ; Another vaguely regular thing
 ; Small Rhombicuboctahedron?
-(symo:draw (cartesian-point->symmetric-object B3-play (up (* .5 (+ 1 (sqrt 2))) .5 .5)) 
-	   (frame -2 2 -2 2) cab)
+(symo:draw
+ (cartesian-point->symmetric-object
+  B3-play (up (* .5 (+ 1 (sqrt 2))) .5 .5)) 
+ (frame -2 2 -2 2) cab)
 
-(symo:draw (cartesian-point->symmetric-object B3-play (up -1.5 .5 .5) #t) 
-	   (frame -2 2 -2 2) cab)
+(symo:draw
+ (cartesian-point->symmetric-object B3-play (up -1.5 .5 .5) #t) 
+ (frame -2 2 -2 2) cab)
 
 (symo:file-print-vrml 
  (cartesian-point->symmetric-object 

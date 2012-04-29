@@ -37,41 +37,57 @@
 	   (frame -2 2 -2 2) cab)
 
 ; These are the midpoints of the sides of this tetrahedron
-(symo:draw (cartesian-point->symmetric-object A3-system (up 0 1 0)) (frame -2 2 -2 2) cab)
+(symo:draw
+ (cartesian-point->symmetric-object A3-system (up 0 1 0))
+ (frame -2 2 -2 2) cab)
 
-(symo:draw (cartesian-point->symmetric-object A3-system (up 0.2 1 .1) #t) 
-	   (frame -2 2 -2 2) cab)
+(symo:draw
+ (cartesian-point->symmetric-object A3-system (up 0.2 1 .1) #t) 
+ (frame -2 2 -2 2) cab)
 
-(symo:file-print-gv-skel (cartesian-point->symmetric-object A3-system (up 0.2 1 .1) #t) 
-			 "playout/A3.skel" (merge-by-first (list) '(1.0 1.0 1.0 1.0)))
+(symo:file-print-gv-skel
+ (cartesian-point->symmetric-object A3-system (up 0.2 1 .1) #t) 
+ "playout/A3.skel" (merge-by-first (list) '(1.0 1.0 1.0 1.0)))
 
 ; Something strange
-(symo:draw (cartesian-point->symmetric-object A3-system (up 0 1 -.47) #t) 
-	   (frame -2 2 -2 2) cab)
+(symo:draw
+ (cartesian-point->symmetric-object A3-system (up 0 1 -.47) #t) 
+ (frame -2 2 -2 2) cab)
 
-(symo:draw (cartesian-point->symmetric-object A3-system (up 0 1 1) #t) 
-	   (frame -2 2 -2 2) cab)
+(symo:draw
+ (cartesian-point->symmetric-object A3-system (up 0 1 1) #t) 
+ (frame -2 2 -2 2) cab)
 
 ; This shows the tetrahedron
 (let ((win (frame -2 2 -2 2)))
-  (symo:draw (cartesian-point->symmetric-object A3-system (up 0 1 (sqrt 2))) 
-	     win cab)
+  (symo:draw
+   (cartesian-point->symmetric-object A3-system (up 0 1 (sqrt 2))) 
+   win cab)
   (add-three-d-axes win cab))
 
 ; Here's a point outside the chamber of the identity
 (let ((win (frame -2 2 -2 2)))
-  (symo:draw (cartesian-point->symmetric-object A3-system (up (sqrt 2) 0 1) #t) 
-	     win cab)
+  (symo:draw
+   (cartesian-point->symmetric-object
+    A3-system (up (sqrt 2) 0 1) #t) 
+   win cab)
   (add-three-d-axes win cab)
   )
 
 (pp (omega-dirs A3-system))
 
-(symo:draw (magic-spec->symmetric-object A3-system '(1 0 0)) (frame -2 2 -2 2) cab)
-(symo:draw (magic-spec->symmetric-object A3-system '(0 1 0)) (frame -2 2 -2 2) cab)
-(symo:draw (magic-spec->symmetric-object A3-system '(0 0 1)) (frame -2 2 -2 2) cab)
+(symo:draw
+ (magic-spec->symmetric-object A3-system '(1 0 0))
+ (frame -2 2 -2 2) cab)
+(symo:draw
+ (magic-spec->symmetric-object A3-system '(0 1 0))
+ (frame -2 2 -2 2) cab)
+(symo:draw
+ (magic-spec->symmetric-object A3-system '(0 0 1))
+ (frame -2 2 -2 2) cab)
 
-(let ((tetrahedron (magic-spec->symmetric-object A3-system '(1 0 0))))
+(let ((tetrahedron
+       (magic-spec->symmetric-object A3-system '(1 0 0))))
   (with-output-to-file-ensuring-path
       "playout/tetra.wrl" 
     (lambda ()

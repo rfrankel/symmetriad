@@ -24,23 +24,30 @@
 
 (define H3-system (geom-family->cox-geometry H-family 3))
 
-(symo:file-print-vrml (magic-spec->symmetric-object H3-system '(0 0 1))
-		      "dodecahedron.wrl")
+(symo:file-print-vrml
+ (magic-spec->symmetric-object H3-system '(0 0 1))
+ "dodecahedron.wrl")
 
-(symo:file-print-vrml (magic-spec->symmetric-object H3-system '(1 0 0))
-		      "icosohedron.wrl")
+(symo:file-print-vrml
+ (magic-spec->symmetric-object H3-system '(1 0 0))
+ "icosohedron.wrl")
 
-(symo:file-print-vrml (magic-spec->symmetric-object H3-system '(0 1 0))
-		      "icosidodecahedron.wrl")
+(symo:file-print-vrml
+ (magic-spec->symmetric-object H3-system '(0 1 0))
+ "icosidodecahedron.wrl")
 
-(symo:file-print-vrml (magic-spec->symmetric-object H3-system '(1 1 0))
-		      "trunc-icosohedron.wrl")
+(symo:file-print-vrml
+ (magic-spec->symmetric-object H3-system '(1 1 0))
+ "trunc-icosohedron.wrl")
 
-(symo:file-print-vrml (magic-spec->symmetric-object H3-system '(0 1 1))
-		      "trunc-dodecahedron.wrl")
+(symo:file-print-vrml
+ (magic-spec->symmetric-object H3-system '(0 1 1))
+ "trunc-dodecahedron.wrl")
 
-(symo:file-print-vrml (magic-spec->symmetric-object H3-system '(1 0 1))
-		      "small-rhombicosidodecahedron.wrl")
+(symo:file-print-vrml
+ (magic-spec->symmetric-object H3-system '(1 0 1))
+ "small-rhombicosidodecahedron.wrl")
 
-(symo:file-print-vrml (magic-spec->symmetric-object H3-system '(1 1 1))
-		      "great-rhombicosidodecahedron.wrl")
+(symo:file-print-vrml
+ (magic-spec->symmetric-object H3-system '(1 1 1))
+ "great-rhombicosidodecahedron.wrl")
