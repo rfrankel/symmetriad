@@ -60,7 +60,7 @@
 ; At the moment, only works for 3D objects.  Breaks silently if the 
 ; dimensions are off.
 (define (symo:print-vrml sym-obj)
-  (define hack-map (symo:rep-index sym-obj))
+  (define rep-index (symo:rep-index sym-obj))
 
   (define (print-VRML-header)
     (display "#VRML V2.0 utf8") (newline) (newline)
@@ -83,8 +83,8 @@
     (display "    coordIndex [") (newline))
   (define (print-edges sym-obj)
     (for-each (lambda (edge)
-		(let* ((ind1 (hack-map (car edge)))
-		       (ind2 (hack-map (cadr edge))))
+		(let* ((ind1 (rep-index (car edge)))
+		       (ind2 (rep-index (cadr edge))))
 		  (display "      ") (display ind1) (display ", ")
 		  (display ind2) (display ", -1,") (newline)))
 	      (symo:unique-edge-list sym-obj)))
@@ -120,7 +120,7 @@
       (symo:print-gv-help sym-obj format color-proc)))
 
 (define (symo:print-gv-help sym-obj format color-proc)
-  (define hack-map (symo:rep-index sym-obj))
+  (define rep-index (symo:rep-index sym-obj))
   (define drawee-selector 
     (if (eq? format 'skel)
 	symo:unique-edge-list
@@ -156,7 +156,7 @@
   (define (print-drawee drawee color)
     (display (length drawee)) (display " ")
     (for-each (lambda (drawee-elt)
-		(display (hack-map drawee-elt))
+		(display (rep-index drawee-elt))
 		(display " "))
 	      drawee)
     (display (color->string color))
@@ -271,7 +271,7 @@
     (display (length hedron-specs)) (newline))
   (define (print-hedron spec)
     ;; TODO Abstract commonalities with symo:print-gv-help
-    (define hack-map (symo:rep-index sym-obj))
+    (define rep-index (symo:rep-index sym-obj))
     (define vertices (car spec))
     (define color (cdr spec))
     (define color-spec
@@ -286,7 +286,7 @@
     (define (print-face face color)
       (display (length face)) (display " ")
       (for-each (lambda (face-elt)
-		  (display (hack-map face-elt))
+		  (display (rep-index face-elt))
 		  (display " "))
 		face)
       (display (color->string color))
@@ -299,7 +299,7 @@
     ;; TODO Why are there non-eq vertices in the input list that map
     ;; to the same vertex index?
     (define vert-indexes
-      (delete-duplicates (map hack-map vertices) =))
+      (delete-duplicates (map rep-index vertices) =))
     (display (length vert-indexes)) (display " ")
     (display (length face-color-list)) (display " ")
     (for-each (lambda (index)
@@ -340,7 +340,7 @@
   (define (print-hedron spec)
     (pp `(printing hedron ,spec) (notification-output-port))
     ;; TODO Abstract commonalities with symo:print-gv-help
-    (define hack-map (symo:rep-index sym-obj))
+    (define rep-index (symo:rep-index sym-obj))
     (define vertex-symbols (car spec))
     (define color (cdr spec))
     (define color-spec
@@ -405,7 +405,7 @@
     ;; ;; elements of the reflection group, but they got mapped to the
     ;; ;; same place because the corresponding offsets of the reflected
     ;; ;; point were zero.
-    ;; (define vert-indexes (delete-duplicates (map hack-map vertex-symbols) =))
+    ;; (define vert-indexes (delete-duplicates (map rep-index vertex-symbols) =))
     ;; (display (length vert-indexes)) (display " ")
     ;; (display (length face-color-list)) (display " ")
     ;; (for-each (lambda (index)
