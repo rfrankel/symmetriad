@@ -46,11 +46,14 @@
 ;; Reducible group 0-5-0   0-5-0
 (let* ((H2H2-system
 	(geom-spec->cox-geometry 
-	 (gspec:cross-product (geom-family->geom-spec (I-family 5) 2)
-			      (geom-family->geom-spec (I-family 5) 2)))))
+	 (gspec:cross-product
+          (geom-family->geom-spec (I-family 5) 2)
+          (geom-family->geom-spec (I-family 5) 2)))))
   (assert-equal 100 (gn:num-live-cosets (cxg/group-net H2H2-system)))
-  (assert-equal 45 (length (gn:dead-cosets (cxg/group-net H2H2-system))))
-  (let* ((H2H2-full (magic-spec->symmetric-object H2H2-system '(1 1 1 1))))
+  (assert-equal 45 (length (gn:dead-cosets
+                            (cxg/group-net H2H2-system))))
+  (let* ((H2H2-full
+          (magic-spec->symmetric-object H2H2-system '(1 1 1 1))))
     (symo:file-print-gv 
      H2H2-full "playout/H2H2-full.off" 'off-conformal
      (highlight-multigroup-cosets
@@ -60,11 +63,15 @@
 ;; Reducible group 0-5-0   0-7-0
 (let* ((prism-system
 	(geom-spec->cox-geometry 
-	 (gspec:cross-product (geom-family->geom-spec (I-family 5) 2)
-			      (geom-family->geom-spec (I-family 7) 2)))))
-  (assert-equal 140 (gn:num-live-cosets (cxg/group-net prism-system)))
-  (assert-equal 73 (length (gn:dead-cosets (cxg/group-net prism-system))))
-  (let* ((prism-full (magic-spec->symmetric-object prism-system '(1 1 1 1))))
+	 (gspec:cross-product
+          (geom-family->geom-spec (I-family 5) 2)
+          (geom-family->geom-spec (I-family 7) 2)))))
+  (assert-equal 140 (gn:num-live-cosets
+                     (cxg/group-net prism-system)))
+  (assert-equal 73 (length (gn:dead-cosets
+                            (cxg/group-net prism-system))))
+  (let* ((prism-full
+          (magic-spec->symmetric-object prism-system '(1 1 1 1))))
     (symo:file-print-gv 
      prism-full "playout/prism-full.off" 'off-conformal
      (highlight-multigroup-cosets
