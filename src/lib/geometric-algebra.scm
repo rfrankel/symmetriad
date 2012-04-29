@@ -299,5 +299,7 @@
      (/ (mv->scalar (* inner-product-sphere inner-product-sphere))
         (square (mv->scalar (dot inner-product-sphere einf)))))))
 
+;; This implicitly projects the input 4-vector conformally down to R3
+;; (and represents the result in the conformal algebra).
 (define (r4-vector->mv x y z w)
   (+ (* x e1) (* y e2) (* z e3) (* w e+) e-))
