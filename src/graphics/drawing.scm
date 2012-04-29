@@ -60,8 +60,7 @@
 ; At the moment, only works for 3D objects.  Breaks silently if the 
 ; dimensions are off.
 (define (symo:print-vrml sym-obj)
-  (define (hack-map chamber-symb)
-    (symo:rep-index sym-obj chamber-symb))
+  (define hack-map (symo:rep-index sym-obj))
 
   (define (print-VRML-header)
     (display "#VRML V2.0 utf8") (newline) (newline)
@@ -121,8 +120,7 @@
       (symo:print-gv-help sym-obj format color-proc)))
 
 (define (symo:print-gv-help sym-obj format color-proc)
-  (define (hack-map chamber-symb)
-    (symo:rep-index sym-obj chamber-symb))
+  (define hack-map (symo:rep-index sym-obj))
   (define drawee-selector 
     (if (eq? format 'skel)
 	symo:unique-edge-list
@@ -273,8 +271,7 @@
     (display (length hedron-specs)) (newline))
   (define (print-hedron spec)
     ;; TODO Abstract commonalities with symo:print-gv-help
-    (define (hack-map chamber-symb)
-      (symo:rep-index sym-obj chamber-symb))
+    (define hack-map (symo:rep-index sym-obj))
     (define vertices (car spec))
     (define color (cdr spec))
     (define color-spec
@@ -343,8 +340,7 @@
   (define (print-hedron spec)
     (pp `(printing hedron ,spec) (notification-output-port))
     ;; TODO Abstract commonalities with symo:print-gv-help
-    (define (hack-map chamber-symb)
-      (symo:rep-index sym-obj chamber-symb))
+    (define hack-map (symo:rep-index sym-obj))
     (define vertex-symbols (car spec))
     (define color (cdr spec))
     (define color-spec

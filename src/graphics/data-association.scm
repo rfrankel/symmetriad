@@ -44,13 +44,12 @@
       (set! default-data (data:default)))
   (let ((vert-set
          (list->eq-hash-set 
-          (map (lambda (vert) (symo:rep-index sym-obj vert))
-               vert-list))))
+          (map (symo:rep-index sym-obj) vert-list))))
     (lambda (given-verts)
       ;(pp given-verts)
       (if (any (lambda (vert)
                  (hash-table/get
-                  vert-set (symo:rep-index sym-obj vert) #f))
+                  vert-set ((symo:rep-index sym-obj) vert) #f))
                given-verts)
           data
           default-data))))
@@ -64,13 +63,12 @@
       (set! default-data (data:default)))
   (let ((vert-set
          (list->eq-hash-set 
-          (map (lambda (vert) (symo:rep-index sym-obj vert))
-               vert-list))))
+          (map (symo:rep-index sym-obj) vert-list))))
     (lambda (given-verts)
       ;(pp given-verts)
       (if (every (lambda (vert)
                    (hash-table/get
-                    vert-set (symo:rep-index sym-obj vert) #f))
+                    vert-set ((symo:rep-index sym-obj) vert) #f))
                  given-verts)
           data
           default-data))))
@@ -85,14 +83,13 @@
   (let ((vert-sets
          (lists->set-map
           (map (lambda (lst)
-                 (map (lambda (vert) (symo:rep-index sym-obj vert))
-                      lst))
+                 (map (symo:rep-index sym-obj) lst))
                vert-lists))))
     (lambda (given-verts)
       (let ((index-msets
              (map (lambda (vert)
                     (hash-table/get
-                     vert-sets (symo:rep-index sym-obj vert) #f))
+                     vert-sets ((symo:rep-index sym-obj) vert) #f))
                   given-verts)))
         (let ((results
                (reduce
@@ -116,15 +113,14 @@
   (let ((vert-sets
          (lists->set-map
           (map (lambda (lst)
-                 (map (lambda (vert) (symo:rep-index sym-obj vert))
-                      lst))
+                 (map (symo:rep-index sym-obj) lst))
                (map car vert-list-data-alist))))
         (data-map (list->vector (map cdr vert-list-data-alist))))
     (lambda (given-verts)
       (let ((index-msets
              (map (lambda (vert)
                     (hash-table/get
-                     vert-sets (symo:rep-index sym-obj vert) #f))
+                     vert-sets ((symo:rep-index sym-obj) vert) #f))
                   given-verts)))
         (let ((results
                (reduce

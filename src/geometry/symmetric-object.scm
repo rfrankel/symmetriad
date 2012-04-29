@@ -150,7 +150,7 @@
   (hash-table/get (symo/representative-map sym-obj)
 		  chamber-symb #f))  
 
-(define (symo:rep-index sym-obj chamber-symb)
+(define ((symo:rep-index sym-obj) chamber-symb)
   (hash-table/get (symo/rep-index-map sym-obj)
 		  (symo:representative sym-obj chamber-symb)
 		  #f))
@@ -177,8 +177,8 @@
 (define (symo:unique-edge-list sym-obj)
   ((lin-rem-dup equal-hash-mod equal?) 
    (map (lambda (edge)
-	  (if (< (symo:rep-index sym-obj (car edge)) 
-		 (symo:rep-index sym-obj (cadr edge)))
+	  (if (< ((symo:rep-index sym-obj) (car edge)) 
+		 ((symo:rep-index sym-obj) (cadr edge)))
 	      edge
 	      (list (cadr edge) (car edge))))
 	(symo:edge-list sym-obj))))
