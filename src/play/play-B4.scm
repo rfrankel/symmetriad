@@ -40,7 +40,7 @@
  tesseract
  "playout/tesseract-2.off"
  (lambda (face)
-   (list 0.10 0.0 0.5)))
+   (list 0.10 0.0 0.5 1.0)))
 
 ; This looks weird... It may be wrong...
 (symo:file-print-oogl-off 
