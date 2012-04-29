@@ -20,6 +20,8 @@
 
 (declare (usual-integrations))
 
+(load-option 'format)
+
 ;;; Procedures for actually drawing stuff
 
 ;; Default projection is orthographic
@@ -318,3 +320,105 @@
       filename
     (lambda ()
       (symo:print-polyhedra sym-obj hedron-specs))))
+
+(define (r4-vector->mv x y z w)
+  (+ (* x e1) (* y e2) (* z e3) (* w e+) e-))
+
+(define (symo->povray sym-obj filename hedra #!optional headerfile)
+  (if (default-object? headerfile)
+      (set! headerfile "~/Misc/Code/4d/header.pov"))
+  (copy-file headerfile filename)
+  (let ((port (open-output-file filename #t)))
+    (let ((answer
+           (with-output-to-port port
+             (lambda ()
+               (symo->povray-help sym-obj hedra)))))
+      (close-port port)
+      answer)))
+
+(define (symo->povray-help sym-obj hedra)
+  (define (representative s)
+    (symo:representative sym-obj s))
+  (define (vertex->mv vertex-symb)
+    (apply r4-vector->mv
+           (up-structure->list
+            (symo:get-vertex sym-obj vertex-symb))))
+  (define (print-hedron spec)
+    (pp `(printing hedron ,spec) (notification-output-port))
+    ;; TODO Abstract commonalities with symo:print-gv-help
+    (define (hack-map chamber-symb)
+      (symo:rep-index sym-obj chamber-symb))
+    (define vertex-symbols (car spec))
+    (define color (cdr spec))
+    (define color-spec
+      (highlight-contained
+       sym-obj vertex-symbols color (color:default)))
+    (define vertex-representatives
+      (lin-rem-dup-eq (map representative vertex-symbols)))
+    (define face-color-list 
+      (filter (lambda (x) x)
+	      (map (lambda (face)
+		     (let ((color (color-spec face)))
+		       (if (color:drawable? color) 
+			   (cons face color) #f)))
+		   (symo/face-list sym-obj))))
+    (define (print-face face color)
+      (define face-representatives
+        (lin-rem-dup-eq (map representative face)))
+      (define face-vertices (map vertex->mv face))
+      (define face-sphere-mv
+        ;; The rest will lie on the same sphere.
+        (great-sphere (car face-vertices)
+                      (cadr face-vertices)
+                      (caddr face-vertices)))
+      (define other-vertex
+        (vertex->mv (car (lset-difference eq?
+                          vertex-representatives
+                          face-representatives))))
+      ;; I expect all other vertices of the polyhedron to give the
+      ;; same answer.
+      (define invert?
+        (not (inside-sphere? face-sphere-mv other-vertex)))
+      #;
+      (pp (map (lambda (other-vert)
+                 (cons (inside-sphere? face-sphere-mv other-vert)
+                       (multivector->list other-vert)))
+               (map vertex->mv
+                    (lset-difference eq?
+                     vertex-representatives
+                     face-representatives)))
+          (notification-output-port))
+      (define center-vec (sphere-center face-sphere-mv))
+      (display "sphere {") (newline)
+      (format #t "<~A, ~A, ~A>, ~A"
+              (car center-vec)
+              (cadr center-vec)
+              (caddr center-vec)
+              (sphere-radius face-sphere-mv))
+      (newline)
+      (format #t "pigment { color rgb <~A, ~A, ~A> }\n"
+              (car color) (cadr color) (caddr color))
+      (if invert? (display "inverse\n"))
+      (display "}") (newline) (flush-output))
+    (define (print-faces face-color-list)
+      (display "intersection {\n")
+      (for-each 
+       (lambda (face)
+	 (print-face (car face) (cdr face)))
+       face-color-list)
+      (display "}\n"))
+    ;; ;; Why are there non-eq vertex-symbols in the input list that map
+    ;; ;; to the same vertex index?  Answer: they represent different
+    ;; ;; elements of the reflection group, but they got mapped to the
+    ;; ;; same place because the corresponding offsets of the reflected
+    ;; ;; point were zero.
+    ;; (define vert-indexes (delete-duplicates (map hack-map vertex-symbols) =))
+    ;; (display (length vert-indexes)) (display " ")
+    ;; (display (length face-color-list)) (display " ")
+    ;; (for-each (lambda (index)
+    ;;     	(display index)
+    ;;     	(display " "))
+    ;;           vert-indexes)
+    ;; (newline)
+    (print-faces face-color-list))
+  (for-each print-hedron hedra))
