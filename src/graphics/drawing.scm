@@ -326,7 +326,7 @@
 
 (define (symo->povray sym-obj filename hedra #!optional headerfile)
   (if (default-object? headerfile)
-      (set! headerfile "../tool/header.pov"))
+      (set! headerfile "../tools/header.pov"))
   (copy-file headerfile filename)
   (let ((port (open-output-file filename #t)))
     (let ((answer
