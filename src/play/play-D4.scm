@@ -44,7 +44,7 @@
 
 (let* ((object (symmetric-object D-family '(1 0 1 1)))
        (cube (symo-subgroup object '(s0 s2 s3)))
-       (cuboctahadron (symo-subgroup object '(s0 s1 s2))))
+       (cuboctahedron (symo-subgroup object '(s0 s1 s2))))
   (symo:file-print-gv-skel
    object "playout/D4-1011.skel"
    (highlight-all-cosets object cuboctahedron '(1.0 0.0 0.0 1.0)
