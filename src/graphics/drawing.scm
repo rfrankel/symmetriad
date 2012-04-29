@@ -284,7 +284,10 @@
                           (cons (map rep-index face) color) #f)))
                   (symo/face-list sym-obj)))
     ;; TODO Why are there non-eq vertices in the input list that map
-    ;; to the same vertex index?
+    ;; to the same vertex index?  Answer: because all-cosets doesn't
+    ;; canonicalize the group elements with respect to mapping to the
+    ;; same point due to the reflection point being on that mirror
+    ;; (whereas the data association machinery does).
     (define vert-indexes
       (delete-duplicates (map rep-index vertices) =))
     (display (length vert-indexes)) (display " ")
@@ -387,18 +390,5 @@
 	 (print-face (car face) (cdr face)))
        face-color-list)
       (display "}\n"))
-    ;; ;; Why are there non-eq vertex-symbols in the input list that map
-    ;; ;; to the same vertex index?  Answer: they represent different
-    ;; ;; elements of the reflection group, but they got mapped to the
-    ;; ;; same place because the corresponding offsets of the reflected
-    ;; ;; point were zero.
-    ;; (define vert-indexes (delete-duplicates (map rep-index vertex-symbols) =))
-    ;; (display (length vert-indexes)) (display " ")
-    ;; (display (length face-color-list)) (display " ")
-    ;; (for-each (lambda (index)
-    ;;     	(display index)
-    ;;     	(display " "))
-    ;;           vert-indexes)
-    ;; (newline)
     (print-faces face-color-list))
   (for-each print-hedron hedra))
