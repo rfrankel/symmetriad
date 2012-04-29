@@ -57,8 +57,8 @@
  ;(lambda (edge) *red*)
  )
 
-; It builds!  About 10 seconds on averdon, dominated by post-component stuff
-; And only takes about 0.6 megawords...
+; It builds!  About 10 seconds on averdon, dominated by
+; post-component stuff And only takes about 0.6 megawords...
 (define H4-1001 (magic-spec->symmetric-object H4-play '(1 0 0 1)))
 (define H4-1001 #f)
 (cxg:clear-cache! H4-play)
@@ -67,7 +67,8 @@
 (symo:file-print-gv-skel
  H4-1001
  "playout/H4-1001.skel"
- (highlight-multigroup-cosets H4-1001 `(((s0) . ,*red*) ((s3) . ,*purple*)) *grey*)
+ (highlight-multigroup-cosets
+  H4-1001 `(((s0) . ,*red*) ((s3) . ,*purple*)) *grey*)
  ; (color-cycle-all-cosets H4-1001 '(s3 s1 s2) (list *red* *blue* *green* *purple* *magenta*))
  ; (highlight-all-cosets H4-1001 '(s0) *red* *blue*)
  )
@@ -120,9 +121,9 @@
    ))
  
 
-; about 12 seconds on averdon, if assert-collapse-matches-vertex-group is disabled
-; in compute-magic-spec->symmetric-object
-; 0.8 megawords
+; about 12 seconds on averdon, if
+; assert-collapse-matches-vertex-group is disabled in
+; compute-magic-spec->symmetric-object 0.8 megawords
 (define H4-full (magic-spec->symmetric-object H4-play '(1 1 1 1)))
 (define H4-full #f)
 (cxg:clear-cache! H4-play)
@@ -130,7 +131,8 @@
 (symo:file-print-gv-skel
  H4-full
  "playout/H4-full.skel"
- ; This is "fast" -- about 25 seconds on tumunzahar, dominated by the vertices
+ ; This is "fast" -- about 25 seconds on tumunzahar, dominated by the
+ ; vertices
  (lambda (edge) *purple*)
  )
 
