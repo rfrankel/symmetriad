@@ -20,11 +20,12 @@
 
 (declare (usual-integrations))
 
-;;; This file defines the tools needed to create colorings of symmetric
-;;; objects.  An edge (face) coloring of a symmetric object is represented
-;;; as a procedure that takes an edge (face) thereof
-;;; and returns a color (i.e. a list of rgba values) for it.
-;;; The procedure is expected to already know what symmetric object it is coloring
+;;; This file defines the tools needed to create colorings of
+;;; symmetric objects.  An edge (face) coloring of a symmetric object
+;;; is represented as a procedure that takes an edge (face) thereof
+;;; and returns a color (i.e. a list of rgba values) for it.  The
+;;; procedure is expected to already know what symmetric object it is
+;;; coloring
 
 (define highlight-touching data:associate-touching)
 
@@ -34,8 +35,10 @@
 
 (define multihighlight-partition data:associate-partition-alist)
 
-(define (highlight-coset sym-obj subg elt color #!optional default-color)
-  (if (default-object? default-color) (set! default-color (color:default)))
+(define (highlight-coset sym-obj subg elt color
+                         #!optional default-color)
+  (if (default-object? default-color)
+      (set! default-color (color:default)))
   (if (not (subgroup? subg))
       (if (list? subg)
 	  (set! subg (symo-subgroup sym-obj subg))
@@ -48,7 +51,8 @@
 ; Need a better interface to the colors.
 (define (highlight-all-cosets sym-obj subg color
 			      #!optional default-color)
-  (if (default-object? default-color) (set! default-color (color:default)))
+  (if (default-object? default-color)
+      (set! default-color (color:default)))
   (highlight-listed-cosets sym-obj subg 
 			   (cxg/chamber-list (symo/geometry sym-obj))
 			   color
@@ -65,11 +69,13 @@
 	elt-list)))
 
 (define (all-cosets sym-obj subg)
-  (listed-cosets sym-obj subg (cxg/chamber-list (symo/geometry sym-obj))))
+  (listed-cosets
+   sym-obj subg (cxg/chamber-list (symo/geometry sym-obj))))
 
 (define (highlight-listed-cosets sym-obj subg elt-list color 
 				 #!optional default-color)
-  (if (default-object? default-color) (set! default-color (color:default)))		 
+  (if (default-object? default-color)
+      (set! default-color (color:default)))		 
   (let ((cosets (listed-cosets sym-obj subg elt-list)))
     (display "Highlighting ") (display (length cosets)) 
     (display " cosets") (newline)
@@ -77,28 +83,33 @@
 
 (define (highlight-multigroup-cosets 
 	 sym-obj group-color-alist #!optional default-color)
-  (if (default-object? default-color) (set! default-color (color:default)))
+  (if (default-object? default-color)
+      (set! default-color (color:default)))
   (highlight-listed-multigroup-cosets
-   sym-obj group-color-alist (cxg/chamber-list (symo/geometry sym-obj))
+   sym-obj group-color-alist
+   (cxg/chamber-list (symo/geometry sym-obj))
    default-color))
 
 (define (highlight-listed-multigroup-cosets 
 	 sym-obj group-color-alist elt-list #!optional default-color)
-  (if (default-object? default-color) (set! default-color (color:default)))
-  (merge-by-first (map (lambda (group-color-pair)
-			 (display "Highlighting ")
-			 (pp group-color-pair)
-			 (highlight-listed-cosets 
-			  sym-obj 
-			  (symo-subgroup sym-obj (car group-color-pair))
-			  elt-list
-			  (cdr group-color-pair)))
-		       group-color-alist)
-		  default-color))
+  (if (default-object? default-color)
+      (set! default-color (color:default)))
+  (merge-by-first
+   (map (lambda (group-color-pair)
+          (display "Highlighting ")
+          (pp group-color-pair)
+          (highlight-listed-cosets 
+           sym-obj 
+           (symo-subgroup sym-obj (car group-color-pair))
+           elt-list
+           (cdr group-color-pair)))
+        group-color-alist)
+   default-color))
 
 (define (multicolor-listed-cosets 
 	 sym-obj subg coset-color-alist #!optional default-color)
-  (if (default-object? default-color) (set! default-color (color:default)))
+  (if (default-object? default-color)
+      (set! default-color (color:default)))
   (if (not (subgroup? subg))
       (if (list? subg)
 	  (set! subg (symo-subgroup sym-obj subg))
@@ -112,25 +123,29 @@
 
 (define (color-cycle-all-cosets 
 	 sym-obj subg color-list #!optional default-color)
-  (if (default-object? default-color) (set! default-color (color:default)))
+  (if (default-object? default-color)
+      (set! default-color (color:default)))
   (if (not (subgroup? subg))
       (if (list? subg)
 	  (set! subg (symo-subgroup sym-obj subg))
 	  (error "Inalid subgroup." subg)))		 
   (multicolor-listed-cosets 
    sym-obj subg 
-   (cyclic-associate (map car (subg:coset-list subg (cxg/chamber-list 
-						     (symo/geometry sym-obj))))
-		     color-list)
+   (cyclic-associate
+    (map car (subg:coset-list subg (cxg/chamber-list 
+                                    (symo/geometry sym-obj))))
+    color-list)
    default-color))
 
-;; Highlights one cell (at identity) from the first subgroup in the list,
-;; and its neighboring cells from the others.
+;; Highlights one cell (at identity) from the first subgroup in the
+;; list, and its neighboring cells from the others.
 (define (highlight-cell-and-neighbors 
 	 sym-obj group-color-alist #!optional default-color)
-  (if (default-object? default-color) (set! default-color (color:default)))
+  (if (default-object? default-color)
+      (set! default-color (color:default)))
   (highlight-listed-multigroup-cosets
    sym-obj group-color-alist 
-   (subg:get-coset (symo-subgroup sym-obj (caar group-color-alist)) 'e)
+   (subg:get-coset
+    (symo-subgroup sym-obj (caar group-color-alist)) 'e)
    default-color))
 
