@@ -20,10 +20,12 @@
 
 (declare (usual-integrations))
 
-;; This file defines utilities actively using, working on or producing hash tables
+;; This file defines utilities actively using, working on or
+;; producing hash tables
 
 (define ((lin-rem-dup key-hash key=?) lst)
-  (let ((unique-elts ((strong-hash-table/constructor key-hash key=? #t))))
+  (let ((unique-elts
+         ((strong-hash-table/constructor key-hash key=? #t))))
     (for-each (lambda (elt)
 		(if (not (hash-table/get unique-elts elt #f))
 		    (hash-table/put! unique-elts elt #t)))
@@ -53,16 +55,18 @@
 	      lst)
     answer))
 
-(define list->eq-hash-table (list->hash-table eq-hash-mod eq?))
+(define list->eq-hash-table
+  (list->hash-table eq-hash-mod eq?))
 
-(define list->equal-hash-table (list->hash-table equal-hash-mod equal?))
+(define list->equal-hash-table
+  (list->hash-table equal-hash-mod equal?))
 
 (define list->eq-hash-set 
   (list->eq-hash-table (lambda (elt) elt) (lambda (elt) #t)))
 
-;; The lists given must be disjoint.  The result is a hash table from 
-;; elements in the lists to the index of the list in the input (i.e. a 
-;; unique identifier)
+;; The lists given must be disjoint.  The result is a hash table from
+;; elements in the lists to the index of the list in the input
+;; (i.e. a unique identifier)
 (define (disjoint-lists->set-map list-of-lists)
   (let ((elt-sets (make-eq-hash-table))
 	(list-num 0))
@@ -72,9 +76,12 @@
 	(lambda (elt)
 	  (let ((val (hash-table/get elt-sets elt #f)))
 	    (if (and val (not (= val list-num)))
-		(error (string-append "Element occurs in lists " (number->string list-num) 
-				      " and " (number->string val) ":")
-		       elt))
+		(error
+                 (string-append
+                  "Element occurs in lists "
+                  (number->string list-num) 
+                  " and " (number->string val) ":")
+                 elt))
 	    (hash-table/put! elt-sets elt list-num)))
 	lst)
        (set! list-num (+ 1 list-num)))
