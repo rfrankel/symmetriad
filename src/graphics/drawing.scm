@@ -321,9 +321,6 @@
     (lambda ()
       (symo:print-polyhedra sym-obj hedron-specs))))
 
-(define (r4-vector->mv x y z w)
-  (+ (* x e1) (* y e2) (* z e3) (* w e+) e-))
-
 (define (symo->povray sym-obj filename hedra #!optional headerfile)
   (if (default-object? headerfile)
       (set! headerfile "../tools/header.pov"))
