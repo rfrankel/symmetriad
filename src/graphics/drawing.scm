@@ -344,9 +344,19 @@
       (define other-vertex
         (vertex->mv (car (lset-difference eq? vertices face))))
       (if (really-plane? face-sphere-mv)
-          (make-plane
-           (plane-unit-normal face-sphere-mv)
-           (plane-displacement face-sphere-mv))
+          (begin
+            (warn "Looks like a plane" face-sphere-mv)
+            (let ((normal (plane-unit-normal face-sphere-mv))
+                  (displacement (plane-displacement face-sphere-mv))
+                  (other-pt (mv->3-vector other-vertex)))
+              (let ((distance-along-normal
+                     (apply + (map * normal other-pt))))
+                (if (<= distance-along-normal 0)
+                    (make-plane normal displacement)
+                    (make-plane (map (lambda (x)
+                                       (* -1 x))
+                                     normal)
+                                (* -1 displacement))))))
           (make-sphere
            (sphere-center face-sphere-mv)
            (sphere-radius face-sphere-mv)

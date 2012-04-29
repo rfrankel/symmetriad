@@ -74,6 +74,14 @@
         (all-cosets object '(s1 s2 s0)))
    ))
 
+(let ((object (symmetric-object B-family '(3 0 0 1))))
+  (symo->povray
+   object
+   "playout/B4-1001-2.pov"
+   (map (colorize '(0.0 0.5 0.5 1.0))
+        (all-cosets object '(s1 s2 s3)))
+   ))
+
 ;; TODO This one seems to cause division by zero.
 #;
 (let ((object (symmetric-object F-family '(1 1 1 9))))

@@ -319,7 +319,7 @@
   (map / (plane-normal plane) (make-list 3 (plane-scale plane))))
 
 (define (plane-displacement plane)
-  (- (/ (mv->scalar (dot (dual plane) e0))
+  (- (/ (careful-mv->scalar (dot (dual plane) e0))
         (plane-scale plane))))
 
 ;; This implicitly projects the input 4-vector conformally down to R3
