@@ -20,5 +20,5 @@
 
 (for-each (lambda (file)
 	    (cf-conditionally file))
-	  '(;"geometric-algebra" ; Actually not, because it stomps on fluid-let of generator-signature
+	  '("geometric-algebra"
             ))

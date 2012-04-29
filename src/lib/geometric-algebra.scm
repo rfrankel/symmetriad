@@ -1,10 +1,15 @@
 ;;; A library for geometric algebra computations in the 5-generator
 ;;; conformal model of R^3.
 
+(declare (usual-integrations + - * /))
+
 (define-structure generator
   symbol
-  signature
+  %signature
   order)
+
+(define (generator-signature g) ; a fluid-bindable hook
+  (generator-%signature g))
 
 (define (generator< g1 g2)
   (< (generator-order g1) (generator-order g2)))
