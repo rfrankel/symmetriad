@@ -1,0 +1,189 @@
+// Reads in surface data and displays it
+
+_BGColor = White;
+_FrameBoxSize = 0;
+SetLineWidth(3);
+EnableSmoothLine(0);
+:DRAW_POINT_AS_SPHERE;
+:N3_WIRE;
+:E3_DRAW_VEC_AS_POINT;
+DefVarsN3();
+
+ReembedSphereCenter = {
+	point3d = _P(1);
+	norm = point3d * point3d;
+	point3d + (0.5 * norm * einf) + e0
+}
+
+// This is the antipode in the unit sphere in R4
+Antipode = {
+	point = _P(1);
+	homogenized = point / (- point . em);
+	in_r4 = homogenized - em;
+	antipode = - in_r4;
+	back = antipode + em;
+	back
+}
+
+GreatCircle = {
+	point = _P(1);
+	other_point = _P(2);
+	point ^ other_point ^ ::Antipode(point) // Will also include the other antipode
+}
+
+GreatSphere = {
+	_P(1) ^ _P(2) ^ _P(3) ^ ::Antipode(_P(1)) // Will also include the other antipodes
+}
+
+LsetMember = {
+	elt = _P(1);
+	lst = _P(2);
+	iL = 1;
+	answer = -1;
+	loop {
+		if (iL > Len(lst)) {
+			answer = (1==0); break;
+		}
+		if (elt == lst(iL)) {
+			answer = (0==0); break;
+		}
+		iL = iL + 1;
+	}
+	answer
+}
+
+LsetDiff = {
+	lst1 = _P(1);
+	lst2 = _P(2);
+	iL1 = 1;
+	answer = [];
+	loop {
+		if (iL1 > Len(lst1))
+			break;
+		if (!! (::LsetMember(lst1(iL1), lst2)))
+			answer << [lst1(iL1)];
+		iL1 = iL1 + 1;
+	}
+	answer
+}
+
+SphereCenter = {
+	sphere = _P(1);
+	proj(*sphere,(e1*e2*e3)) / (- (*sphere) . einf)
+}
+
+SphereRadius = {
+	sphere = _P(1);
+	scalar = (*sphere) . einf;
+	sqrt(((*sphere) * (*sphere)) / (scalar * scalar))
+}
+
+InsideSphere = {
+	sphere = _P(1);
+	point = _P(2);
+	discriminant = (*sphere . point) / ((*sphere . einf) * (*sphere . e0));
+	discriminant >= 0
+}
+	
+if (ExecMode & EM_CHANGE ||
+	ExecMode & EM_LINK)
+{
+	?Poly = ReadData("/home/axch/Misc/Code/4d/A4-1001-1.poly");
+	Header = Poly(1);
+	PolySpec = Poly(2);
+	?VertexCount = PolySpec(1);
+	?HedronCount = PolySpec(2);
+	
+	iP = 1;
+	line = 3;
+	Verts = [];
+	loop
+	{
+		if (iP > VertexCount)
+			break;
+
+		VertCoords = Poly(line);
+		Verts << VertCoords(1)^e1 +  VertCoords(2)^e2 + VertCoords(3)^e3 + VertCoords(4)^ep + em; 
+		
+		iP = iP + 1;
+		line = line + 1;	
+	}
+	
+	iH = 1;
+	AllHedra = [];
+	TheColors = [Red, White, Blue, Green, Yellow, Cyan, Magenta, Black];
+	loop
+	{
+		if (iH > HedronCount)
+			break;
+
+		HedronSpec = Poly(line);
+        SideCount = HedronSpec(2);
+		HedronVertInds = HedronSpec(3~Len(HedronSpec));
+		
+		iHf = 1;
+		line = line + 1;
+		OneHedron = [HedronSpec];
+		loop 
+		{
+		    if (iHf > SideCount)
+			break;
+
+			Face = Poly(line);
+			line = line + 1;
+			iFv = 1;
+			VertCount = Face(1);
+			VertInds = [];
+			OneFace = [];
+			loop {
+				if (iFv > VertCount)
+					break;
+				
+				VertNum = Face(iFv + 1);
+				VertInds << VertNum;
+				OneFace << Verts(VertNum + 1);
+				iFv = iFv + 1;
+			}
+			HedronVertInds;
+			VertInds;
+			OtherVertInds = LsetDiff(HedronVertInds, VertInds);
+			FaceSphere = GreatSphere(OneFace(1),OneFace(2),OneFace(3));
+			PovFaceDesc = "sphere { "
+			if (iH == 1) {
+				// ?OneFace(1);
+				// :OneFace(2);
+				// :OneFace(3);
+				// :OneFace(1)^OneFace(2)^OneFace(3);
+				
+				if (InsideSphere(FaceSphere, Verts(OtherVertInds(1)+1))) {
+					:TheColors(iH);
+				} else {
+					:TheColors(3);
+				}
+				//:GreatCircle(OneFace(1),OneFace(2));
+				//:GreatCircle(OneFace(2),OneFace(3));
+				//:GreatCircle(OneFace(3),OneFace(1));
+				:FaceSphere;
+				:ReembedSphereCenter(SphereCenter(FaceSphere));
+				?SphereRadius(FaceSphere);
+			};
+		
+			OneHedron << [OneFace];
+			iHf = iHf + 1;
+		}
+					
+		AllHedra << [OneHedron];
+					
+		iH = iH + 1;				
+	}
+	
+	?Verts;
+	?Len(Verts);
+	?AllFaces;
+	?Len(AllFaces);
+	//:Verts(12):Red;
+	//:Verts(9):Green;
+	//:Verts(15):Blue;
+	//:Verts(4):Yellow;
+	
+}	
