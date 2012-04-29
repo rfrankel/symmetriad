@@ -69,3 +69,8 @@
           ((pred (car tail))
            (append tail (reverse head)))
           (else (loop (cdr tail) (cons (car tail) head))))))
+
+(define (as-list object)
+  (if (list? object)
+      object
+      (list object)))

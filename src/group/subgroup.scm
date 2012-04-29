@@ -47,7 +47,7 @@
 (define (coxg-subgroup cox-g word-list)
   (%create-subgroup
    (lambda (elt gen) (gn:product (cxg/group-net cox-g) elt gen))
-   (map (lambda (word) (if (list? word) word (list word))) word-list)))
+   (map as-list word-list)))
 
 ; gen-spec is a list of 1's and 0's.  The 0's indicate which 
 ; generators go into the subgroup.
@@ -66,10 +66,12 @@
     (define (loop cur-elt word-left)
       (if (null? word-left)
 	  cur-elt
-	  (loop (mult-proc cur-elt (car word-left)) (cdr word-left))))
+	  (loop (mult-proc cur-elt (car word-left))
+                (cdr word-left))))
     ;(pp (loop start word))
     (loop start word))
-  (let ((done-elts ((strong-hash-table/constructor eq-hash-mod eq? #t))))
+  (let ((done-elts
+         ((strong-hash-table/constructor eq-hash-mod eq? #t))))
     (define (loop todo-elts)
       (if (null? todo-elts)
 	  (hash-table/key-list done-elts)
@@ -77,13 +79,15 @@
 		(left (cdr todo-elts)))
 	    (if (hash-table/get done-elts cur-elt #f)
 		(loop left) ; This was a repeat, do nothing
-		(begin (hash-table/put! done-elts cur-elt #t)
-		       (for-each 
-			(lambda (word)
-			  (let ((result (traverse-word (subg/mult-proc subg) 
-						       cur-elt word)))
-			    (set! left (cons result left))))
-			(subg/word-list subg))
+		(begin
+                  (hash-table/put! done-elts cur-elt #t)
+                  (for-each 
+                   (lambda (word)
+                     (let ((result
+                            (traverse-word (subg/mult-proc subg) 
+                                           cur-elt word)))
+                       (set! left (cons result left))))
+                   (subg/word-list subg))
 		       (loop left))))))
     (loop (list start))
     (hash-table/key-list done-elts)))
@@ -91,13 +95,16 @@
 (define (subg:get-coset subgroup elt #!optional use-cache)
   (if (default-object? use-cache) (set! use-cache #t))
   (if use-cache
-      (let ((cached (hash-table/get (subg/coset-cache subgroup) elt #f)))
+      (let ((cached
+             (hash-table/get (subg/coset-cache subgroup) elt #f)))
 	(if cached
 	    cached
 	    (let ((coset (subg:compute-coset subgroup elt)))
-	      (for-each (lambda (key)
-			  (hash-table/put! (subg/coset-cache subgroup) key coset))
-			coset)
+	      (for-each
+               (lambda (key)
+                 (hash-table/put!
+                  (subg/coset-cache subgroup) key coset))
+               coset)
 	      coset)))
       (subg:compute-coset subgroup elt)))
 
@@ -107,7 +114,8 @@
        
 (define (subg:coset-list subg elt-list)
   (if (symmetric-object? elt-list)
-      (subg:coset-list subg (cxg/chamber-list (symo/geometry elt-list)))
+      (subg:coset-list
+       subg (cxg/chamber-list (symo/geometry elt-list)))
       (lin-rem-dup-eq
        (map (lambda (elt)
 	      (subg:get-coset subg elt))
