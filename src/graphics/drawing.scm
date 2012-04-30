@@ -301,23 +301,27 @@
     (lambda ()
       (symo:print-polyhedra sym-obj hedron-specs))))
 
-(define (symo->povray sym-obj filename hedra #!optional headerfile)
+(define (symo->povray sym-obj filename hedra
+                      #!optional headerfile transform)
   (if (default-object? headerfile)
       (set! headerfile "../tools/header.pov"))
+  (if (default-object? transform)
+      (set! transform identity))
   (copy-file headerfile filename)
   (let ((port (open-output-file filename #t)))
     (let ((answer
            (with-output-to-port port
              (lambda ()
-               (symo->povray-help sym-obj hedra)))))
+               (symo->povray-help sym-obj hedra transform)))))
       (close-port port)
       answer)))
 
-(define (symo->povray-help sym-obj hedra)
+(define (symo->povray-help sym-obj hedra transform)
   (define (vertex->mv vertex-symb)
     (apply r4-vector->mv
            (up-structure->list
-            (symo:get-vertex sym-obj vertex-symb))))
+            (transform
+             (symo:get-vertex sym-obj vertex-symb)))))
   (define (print-hedron spec)
     (pp `(printing hedron ,spec) (notification-output-port))
     ;; TODO Abstract commonalities with symo:print-gv-help
