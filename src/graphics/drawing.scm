@@ -333,34 +333,9 @@
                           (cons face color) #f)))
                   (symo/face-list sym-obj)))
     (define (face-as-sphere face)
-      (define face-vertices (map vertex->mv face))
-      (define face-sphere-mv
-        ;; The rest will lie on the same sphere.
-        (great-sphere (car face-vertices)
-                      (cadr face-vertices)
-                      (caddr face-vertices)))
-      ;; I expect all other vertices of the polyhedron to give the
-      ;; same answer.
-      (define other-vertex
-        (vertex->mv (car (lset-difference eq? vertices face))))
-      (if (really-plane? face-sphere-mv)
-          (begin
-            (warn "Looks like a plane" face-sphere-mv)
-            (let ((normal (plane-unit-normal face-sphere-mv))
-                  (displacement (plane-displacement face-sphere-mv))
-                  (other-pt (mv->3-vector other-vertex)))
-              (let ((distance-along-normal
-                     (apply + (map * normal other-pt))))
-                (if (<= distance-along-normal 0)
-                    (make-plane normal displacement)
-                    (make-plane (map (lambda (x)
-                                       (* -1 x))
-                                     normal)
-                                (* -1 displacement))))))
-          (make-sphere
-           (sphere-center face-sphere-mv)
-           (sphere-radius face-sphere-mv)
-           (not (inside-sphere? face-sphere-mv other-vertex)))))
+      (points-as-sphere
+       (map vertex->mv face)
+       (vertex->mv (car (lset-difference eq? vertices face)))))
     (define (print-sphere-face face color)
       (let ((center (sph-center face))
             (radius (sph-radius face))
@@ -408,3 +383,33 @@
 
 (define-structure (plane (conc-name pln-))
   normal displacement)
+
+;; Returns a sphere object containing the given points (assuming they
+;; all lie on one sphere), with the invert? bit set according to
+;; whether the other point is inside or outside the sphere.  If the
+;; points are actually coplanar, retuns a plane object instead,
+;; oriented so that the other point is "inside".
+(define (points-as-sphere point-mvs other-point-mv)
+  (define face-sphere-mv
+    ;; The rest will lie on the same sphere.
+    (great-sphere (car point-mvs)
+                  (cadr point-mvs)
+                  (caddr point-mvs)))
+  (if (really-plane? face-sphere-mv)
+      (begin
+        (warn "Looks like a plane" face-sphere-mv)
+        (let ((normal (plane-unit-normal face-sphere-mv))
+              (displacement (plane-displacement face-sphere-mv))
+              (other-pt (mv->3-vector other-point-mv)))
+          (let ((distance-along-normal
+                 (apply + (map * normal other-pt))))
+            (if (<= distance-along-normal 0)
+                (make-plane normal displacement)
+                (make-plane (map (lambda (x)
+                                   (* -1 x))
+                                 normal)
+                            (* -1 displacement))))))
+      (make-sphere
+       (sphere-center face-sphere-mv)
+       (sphere-radius face-sphere-mv)
+       (not (inside-sphere? face-sphere-mv other-point-mv)))))
