@@ -92,3 +92,40 @@
     (map (colorize '(0.5 0.3 0.1 1.0))
          (all-cosets object '(s0 s1 s3))))
    "../tools/header-2.pov"))
+
+(let ()
+  (define a-transform
+    (lambda (vec)
+      ;; This matrix brought to you by the number 0.95397264 and the
+      ;; file symmetriad/art/src/F4-1119-9111-2.gcl
+      (* (m:invert
+          (matrix-by-row-list
+           '((0.95397264   0.20908269   -0.17813088     0.12034905)
+             (0.1705742   -0.96126556   -0.21648058    -0.0025307115)
+             (0.21550186  -0.17798947    0.95989817     0.021763876)
+             (0.11996971   0.023901425  -9.5028446e-07 -0.99249053))))
+         vec)))
+
+  (let ((object (symmetric-object F-family '(1 1 1 9))))
+    (symo->povray
+     object
+     "playout/F4-1119-2.pov"
+     (append
+      (map (colorize '(0.9 0.7 0.5 1.0))
+           (all-cosets object '(s0 s1 s2)))
+      (map (colorize '(0.5 0.3 0.1 1.0))
+           (all-cosets object '(s0 s1 s3))))
+     "../tools/header-3.pov"
+     a-transform))
+
+  (let ((object (symmetric-object F-family '(9 1 1 1))))
+    (symo->povray
+     object
+     "playout/F4-1119-9111.pov"
+     (append
+      (map (colorize '(0.5 0.7 1.0 1.0))
+           (all-cosets object '(s3 s1 s2)))
+      (map (colorize '(0.1 0.3 0.5 1.0))
+           (all-cosets object '(s0 s2 s3))))
+     "playout/F4-1119-2.pov"            ; Hack alert!
+     a-transform)))
