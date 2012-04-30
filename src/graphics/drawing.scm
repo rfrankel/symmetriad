@@ -335,6 +335,8 @@
     (define (face-as-sphere face)
       (points-as-sphere
        (map vertex->mv face)
+       ;; I expect that every other vertex of the polyhedron will
+       ;; yield the same result.
        (vertex->mv (car (lset-difference eq? vertices face)))))
     (define (print-sphere-face face color)
       (let ((center (sph-center face))
