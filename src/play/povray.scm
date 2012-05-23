@@ -98,6 +98,16 @@
     (lambda (vec)
       ;; This matrix brought to you by the number 0.95397264 and the
       ;; file symmetriad/art/src/F4-1119-9111-2.gcl
+      ;; Attempts to make this picture look like the corresponding
+      ;; Geomview one have failed.  My notes on attempted matrix
+      ;; changes and camera positions:
+      ;; transpose invert 0,0,-13 is wrong
+      ;; transpose invert 0,0,13 is wrong
+      ;; transpose 0,0,13 is wrong
+      ;; invert 0,0,13 is wrong and looks like like transpose 13
+      ;; - That would be because the inverse is the transpose of this
+      ;;   matrix
+      ;; invert 0,0,-13 is wrong
       (* (m:invert
           (matrix-by-row-list
            '((0.95397264   0.20908269   -0.17813088     0.12034905)
